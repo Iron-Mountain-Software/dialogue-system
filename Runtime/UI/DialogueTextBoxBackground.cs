@@ -1,8 +1,8 @@
-using ARISE.DialogueSystem.Nodes;
 using SpellBoundAR.CanvasGroups;
+using SpellBoundAR.DialogueSystem.Nodes;
 using UnityEngine;
 
-namespace ARISE.DialogueSystem.UI
+namespace SpellBoundAR.DialogueSystem.UI
 {
     [RequireComponent(typeof(CanvasGroupAnimator))]
     public class DialogueTextBoxBackground : MonoBehaviour

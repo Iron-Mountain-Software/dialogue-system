@@ -2,7 +2,7 @@ using SpellBoundAR.Characters;
 using SpellBoundAR.VirtualCameraManagement;
 using UnityEngine;
 
-namespace ARISE.DialogueSystem
+namespace SpellBoundAR.DialogueSystem
 {
     public class DialogueLine
     {

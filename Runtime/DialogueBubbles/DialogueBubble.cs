@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace ARISE.DialogueSystem.DialogueBubbles
+namespace SpellBoundAR.DialogueSystem.DialogueBubbles
 {
     public class DialogueBubble : MonoBehaviour
     {

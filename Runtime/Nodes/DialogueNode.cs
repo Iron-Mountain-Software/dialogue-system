@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using XNode;
 
-namespace ARISE.DialogueSystem.Nodes
+namespace SpellBoundAR.DialogueSystem.Nodes
 {
     public abstract class DialogueNode : Node
     {

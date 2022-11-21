@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using ARISE.DialogueSystem.Nodes.Conditions;
-using ARISE.DialogueSystem.Nodes.ResponseGenerators;
+using SpellBoundAR.DialogueSystem.Nodes.Conditions;
+using SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators;
 using UnityEngine;
 using XNode;
 
-namespace ARISE.DialogueSystem.Nodes
+namespace SpellBoundAR.DialogueSystem.Nodes
 {
     [NodeWidth(160)]
     [NodeTint("#0061CC")]

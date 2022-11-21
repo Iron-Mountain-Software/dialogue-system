@@ -1,7 +1,7 @@
-using ARISE.DialogueSystem.Nodes;
+using SpellBoundAR.DialogueSystem.Nodes;
 using UnityEngine;
 
-namespace ARISE.DialogueSystem.Responses
+namespace SpellBoundAR.DialogueSystem.Responses
 {
     public class PlayQueuedDialogueResponse : BasicResponse
     {

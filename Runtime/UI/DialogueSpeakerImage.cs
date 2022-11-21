@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ARISE.DialogueSystem.UI
+namespace SpellBoundAR.DialogueSystem.UI
 {
     [RequireComponent(typeof(Image))]
     public class DialogueSpeakerImage : MonoBehaviour

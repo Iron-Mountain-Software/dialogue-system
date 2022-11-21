@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-using ARISE.DialogueSystem.Nodes;
-using ARISE.DialogueSystem.Nodes.ResponseGenerators;
-using ARISE.DialogueSystem.Responses;
+using SpellBoundAR.DialogueSystem.Nodes;
+using SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators;
+using SpellBoundAR.DialogueSystem.Responses;
 using SpellBoundAR.Drawers;
 using UnityEngine;
 
-namespace ARISE.DialogueSystem.UI
+namespace SpellBoundAR.DialogueSystem.UI
 {
     [RequireComponent(typeof(Drawer))]
     public class UI_DialogueResponseBlock : MonoBehaviour

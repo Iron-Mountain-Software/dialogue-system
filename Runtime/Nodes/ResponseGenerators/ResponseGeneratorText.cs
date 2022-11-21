@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using ARISE.DialogueSystem.Responses;
+using SpellBoundAR.DialogueSystem.Responses;
 using SpellBoundAR.ResourceUtilities;
 using UnityEngine;
 using UnityEngine.Localization;
 
-namespace ARISE.DialogueSystem.Nodes.ResponseGenerators
+namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
 {
     public class ResponseGeneratorText : ResponseGenerator
     {

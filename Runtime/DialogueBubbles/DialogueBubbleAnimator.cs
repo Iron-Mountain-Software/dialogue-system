@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace ARISE.DialogueSystem.DialogueBubbles
+namespace SpellBoundAR.DialogueSystem.DialogueBubbles
 {
     [RequireComponent(typeof(DialogueBubble))]
     public class DialogueBubbleAnimator : MonoBehaviour

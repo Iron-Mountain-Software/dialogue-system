@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ARISE.DialogueSystem.Narration
+namespace SpellBoundAR.DialogueSystem.Narration
 {
     [ExecuteAlways]
     [DisallowMultipleComponent]

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ARISE.DialogueSystem
+namespace SpellBoundAR.DialogueSystem
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Dialogue/Scripted Conversation")]
     public class ScriptedConversation : Conversation

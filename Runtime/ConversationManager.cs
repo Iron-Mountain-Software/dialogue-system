@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace ARISE.DialogueSystem
+namespace SpellBoundAR.DialogueSystem
 {
     public static class ConversationManager
     {

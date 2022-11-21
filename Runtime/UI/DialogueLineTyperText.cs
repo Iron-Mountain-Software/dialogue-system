@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ARISE.DialogueSystem.UI
+namespace SpellBoundAR.DialogueSystem.UI
 {
     [RequireComponent(typeof(Text))]
     public class DialogueLineTyperText : DialogueLineTyper

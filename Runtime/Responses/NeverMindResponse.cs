@@ -1,8 +1,8 @@
 using System;
-using ARISE.DialogueSystem.Nodes;
+using SpellBoundAR.DialogueSystem.Nodes;
 using UnityEngine;
 
-namespace ARISE.DialogueSystem.Responses
+namespace SpellBoundAR.DialogueSystem.Responses
 {
     [Serializable]
     public class NeverMindResponse : BasicResponse

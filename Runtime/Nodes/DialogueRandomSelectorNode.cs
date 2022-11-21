@@ -2,7 +2,7 @@
 using XNode;
 using Random = UnityEngine.Random;
 
-namespace ARISE.DialogueSystem.Nodes
+namespace SpellBoundAR.DialogueSystem.Nodes
 {
     [NodeWidth(150)]
     [NodeTint("#656565")]

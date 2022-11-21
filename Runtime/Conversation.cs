@@ -1,6 +1,6 @@
-using ARISE.DialogueSystem.Nodes;
 using SpellBoundAR.AssetManagement;
 using SpellBoundAR.Conditions;
+using SpellBoundAR.DialogueSystem.Nodes;
 using SpellBoundAR.ResourceUtilities;
 using UnityEditor;
 using UnityEditor.Localization;
@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.Localization;
 using XNode;
 
-namespace ARISE.DialogueSystem
+namespace SpellBoundAR.DialogueSystem
 {
     public abstract class Conversation : NodeGraph, IIdentifiable
     {

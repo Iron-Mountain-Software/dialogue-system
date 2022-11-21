@@ -1,4 +1,4 @@
-namespace ARISE.DialogueSystem.Nodes.Conditions
+namespace SpellBoundAR.DialogueSystem.Nodes.Conditions
 {
     public class PassFailConditionDialogueQueued : PassFailCondition
     {

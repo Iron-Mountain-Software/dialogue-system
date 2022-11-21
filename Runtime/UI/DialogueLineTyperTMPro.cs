@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace ARISE.DialogueSystem.UI
+namespace SpellBoundAR.DialogueSystem.UI
 {
     [RequireComponent(typeof(TextMeshProUGUI))]
     public class DialogueLineTyperTMPro : DialogueLineTyper

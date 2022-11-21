@@ -3,7 +3,7 @@ using SpellBoundAR.AssetManagement;
 using SpellBoundAR.Characters;
 using UnityEngine;
 
-namespace ARISE.DialogueSystem
+namespace SpellBoundAR.DialogueSystem
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Dialogue/Scripted Conversation Entity")]
     public class ScriptedConversationEntity : IdentifiableScriptableObject, IConversationEntity

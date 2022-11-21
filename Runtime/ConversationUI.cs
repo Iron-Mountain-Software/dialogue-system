@@ -1,9 +1,9 @@
 using System;
-using ARISE.DialogueSystem.Nodes;
+using SpellBoundAR.DialogueSystem.Nodes;
 using SpellBoundAR.Drawers;
 using UnityEngine;
 
-namespace ARISE.DialogueSystem
+namespace SpellBoundAR.DialogueSystem
 {
     public class ConversationUI : MonoBehaviour
     {

@@ -1,7 +1,7 @@
 using System;
-using ARISE.DialogueSystem.Nodes;
+using SpellBoundAR.DialogueSystem.Nodes;
 
-namespace ARISE.DialogueSystem.Responses
+namespace SpellBoundAR.DialogueSystem.Responses
 {
     [Serializable]
     public class ChatResponse : BasicResponse

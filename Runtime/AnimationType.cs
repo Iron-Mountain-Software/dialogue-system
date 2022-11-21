@@ -1,4 +1,4 @@
-namespace ARISE.DialogueSystem
+namespace SpellBoundAR.DialogueSystem
 {
     public enum AnimationType
     {

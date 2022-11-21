@@ -1,7 +1,7 @@
-﻿using ARISE.DialogueSystem.Nodes;
+﻿using SpellBoundAR.DialogueSystem.Nodes;
 using UnityEngine;
 
-namespace ARISE.DialogueSystem.UI
+namespace SpellBoundAR.DialogueSystem.UI
 {
     public class UI_DialogueResponseBlockGenerator : MonoBehaviour
     {

@@ -4,10 +4,10 @@ using SpellBoundAR.VirtualCameraManagement;
 using UnityEngine;
 using UnityEngine.Localization;
 
-namespace ARISE.DialogueSystem.Nodes
+namespace SpellBoundAR.DialogueSystem.Nodes
 {
-    [NodeWidthAttribute(300)]
-    [NodeTintAttribute("#989898")]
+    [NodeWidth(300)]
+    [NodeTint("#989898")]
     public class DialogueLineNode : DialogueNode
 	{
 		[Input] public Connection input;

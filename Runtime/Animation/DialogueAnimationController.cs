@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ARISE.DialogueSystem.Animation
+namespace SpellBoundAR.DialogueSystem.Animation
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(IConversationEntity))]

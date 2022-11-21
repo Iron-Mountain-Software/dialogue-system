@@ -1,4 +1,4 @@
-namespace ARISE.DialogueSystem.Nodes
+namespace SpellBoundAR.DialogueSystem.Nodes
 {
     [NodeWidth(100)]
     [NodeTint("#656565")]

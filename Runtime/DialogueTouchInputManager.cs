@@ -1,7 +1,7 @@
-using ARISE.DialogueSystem.UI;
+using SpellBoundAR.DialogueSystem.UI;
 using UnityEngine;
 
-namespace ARISE.DialogueSystem
+namespace SpellBoundAR.DialogueSystem
 {
     public class DialogueTouchInputManager : MonoBehaviour
     {

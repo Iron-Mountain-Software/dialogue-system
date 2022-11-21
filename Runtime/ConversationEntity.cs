@@ -4,7 +4,7 @@ using SpellBoundAR.AssetManagement;
 using SpellBoundAR.Characters;
 using UnityEngine;
 
-namespace ARISE.DialogueSystem
+namespace SpellBoundAR.DialogueSystem
 {
     public class ConversationEntity : IConversationEntity
     {

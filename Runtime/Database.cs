@@ -1,7 +1,7 @@
 ﻿using SpellBoundAR.AssetManagement;
 using UnityEngine;
 
-namespace ARISE.DialogueSystem
+namespace SpellBoundAR.DialogueSystem
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Gameplay/Dialogue/Database")]
     public class Database : SingletonDatabase<Database>

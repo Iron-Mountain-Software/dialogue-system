@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ARISE.DialogueSystem.Nodes.Actions
+namespace SpellBoundAR.DialogueSystem.Nodes.Actions
 {
     [NodeWidth(300)]
     [NodeTint("#FFCA3A")]

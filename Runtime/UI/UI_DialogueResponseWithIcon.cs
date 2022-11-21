@@ -1,8 +1,8 @@
-using ARISE.DialogueSystem.Responses;
+using SpellBoundAR.DialogueSystem.Responses;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ARISE.DialogueSystem.UI
+namespace SpellBoundAR.DialogueSystem.UI
 {
     public class UI_DialogueResponseWithIcon : UI_DialogueResponse
     {

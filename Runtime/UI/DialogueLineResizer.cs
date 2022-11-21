@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ARISE.DialogueSystem.UI
+namespace SpellBoundAR.DialogueSystem.UI
 {
     public class DialogueLineResizer : MonoBehaviour
     {

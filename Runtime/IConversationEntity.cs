@@ -3,7 +3,7 @@ using SpellBoundAR.AssetManagement;
 using SpellBoundAR.Characters;
 using UnityEngine;
 
-namespace ARISE.DialogueSystem
+namespace SpellBoundAR.DialogueSystem
 {
     public interface IConversationEntity : IIdentifiable, IDepictable
     {

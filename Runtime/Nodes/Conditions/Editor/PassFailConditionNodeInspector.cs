@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace ARISE.DialogueSystem.Nodes.Conditions.Editor
+namespace SpellBoundAR.DialogueSystem.Nodes.Conditions.Editor
 {
     [CustomEditor(typeof(PassFailCondition), true)]
     public class PassFailConditionNodeInspector : UnityEditor.Editor

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using ARISE.DialogueSystem.Responses;
+using SpellBoundAR.DialogueSystem.Responses;
 
-namespace ARISE.DialogueSystem.Nodes.ResponseGenerators
+namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
 {
     [NodeWidth(200)]
     [NodeTint("#80461B")]

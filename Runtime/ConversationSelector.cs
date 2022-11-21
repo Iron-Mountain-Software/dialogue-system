@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace ARISE.DialogueSystem
+namespace SpellBoundAR.DialogueSystem
 {
     [Serializable]
     public class ConversationSelector
