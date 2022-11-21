@@ -11,6 +11,9 @@ namespace SpellBoundAR.DialogueSystem
         public static event Action<Conversation, DialogueLine> OnDialogueLinePlayed;
         public static event Action<Conversation> OnDialogueInteractionEnded;
         
+        public event Action OnOpened;
+        public event Action OnClosed;
+
         [Header("Static Settings")]
         private const float DestructionDelay = .5f;
         
@@ -70,12 +73,14 @@ namespace SpellBoundAR.DialogueSystem
         public void Open()
         {
             if (drawer) drawer.Open();
+            OnOpened?.Invoke();
         }
 
         public void Close()
         {
             if (drawer) drawer.Close();
             Destroy(gameObject, DestructionDelay);
+            OnClosed?.Invoke();
         }
 
         public void PlayDialogueLine(DialogueLine dialogueLine)
