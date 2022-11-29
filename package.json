@@ -1,6 +1,6 @@
 {
   "name": "com.spellboundar.dialogue-system",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "displayName": "Dialogue System",
   "description": "A system for writing and playing branching dialogue.",
   "unity": "2019.1",
@@ -23,7 +23,6 @@
     "com.spellboundar.asset-management": "1.0.2",
     "com.spellboundar.conditions": "1.0.3",
     "com.spellboundar.resource-utilities": "1.0.0",
-    "com.spellboundar.read-only-attribute": "1.0.2",
     "com.spellboundar.characters": "1.1.2",
     "com.spellboundar.canvas-groups": "1.0.0",
     "com.spellboundar.drawers": "1.0.3",
