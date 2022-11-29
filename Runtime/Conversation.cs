@@ -2,11 +2,14 @@ using SpellBoundAR.AssetManagement;
 using SpellBoundAR.Conditions;
 using SpellBoundAR.DialogueSystem.Nodes;
 using SpellBoundAR.ResourceUtilities;
-using UnityEditor;
-using UnityEditor.Localization;
 using UnityEngine;
 using UnityEngine.Localization;
 using XNode;
+
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEditor.Localization;
+#endif
 
 namespace SpellBoundAR.DialogueSystem
 {
