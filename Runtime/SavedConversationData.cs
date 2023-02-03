@@ -5,7 +5,7 @@ using UnityEngine;
 namespace SpellBoundAR.DialogueSystem
 {
     [Serializable]
-    public class SavedConversationData : SavedClass
+    public class SavedConversationData : SavedData
     {
         [SerializeField] private int playthroughs;
         

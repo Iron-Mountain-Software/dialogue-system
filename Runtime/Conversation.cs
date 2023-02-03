@@ -1,8 +1,8 @@
 using System;
-using SpellBoundAR.AssetManagement;
 using SpellBoundAR.Conditions;
 using SpellBoundAR.DialogueSystem.Nodes;
 using SpellBoundAR.ResourceUtilities;
+using SpellBoundAR.SavedAssetsSystem;
 using UnityEngine;
 using UnityEngine.Localization;
 using XNode;
@@ -14,7 +14,7 @@ using UnityEditor.Localization;
 
 namespace SpellBoundAR.DialogueSystem
 {
-    public abstract class Conversation : NodeGraph, IIdentifiable
+    public abstract class Conversation : NodeGraph, ISavedClass<SavedConversationData>
     {
         public static event Action<Conversation> OnAnyPlaythroughsChanged;
         public event Action OnPlaythroughsChanged;
@@ -105,8 +105,9 @@ namespace SpellBoundAR.DialogueSystem
         public BehaviorWhenQueued BehaviorWhenEnqueued => behaviorWhenQueued;
         public bool Looping => looping;
 
+        public virtual SavedConversationData ConstructNewSavedData() => new();
         public virtual SavedConversationData SavedData => savedData ??= new SavedConversationData();
-
+        
         public int Playthroughs
         {
             get => SavedData.Playthroughs;
