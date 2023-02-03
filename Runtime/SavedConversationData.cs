@@ -8,8 +8,8 @@ namespace SpellBoundAR.DialogueSystem
     public class SavedConversationData : SavedClass
     {
         [SerializeField] private int playthroughs;
-
-        public virtual void Save() { }
+        
+        public override void Save() { }
 
         public int Playthroughs
         {
