@@ -17,6 +17,7 @@ namespace SpellBoundAR.DialogueSystem
     public abstract class Conversation : NodeGraph, IIdentifiable
     {
         public static event Action<Conversation> OnAnyPlaythroughsChanged;
+        public event Action OnPlaythroughsChanged;
 
         public enum BehaviorWhenQueued
         {
@@ -112,6 +113,7 @@ namespace SpellBoundAR.DialogueSystem
             set
             {
                 SavedData.Playthroughs = value;
+                OnPlaythroughsChanged?.Invoke();
                 OnAnyPlaythroughsChanged?.Invoke(this);
             }
         }
