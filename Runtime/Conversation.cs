@@ -1,3 +1,4 @@
+using System;
 using SpellBoundAR.AssetManagement;
 using SpellBoundAR.Conditions;
 using SpellBoundAR.DialogueSystem.Nodes;
@@ -15,6 +16,8 @@ namespace SpellBoundAR.DialogueSystem
 {
     public abstract class Conversation : NodeGraph, IIdentifiable
     {
+        public static event Action<Conversation> OnAnyPlaythroughsChanged;
+
         public enum BehaviorWhenQueued
         {
             None,
@@ -42,8 +45,7 @@ namespace SpellBoundAR.DialogueSystem
         [SerializeField] private BehaviorWhenQueued behaviorWhenQueued;
         [SerializeField] private bool looping;
 
-        // States
-        [SerializeField] private int playthroughs;
+        private SavedConversationData _savedData;
 
         public string ID
         {
@@ -101,11 +103,17 @@ namespace SpellBoundAR.DialogueSystem
 
         public BehaviorWhenQueued BehaviorWhenEnqueued => behaviorWhenQueued;
         public bool Looping => looping;
-        
-        public virtual int Playthroughs
+
+        public virtual SavedConversationData SavedData => _savedData ??= new SavedConversationData();
+
+        public int Playthroughs
         {
-            get => playthroughs;
-            set => playthroughs = value;
+            get => _savedData.Playthroughs;
+            set
+            {
+                _savedData.Playthroughs = value;
+                OnAnyPlaythroughsChanged?.Invoke(this);
+            }
         }
         
         private void OnEnable()
