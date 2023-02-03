@@ -45,7 +45,7 @@ namespace SpellBoundAR.DialogueSystem
         [SerializeField] private BehaviorWhenQueued behaviorWhenQueued;
         [SerializeField] private bool looping;
 
-        private SavedConversationData _savedData;
+        [SerializeField] protected SavedConversationData savedData;
 
         public string ID
         {
@@ -104,14 +104,14 @@ namespace SpellBoundAR.DialogueSystem
         public BehaviorWhenQueued BehaviorWhenEnqueued => behaviorWhenQueued;
         public bool Looping => looping;
 
-        public virtual SavedConversationData SavedData => _savedData ??= new SavedConversationData();
+        public virtual SavedConversationData SavedData => savedData ??= new SavedConversationData();
 
         public int Playthroughs
         {
-            get => _savedData.Playthroughs;
+            get => SavedData.Playthroughs;
             set
             {
-                _savedData.Playthroughs = value;
+                SavedData.Playthroughs = value;
                 OnAnyPlaythroughsChanged?.Invoke(this);
             }
         }
