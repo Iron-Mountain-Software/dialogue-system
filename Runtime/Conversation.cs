@@ -14,7 +14,7 @@ using UnityEditor.Localization;
 
 namespace SpellBoundAR.DialogueSystem
 {
-    public abstract class Conversation : NodeGraph, ISavedClass<SavedConversationData>
+    public abstract class Conversation : NodeGraph, ISavedClass
     {
         public static event Action<Conversation> OnAnyPlaythroughsChanged;
         public event Action OnPlaythroughsChanged;
@@ -46,7 +46,7 @@ namespace SpellBoundAR.DialogueSystem
         [SerializeField] private BehaviorWhenQueued behaviorWhenQueued;
         [SerializeField] private bool looping;
 
-        [SerializeField] protected SavedConversationData savedData;
+        protected SavedConversationData SavedData;
 
         public string ID
         {
@@ -104,21 +104,34 @@ namespace SpellBoundAR.DialogueSystem
 
         public BehaviorWhenQueued BehaviorWhenEnqueued => behaviorWhenQueued;
         public bool Looping => looping;
+        
+        public virtual void Save()
+        {
+            SavedData ??= new SavedConversationData();
+        }
 
-        public virtual SavedConversationData ConstructNewSavedData() => new();
-        public virtual SavedConversationData SavedData => savedData ??= new SavedConversationData();
+        public virtual void Load()
+        {
+            SavedData ??= new SavedConversationData();
+        }
         
         public int Playthroughs
         {
-            get => SavedData.Playthroughs;
+            get
+            {
+                Load();
+                return SavedData.Playthroughs;
+            }
             set
             {
+                Load();
                 SavedData.Playthroughs = value;
+                Save();
                 OnPlaythroughsChanged?.Invoke();
                 OnAnyPlaythroughsChanged?.Invoke(this);
             }
         }
-        
+
         private void OnEnable()
         {
             if (condition) condition.OnConditionStateChanged += OnConditionStateChanged;
