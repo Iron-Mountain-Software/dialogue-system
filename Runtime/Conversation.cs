@@ -120,12 +120,12 @@ namespace SpellBoundAR.DialogueSystem
             get
             {
                 Load();
-                return SavedData.Playthroughs;
+                return SavedData.playthroughs;
             }
             set
             {
                 Load();
-                SavedData.Playthroughs = value;
+                SavedData.playthroughs = value;
                 Save();
                 OnPlaythroughsChanged?.Invoke();
                 OnAnyPlaythroughsChanged?.Invoke(this);
