@@ -5,16 +5,11 @@ using UnityEngine;
 namespace SpellBoundAR.DialogueSystem
 {
     [Serializable]
-    public class SavedConversationData : SavedData
+    public class ConversationSavedData : SavedData
     {
         [SerializeField] public int playthroughs;
 
-        public SavedConversationData(Conversation conversation) : base(conversation)
-        {
-            playthroughs = 0;
-        }
-
-        public SavedConversationData()
+        public ConversationSavedData(Conversation conversation) : base(conversation)
         {
             playthroughs = 0;
         }

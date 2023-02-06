@@ -1,6 +1,6 @@
 {
   "name": "com.spellboundar.dialogue-system",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "displayName": "Dialogue System",
   "description": "A system for writing and playing branching dialogue.",
   "unity": "2019.1",
