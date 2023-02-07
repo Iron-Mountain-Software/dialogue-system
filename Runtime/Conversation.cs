@@ -1,5 +1,6 @@
 using System;
 using SpellBoundAR.Conditions;
+using SpellBoundAR.DialogueSystem.Entities;
 using SpellBoundAR.DialogueSystem.Nodes;
 using SpellBoundAR.ResourceUtilities;
 using SpellBoundAR.SavedAssetsSystem;

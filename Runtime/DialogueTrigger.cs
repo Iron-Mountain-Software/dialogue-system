@@ -1,4 +1,5 @@
 using System;
+using SpellBoundAR.DialogueSystem.Entities;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem

@@ -3,7 +3,7 @@ using SpellBoundAR.AssetManagement;
 using SpellBoundAR.Characters;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem
+namespace SpellBoundAR.DialogueSystem.Entities
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Dialogue/Scripted Conversation Entity")]
     public class ScriptedConversationEntity : IdentifiableScriptableObject, IConversationEntity

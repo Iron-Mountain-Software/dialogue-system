@@ -1,4 +1,5 @@
-﻿using SpellBoundAR.MainCameraManagement;
+﻿using SpellBoundAR.DialogueSystem.Entities;
+using SpellBoundAR.MainCameraManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,13 +17,13 @@ namespace SpellBoundAR.DialogueSystem.UI.SpeechBubbleTail
         {
             _conversationUI = GetComponentInParent<ConversationUI>();
             ConversationUI.OnDialogueInteractionStarted += OnDialogueInteractionStarted;
-            SpeechBubbleTailManager.OnClientsChanged += RefreshAnchor;
+            SpeechBubbleAnchorsManager.OnAnchorsChanged += RefreshAnchor;
         }
 
         protected override void OnDestroy()
         {
             ConversationUI.OnDialogueInteractionStarted -= OnDialogueInteractionStarted;
-            SpeechBubbleTailManager.OnClientsChanged -= RefreshAnchor;
+            SpeechBubbleAnchorsManager.OnAnchorsChanged -= RefreshAnchor;
         }
 
         private void OnDialogueInteractionStarted(Conversation conversation) => RefreshAnchor();
@@ -31,9 +32,7 @@ namespace SpellBoundAR.DialogueSystem.UI.SpeechBubbleTail
         {
             Conversation conversation = _conversationUI ? _conversationUI.CurrentConversation : null;
             IConversationEntity entity = conversation ? conversation.Entity : null;
-            _anchor = entity != null && SpeechBubbleTailManager.Clients.ContainsKey(entity) 
-                ? SpeechBubbleTailManager.Clients[entity] 
-                : null;
+            _anchor = SpeechBubbleAnchorsManager.GetAnchor(entity);
         }
         
         private void Update() => SetVerticesDirty();

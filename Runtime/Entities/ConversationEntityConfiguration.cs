@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem
+namespace SpellBoundAR.DialogueSystem.Entities
 {
     [Serializable]
     public class ConversationEntityConfiguration

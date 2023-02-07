@@ -1,4 +1,5 @@
 using System;
+using SpellBoundAR.DialogueSystem.Entities;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem
@@ -26,14 +27,14 @@ namespace SpellBoundAR.DialogueSystem
         public ConversationSelector(IConversationEntity conversationEntity)
         {
             ConversationEntity = conversationEntity;
-            DialogueSystem.ConversationEntity.OnAnyDialogueListChanged += OnAnyDialogueListChanged;
+            Entities.ConversationEntity.OnAnyDialogueListChanged += OnAnyDialogueListChanged;
             ConversationUI.OnDialogueInteractionEnded += OnDialogueInteractionEnded;
             RefreshNextDialogueInteraction();
         }
 
         ~ConversationSelector()
         {
-            DialogueSystem.ConversationEntity.OnAnyDialogueListChanged -= OnAnyDialogueListChanged;
+            Entities.ConversationEntity.OnAnyDialogueListChanged -= OnAnyDialogueListChanged;
             ConversationUI.OnDialogueInteractionEnded -= OnDialogueInteractionEnded;
         }
         

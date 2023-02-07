@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SpellBoundAR.DialogueSystem.Entities;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.Animation
