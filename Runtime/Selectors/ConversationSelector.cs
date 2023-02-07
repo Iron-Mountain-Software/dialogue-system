@@ -4,15 +4,19 @@ using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem
 {
-    [Serializable]
-    public class ConversationSelector
+    [RequireComponent(typeof(IConversationEntity))]
+    public class ConversationSelector : MonoBehaviour
     {
         public event Action<Conversation> OnNextConversationChanged;
 
+        [Header("References")]
         [SerializeField] private Conversation nextConversation;
 
-        public IConversationEntity ConversationEntity { get; private set; }
-        
+        [Header("Cache")]
+        private IConversationEntity _conversationEntity;
+
+        public IConversationEntity ConversationEntity => _conversationEntity ??= GetComponent<IConversationEntity>();
+
         public Conversation NextConversation
         {
             get => nextConversation;
@@ -24,15 +28,14 @@ namespace SpellBoundAR.DialogueSystem
             }
         }
 
-        public ConversationSelector(IConversationEntity conversationEntity)
+        private void OnEnable()
         {
-            ConversationEntity = conversationEntity;
             Entities.ConversationEntity.OnAnyDialogueListChanged += OnAnyDialogueListChanged;
             ConversationUI.OnDialogueInteractionEnded += OnDialogueInteractionEnded;
             RefreshNextDialogueInteraction();
         }
 
-        ~ConversationSelector()
+        private void OnDisable()
         {
             Entities.ConversationEntity.OnAnyDialogueListChanged -= OnAnyDialogueListChanged;
             ConversationUI.OnDialogueInteractionEnded -= OnDialogueInteractionEnded;
@@ -40,7 +43,7 @@ namespace SpellBoundAR.DialogueSystem
         
         private void OnAnyDialogueListChanged(ConversationEntity conversationEntity)
         {
-            if (ConversationEntity != null && ConversationEntity == conversationEntity) RefreshNextDialogueInteraction();
+            if (ConversationEntity != null && ConversationEntity.ID == conversationEntity.ID) RefreshNextDialogueInteraction();
         }
 
         private void OnDialogueInteractionEnded(Conversation conversation)

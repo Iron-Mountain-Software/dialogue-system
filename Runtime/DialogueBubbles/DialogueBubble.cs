@@ -70,9 +70,9 @@ namespace SpellBoundAR.DialogueSystem.DialogueBubbles
                 SetText(string.Empty);
                 Disappear();
             }
-            else if (conversation == DialogueTrigger.ConversationEntity.DefaultConversation)
+            else if (conversation == DialogueTrigger.ConversationSelector.ConversationEntity.DefaultConversation)
             {
-                List<Conversation> activeConversations = DialogueTrigger.ConversationEntity.GetActiveDialogue();
+                List<Conversation> activeConversations = DialogueTrigger.ConversationSelector.ConversationEntity.GetActiveDialogue();
                 foreach(Conversation activeConversation in activeConversations)
                 {
                     if (activeConversation.PreviewType != ConversationPreviewType.None)
