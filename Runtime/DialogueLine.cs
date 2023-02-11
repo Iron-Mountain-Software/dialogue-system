@@ -1,4 +1,5 @@
 using SpellBoundAR.Characters;
+using SpellBoundAR.DialogueSystem.Animation;
 using SpellBoundAR.VirtualCameraManagement;
 using UnityEngine;
 

@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Selectors.Editor
+namespace SpellBoundAR.DialogueSystem.Editor
 {
     [CustomEditor(typeof(ConversationSelector), true)]
     public class ConversationSelectorInspector : UnityEditor.Editor

@@ -1,4 +1,4 @@
-namespace SpellBoundAR.DialogueSystem
+namespace SpellBoundAR.DialogueSystem.Animation
 {
     public enum AnimationType
     {

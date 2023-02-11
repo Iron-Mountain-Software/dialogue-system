@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Triggers.Editor
+namespace SpellBoundAR.DialogueSystem.Editor
 {
     [CustomEditor(typeof(DialogueTrigger), true)]
     public class DialogueTriggerInspector : UnityEditor.Editor
