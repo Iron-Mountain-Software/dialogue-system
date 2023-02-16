@@ -1,9 +1,8 @@
-using System;
 using SpellBoundAR.DialogueSystem.Animation;
 using UnityEditor;
 using UnityEngine;
 
-namespace ARISE.DialogueSystem.Editor.Animation
+namespace SpellBoundAR.DialogueSystem.Editor
 {
     [CustomEditor(typeof(DialogueAnimationController), true)]
     public class DialogueAnimationControllerInspector : UnityEditor.Editor
@@ -21,10 +20,10 @@ namespace ARISE.DialogueSystem.Editor.Animation
 
             GUILayout.Space(5);
 
-            DrawAnimationRow("Nod", "nod", _dialogueAnimationController.Nod);
-            DrawAnimationRow("Exclamation", "exclamation", _dialogueAnimationController.Exclamation);
-            DrawAnimationRow("Question", "question", _dialogueAnimationController.Question);
-            DrawAnimationRow("Hunch", "hunch", _dialogueAnimationController.Hunch);
+            DrawAnimationRow("Nod", "nod", AnimationType.Nod);
+            DrawAnimationRow("Exclamation", "exclamation", AnimationType.Exclamation);
+            DrawAnimationRow("Question", "question", AnimationType.Question);
+            DrawAnimationRow("Hunch", "hunch", AnimationType.Hunch);
             
             GUILayout.Space(10);
             
@@ -39,12 +38,12 @@ namespace ARISE.DialogueSystem.Editor.Animation
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void DrawAnimationRow(string buttonLabel, string propertyName, string animationName)
+        private void DrawAnimationRow(string buttonLabel, string propertyName, AnimationType animationType)
         {
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button(buttonLabel, GUILayout.MaxWidth(100)))
             {
-                _dialogueAnimationController.PlayAnimation(animationName);
+                _dialogueAnimationController.PlayAnimation(animationType);
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty(propertyName), GUIContent.none);
             EditorGUILayout.EndHorizontal();
