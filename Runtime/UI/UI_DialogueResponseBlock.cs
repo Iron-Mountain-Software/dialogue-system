@@ -64,11 +64,11 @@ namespace SpellBoundAR.DialogueSystem.UI
                     GameObject instantiatedRow = Instantiate(rowPrefab, transform);
                     currentRow = instantiatedRow.GetComponent<RectTransform>();
                     currentRow.anchorMin = new Vector2(xPadding, yPadding + (currentRow.GetSiblingIndex() * spacing) + cumulativeRowHeight);
-                    currentRow.anchorMax = new Vector2(1 - xPadding, yPadding + (currentRow.GetSiblingIndex() * spacing) + cumulativeRowHeight + dialogueResponse.Height);
+                    currentRow.anchorMax = new Vector2(1 - xPadding, yPadding + (currentRow.GetSiblingIndex() * spacing) + cumulativeRowHeight + dialogueResponse.Style.Height);
                     currentRow.offsetMin = Vector2.zero;
                     currentRow.offsetMax = Vector2.zero;
                     currentRowIndex = dialogueResponse.Row;
-                    cumulativeRowHeight += dialogueResponse.Height;
+                    cumulativeRowHeight += dialogueResponse.Style.Height;
                 }
                 GameObject instantiated = Instantiate(dialogueResponse.Icon ? dialogueResponseWithIconPrefab : dialogueResponsePrefab, currentRow);
                 UI_DialogueResponse responseButton = instantiated.GetComponent<UI_DialogueResponse>();

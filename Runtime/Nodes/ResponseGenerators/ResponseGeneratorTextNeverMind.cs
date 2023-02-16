@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using SpellBoundAR.DialogueSystem.Responses;
+using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
 {
@@ -24,9 +25,17 @@ namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
         
         public override List<BasicResponse> GetDialogueResponses(ConversationUI conversationUI)
         {
+            IResponseStyle style = ScriptedResponseStyle
+                ? ScriptedResponseStyle
+                : new ResponseStyle(
+                    .08f,
+                    new Color(0.94f, 0.38f, 0.31f),
+                    new Color(0.68f, 0.2f, 0.17f),
+                    Color.white
+                );
             List<BasicResponse> dialogueResponses = new List<BasicResponse>
             {
-                new NeverMindResponse(this, Text, row, column)
+                new (this, Text, null, row, column, style)
             };
             return dialogueResponses;
         }

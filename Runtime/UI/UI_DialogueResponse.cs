@@ -20,11 +20,11 @@ namespace SpellBoundAR.DialogueSystem.UI
             if (basicResponse == null) { Destroy(gameObject); return; }
             _basicResponse = basicResponse;
             _conversationUI = conversationUI;
-            if (buttonImagePrimary) buttonImagePrimary.color = _basicResponse.ButtonColorPrimary;
-            if (buttonImageSecondary) buttonImageSecondary.color = _basicResponse.ButtonColorSecondary;
+            if (buttonImagePrimary) buttonImagePrimary.color = _basicResponse.Style.ButtonColorPrimary;
+            if (buttonImageSecondary) buttonImageSecondary.color = _basicResponse.Style.ButtonColorSecondary;
             if (text)
             {
-                text.color = _basicResponse.TextColor;
+                text.color = _basicResponse.Style.TextColor;
                 text.text = _basicResponse.Text;
             }
         }

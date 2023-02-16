@@ -15,7 +15,10 @@ namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
     
         [SerializeField] protected int row;
         [SerializeField] protected int column;
+        [SerializeField] private ScriptedResponseStyle style;
 
+        public ScriptedResponseStyle ScriptedResponseStyle => style;
+        
         public abstract List<BasicResponse> GetDialogueResponses(ConversationUI conversationUI);
 
         public override DialogueNode GetNextNode(ConversationUI conversationUI)

@@ -7,7 +7,7 @@ namespace SpellBoundAR.DialogueSystem.Responses
     {
         private readonly Conversation _conversation;
     
-        public PlayQueuedDialogueResponse(DialogueNode node, string text, Sprite icon, int row, int column, Conversation conversation) : base(node, text, icon, row, column)
+        public PlayQueuedDialogueResponse(DialogueNode node, string text, Sprite icon, int row, int column, IResponseStyle style, Conversation conversation) : base(node, text, icon, row, column, style)
         {
             _conversation = conversation;
         }

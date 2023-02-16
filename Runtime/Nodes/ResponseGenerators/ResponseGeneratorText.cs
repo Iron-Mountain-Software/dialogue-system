@@ -50,9 +50,17 @@ namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
     
         public override List<BasicResponse> GetDialogueResponses(ConversationUI conversationUI)
         {
+            IResponseStyle style = ScriptedResponseStyle
+                ? ScriptedResponseStyle
+                : new ResponseStyle(
+                    .11f,
+                    new Color(0.94f, 0.82f, 0.55f),
+                    new Color(0.58f, 0.5f, 0.35f),
+                    new Color(0.24f, 0.1f, 0.04f)
+                );
             List<BasicResponse> dialogueResponses = new List<BasicResponse>
             {
-                new BasicResponse(this, Text, Sprite, row, column)
+                new (this, Text, Sprite, row, column, style)
             };
             return dialogueResponses;
         }
