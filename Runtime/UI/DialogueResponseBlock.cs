@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using SpellBoundAR.DialogueSystem.Nodes;
@@ -9,13 +10,14 @@ using UnityEngine;
 namespace SpellBoundAR.DialogueSystem.UI
 {
     [RequireComponent(typeof(Drawer))]
-    public class UI_DialogueResponseBlock : MonoBehaviour
+    public class DialogueResponseBlock : MonoBehaviour
     {
         [Header("Settings")]
         [SerializeField] private float xPadding;
         [SerializeField] private float yPadding;
         [SerializeField] private float spacing;
-
+        [Space]
+        [SerializeField] private Transform rowParent;
         [SerializeField] private GameObject rowPrefab;
         [SerializeField] private GameObject dialogueResponsePrefab;
         [SerializeField] private GameObject dialogueResponseWithIconPrefab;
@@ -31,6 +33,8 @@ namespace SpellBoundAR.DialogueSystem.UI
                 return _drawer;
             }
         }
+
+        private Transform RowParent => rowParent ? rowParent : transform;
 
         private void Awake()
         {
@@ -61,7 +65,7 @@ namespace SpellBoundAR.DialogueSystem.UI
             {
                 if (!currentRow || dialogueResponse.Row != currentRowIndex)
                 {
-                    GameObject instantiatedRow = Instantiate(rowPrefab, transform);
+                    GameObject instantiatedRow = Instantiate(rowPrefab, RowParent);
                     currentRow = instantiatedRow.GetComponent<RectTransform>();
                     currentRow.anchorMin = new Vector2(xPadding, yPadding + (currentRow.GetSiblingIndex() * spacing) + cumulativeRowHeight);
                     currentRow.anchorMax = new Vector2(1 - xPadding, yPadding + (currentRow.GetSiblingIndex() * spacing) + cumulativeRowHeight + dialogueResponse.Style.Height);
@@ -71,7 +75,7 @@ namespace SpellBoundAR.DialogueSystem.UI
                     cumulativeRowHeight += dialogueResponse.Style.Height;
                 }
                 GameObject instantiated = Instantiate(dialogueResponse.Icon ? dialogueResponseWithIconPrefab : dialogueResponsePrefab, currentRow);
-                UI_DialogueResponse responseButton = instantiated.GetComponent<UI_DialogueResponse>();
+                DialogueResponseButton responseButton = instantiated.GetComponent<DialogueResponseButton>();
                 responseButton.Initialize(dialogueResponse, conversationUI);
             }
             Drawer.Open();
@@ -80,7 +84,7 @@ namespace SpellBoundAR.DialogueSystem.UI
         private void OnDialogueResponseBlockExited(DialogueResponseBlockNode dialogueResponse, ConversationUI conversationUI)
         {
             Drawer.Close();
-            StartCoroutine(DestroySelfAfterDelay());
+            Destroy(gameObject, 1f);
         }
     
         private void OnDialogueInteractionEnded(Conversation conversation)
@@ -88,10 +92,9 @@ namespace SpellBoundAR.DialogueSystem.UI
             Destroy(gameObject);
         }
 
-        private IEnumerator DestroySelfAfterDelay()
+        private void OnValidate()
         {
-            yield return new WaitForSeconds(1f);
-            Destroy(gameObject);
+            if (!rowParent) rowParent = transform;
         }
     }
 }

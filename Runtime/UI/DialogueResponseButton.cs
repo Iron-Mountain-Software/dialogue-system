@@ -1,11 +1,14 @@
-﻿using SpellBoundAR.DialogueSystem.Responses;
+﻿using System;
+using SpellBoundAR.DialogueSystem.Responses;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace SpellBoundAR.DialogueSystem.UI
 {
-    public class UI_DialogueResponse : MonoBehaviour
+    public class DialogueResponseButton : MonoBehaviour
     {
+        public event Action OnBasicResponseChanged;
+
         [Header("References")]
         [SerializeField] private Image buttonImagePrimary;
         [SerializeField] private Image buttonImageSecondary;
@@ -14,11 +17,22 @@ namespace SpellBoundAR.DialogueSystem.UI
         [Header("Cache")]
         private BasicResponse _basicResponse;
         private ConversationUI _conversationUI;
-    
+
+        public BasicResponse BasicResponse
+        {
+            get => _basicResponse;
+            private set
+            {
+                if (_basicResponse == value) return;
+                _basicResponse = value;
+                OnBasicResponseChanged?.Invoke();
+            }
+        }
+
         public virtual void Initialize(BasicResponse basicResponse, ConversationUI conversationUI)
         {
             if (basicResponse == null) { Destroy(gameObject); return; }
-            _basicResponse = basicResponse;
+            BasicResponse = basicResponse;
             _conversationUI = conversationUI;
             if (buttonImagePrimary) buttonImagePrimary.color = _basicResponse.Style.ButtonColorPrimary;
             if (buttonImageSecondary) buttonImageSecondary.color = _basicResponse.Style.ButtonColorSecondary;

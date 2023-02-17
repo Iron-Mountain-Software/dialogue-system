@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace SpellBoundAR.DialogueSystem.UI
 {
-    public class UI_DialogueResponseWithIcon : UI_DialogueResponse
+    public class UI_DialogueResponseWithIcon : DialogueResponseButton
     {
         [SerializeField] private Image icon;
 
