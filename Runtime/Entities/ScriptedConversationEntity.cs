@@ -9,8 +9,8 @@ namespace SpellBoundAR.DialogueSystem.Entities
     public class ScriptedConversationEntity : IdentifiableScriptableObject, IConversationEntity
     {
         [Header("Settings")]
-        [SerializeField] private Sprite depiction;
-        [SerializeField] private ConversationEntityConfiguration configuration;
+        [SerializeField] protected Sprite depiction;
+        [SerializeField] protected ConversationEntityConfiguration configuration;
 
         public Sprite Depiction => depiction;
         public ConversationEntity ConversationEntity { get; protected set; }
@@ -22,19 +22,12 @@ namespace SpellBoundAR.DialogueSystem.Entities
         public Conversation GetNextConversation() => ConversationEntity.GetNextConversation();
         public Sprite GetPortrait(PortraitType type) => ConversationEntity.GetPortrait(type);
 
-        private void OnEnable()
-        {
-            InitializeConversationEntity();
-        }
-
-        private void OnDisable()
-        {
-            ConversationEntity = null;
-        }
-
         protected virtual void InitializeConversationEntity()
         {
             ConversationEntity = new ConversationEntity(this, this, configuration);
         }
+        
+        private void OnEnable() => InitializeConversationEntity();
+        private void OnDisable() => ConversationEntity = null;
     }
 }
