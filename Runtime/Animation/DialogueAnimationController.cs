@@ -35,8 +35,11 @@ namespace SpellBoundAR.DialogueSystem.Animation
 
         private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine) 
         {
-            if (!animator) return;
-            if (_entity.ID != conversation.Entity.ID) return;
+            if (!animator
+                || _entity == null
+                || !conversation
+                || conversation.Entity == null
+                || _entity.ID != conversation.Entity.ID) return;
             AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
             foreach (string initialState in initialStates)
             {

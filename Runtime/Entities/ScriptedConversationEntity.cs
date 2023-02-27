@@ -13,7 +13,7 @@ namespace SpellBoundAR.DialogueSystem.Entities
         [SerializeField] private ConversationEntityConfiguration configuration;
 
         public Sprite Depiction => depiction;
-        public ConversationEntity ConversationEntity { get; private set; }
+        public ConversationEntity ConversationEntity { get; protected set; }
 
         public Conversation DefaultConversation => ConversationEntity.DefaultConversation;
         public List<Conversation> Conversations => ConversationEntity.Conversations;
@@ -24,12 +24,17 @@ namespace SpellBoundAR.DialogueSystem.Entities
 
         private void OnEnable()
         {
-            ConversationEntity = new ConversationEntity(this, this, configuration);
+            InitializeConversationEntity();
         }
 
         private void OnDisable()
         {
             ConversationEntity = null;
+        }
+
+        protected virtual void InitializeConversationEntity()
+        {
+            ConversationEntity = new ConversationEntity(this, this, configuration);
         }
     }
 }

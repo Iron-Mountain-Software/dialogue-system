@@ -1,6 +1,6 @@
 {
   "name": "com.spellboundar.dialogue-system",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "displayName": "Dialogue System",
   "description": "A system for writing and playing branching dialogue.",
   "unity": "2019.1",
@@ -29,7 +29,7 @@
     "com.spellboundar.canvas-groups": "1.0.2",
     "com.spellboundar.drawers": "1.0.3",
     "com.spellboundar.main-camera-management": "1.0.1",
-    "com.spellboundar.virtual-camera-management": "1.0.1",
-    "com.spellboundar.saved-assets-system": "1.0.4"
+    "com.spellboundar.virtual-camera-management": "1.0.2",
+    "com.spellboundar.saved-assets-system": "1.1.0"
   }
 }
