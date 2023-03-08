@@ -14,14 +14,15 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 		[Input] public Connection input;
 		[Output] public Connection output;
 		
-		[SerializeField] protected LocalizedString text;
-		[SerializeField] protected AudioClip audioClip;
+		[SerializeField] private LocalizedString text;
+		[SerializeField] private AudioClip audioClip;
+		[SerializeField] private LocalizedAsset<AudioClip> localizedAudio;
 		[SerializeField] protected PortraitType portrait;
 		[SerializeField] protected AnimationType animation;
 		[SerializeField] protected ResourceSprite sprite;
 		[SerializeField] protected VirtualCameraReference virtualCameraReference;
 
-		public string Text
+		protected string Text
 		{
 			get
 			{
@@ -40,13 +41,20 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 			}
 		}
 
-		public AudioClip AudioClip => audioClip;
-		
+		protected AudioClip AudioClip
+		{
+			get
+			{
+				if (audioClip) return audioClip;
+				return !localizedAudio.IsEmpty && Application.isPlaying ? localizedAudio.LoadAsset() : null;
+			}
+		}
+
 		protected virtual DialogueLine GetDialogueLine()
 		{
 			return new (
 				Text,
-				audioClip,
+				AudioClip,
 				portrait,
 				animation,
 				sprite ? sprite.Asset : null,
@@ -86,7 +94,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 
 		protected override bool ExtensionHasWarnings()
 		{
-			return !audioClip;
+			return !audioClip && localizedAudio.IsEmpty;
 		}
 
 		protected override bool ExtensionHasErrors()

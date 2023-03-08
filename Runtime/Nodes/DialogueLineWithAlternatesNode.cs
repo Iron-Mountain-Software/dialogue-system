@@ -15,8 +15,8 @@ namespace SpellBoundAR.DialogueSystem.Nodes
             if (random == -1)
             {
                 return new DialogueLine(
-                    text.IsEmpty ? string.Empty : text.GetLocalizedString(),
-                    audioClip,
+                    Text,
+                    AudioClip,
                     portrait,
                     animation,
                     sprite ? sprite.Asset : null,
