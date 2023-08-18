@@ -1,6 +1,6 @@
 using SpellBoundAR.Characters;
 using SpellBoundAR.DialogueSystem.Animation;
-using SpellBoundAR.ResourceUtilities;
+using IronMountain.ResourceUtilities;
 using SpellBoundAR.VirtualCameraManagement;
 using UnityEngine;
 using UnityEngine.Localization;

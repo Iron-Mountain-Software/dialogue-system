@@ -2,7 +2,7 @@ using System;
 using SpellBoundAR.Conditions;
 using SpellBoundAR.DialogueSystem.Entities;
 using SpellBoundAR.DialogueSystem.Nodes;
-using SpellBoundAR.ResourceUtilities;
+using IronMountain.ResourceUtilities;
 using SpellBoundAR.SavedAssetsSystem;
 using UnityEngine;
 using UnityEngine.Localization;
