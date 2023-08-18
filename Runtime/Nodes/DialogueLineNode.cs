@@ -22,7 +22,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 		[SerializeField] protected ResourceSprite sprite;
 		[SerializeField] protected VirtualCameraReference virtualCameraReference;
 
-		protected string Text
+		public string Text
 		{
 			get
 			{
@@ -41,7 +41,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 			}
 		}
 
-		protected AudioClip AudioClip
+		public AudioClip AudioClip
 		{
 			get
 			{
