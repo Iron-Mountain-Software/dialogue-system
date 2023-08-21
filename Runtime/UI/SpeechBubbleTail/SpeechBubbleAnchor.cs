@@ -1,13 +1,17 @@
-using SpellBoundAR.DialogueSystem.Entities;
+using SpellBoundAR.DialogueSystem.Speakers;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.UI.SpeechBubbleTail
 {
     public class SpeechBubbleAnchor : MonoBehaviour
     {
-        private IConversationEntity _conversationEntity;
-        private void Awake() => _conversationEntity = GetComponentInParent<IConversationEntity>();
-        private void OnEnable() => SpeechBubbleAnchorsManager.RegisterAnchor(_conversationEntity, transform);
-        private void OnDisable() => SpeechBubbleAnchorsManager.UnregisterAnchor(_conversationEntity);
+        [Header("Cache")]
+        private SpeakerController _speakerController;
+
+        public SpeakerController SpeakerController => _speakerController;
+        
+        private void Awake() => _speakerController = GetComponentInParent<SpeakerController>();
+        private void OnEnable() => SpeechBubbleAnchorsManager.RegisterAnchor(this);
+        private void OnDisable() => SpeechBubbleAnchorsManager.UnregisterAnchor(this);
     }
 }

@@ -24,8 +24,8 @@ namespace SpellBoundAR.DialogueSystem.UI
 
         private void OnDialogueInteractionStarted(Conversation conversation)
         {
-            if (!conversation || conversation.Entity == null) return;
-            if (_text) _text.text = conversation.Entity.Name;
+            if (!conversation || !conversation.Speaker) return;
+            if (_text) _text.text = conversation.Speaker.Name;
         }
     
         private void OnDialogueInteractionEnded(Conversation conversation)

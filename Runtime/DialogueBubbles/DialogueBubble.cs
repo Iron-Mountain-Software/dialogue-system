@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SpellBoundAR.DialogueSystem.Speakers;
 using TMPro;
 using UnityEngine;
 
@@ -19,65 +20,64 @@ namespace SpellBoundAR.DialogueSystem.DialogueBubbles
         [Header("Cache")]
         private DialogueBubbleAnimator _animator;
 
-        private DialogueTrigger DialogueTrigger { get; set; }
+        private SpeakerController SpeakerController { get; set; }
 
         private void Awake()
         {
             _animator = GetComponent<DialogueBubbleAnimator>();
-            DialogueTrigger = GetComponentInParent<DialogueTrigger>();
-            if (!DialogueTrigger) return;
-            DialogueTrigger.OnEnabled += OnDialogueTriggerEnabled;
-            DialogueTrigger.OnDisabled += OnDialogueTriggerDisabled;
+            SpeakerController = GetComponentInParent<SpeakerController>();
+            if (!SpeakerController) return;
+            SpeakerController.OnEnabled += OnDialogueTriggerEnabled;
+            SpeakerController.OnDisabled += OnDialogueTriggerDisabled;
         }
 
         private void OnDestroy()
         {
-            if (!DialogueTrigger) return;
-            DialogueTrigger.OnEnabled -= OnDialogueTriggerEnabled;
-            DialogueTrigger.OnDisabled -= OnDialogueTriggerDisabled;
+            if (!SpeakerController) return;
+            SpeakerController.OnEnabled -= OnDialogueTriggerEnabled;
+            SpeakerController.OnDisabled -= OnDialogueTriggerDisabled;
         }
         
         private void Start() => Refresh();
 
         private void OnDialogueTriggerEnabled()
         {
-            if (DialogueTrigger && DialogueTrigger.ConversationSelector != null) DialogueTrigger.ConversationSelector.OnNextConversationChanged += ResolveState;
+            if (SpeakerController && SpeakerController.ConversationSelector != null) SpeakerController.ConversationSelector.OnNextConversationChanged += ResolveState;
             Refresh();
         }
 
         private void OnDialogueTriggerDisabled()
         {
-            if (DialogueTrigger && DialogueTrigger.ConversationSelector != null) DialogueTrigger.ConversationSelector.OnNextConversationChanged -= ResolveState;
+            if (SpeakerController && SpeakerController.ConversationSelector != null) SpeakerController.ConversationSelector.OnNextConversationChanged -= ResolveState;
             Refresh();
         }
 
         private void Refresh()
         {
             Conversation conversation = null;
-            if (DialogueTrigger
-                && DialogueTrigger.enabled
-                && DialogueTrigger.ConversationSelector != null)
+            if (SpeakerController
+                && SpeakerController.enabled
+                && SpeakerController.ConversationSelector != null)
             {
-                conversation = DialogueTrigger.ConversationSelector.NextConversation;
+                conversation = SpeakerController.ConversationSelector.NextConversation;
             }
             ResolveState(conversation);
         }
 
         private void ResolveState(Conversation conversation)
         {
-            if (!DialogueTrigger || !DialogueTrigger.enabled || !conversation)
+            if (!SpeakerController || !SpeakerController.enabled || !conversation)
             {
                 SetText(string.Empty);
                 Disappear();
             }
-            else if (conversation == DialogueTrigger.ConversationSelector.ConversationEntity.DefaultConversation)
+            else if (conversation == SpeakerController.ConversationSelector.Speaker.DefaultConversation)
             {
-                List<Conversation> activeConversations = DialogueTrigger.ConversationSelector.ConversationEntity.GetActiveDialogue();
-                foreach(Conversation activeConversation in activeConversations)
+                foreach(Conversation testConversation in SpeakerController.ConversationSelector.Speaker.Conversations)
                 {
-                    if (activeConversation.PreviewType != ConversationPreviewType.None)
+                    if (testConversation.IsActive && testConversation.PreviewType != ConversationPreviewType.None)
                     {
-                        AppearFor(activeConversation ? activeConversation : conversation);
+                        AppearFor(testConversation ? testConversation : conversation);
                         return;
                     }
                 }

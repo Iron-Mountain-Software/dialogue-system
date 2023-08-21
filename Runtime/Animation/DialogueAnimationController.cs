@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
-using SpellBoundAR.DialogueSystem.Entities;
+using SpellBoundAR.DialogueSystem.Speakers;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.Animation
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(IConversationEntity))]
+    [RequireComponent(typeof(SpeakerController))]
     public class DialogueAnimationController : MonoBehaviour 
     {
         [SerializeField] private List<string> initialStates;
@@ -18,12 +17,12 @@ namespace SpellBoundAR.DialogueSystem.Animation
 
         [SerializeField] private Animator animator;
 
-        private IConversationEntity _entity;
+        private SpeakerController _speakerController;
         private readonly Dictionary<AnimationType, string> _animations = new ();
 
         private void Awake()
         {
-            _entity = GetComponent<IConversationEntity>();
+            _speakerController = GetComponent<SpeakerController>();
             _animations.Add(AnimationType.Exclamation, exclamation);
             _animations.Add(AnimationType.Hunch, hunch);
             _animations.Add(AnimationType.Nod, nod);
@@ -36,10 +35,10 @@ namespace SpellBoundAR.DialogueSystem.Animation
         private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine) 
         {
             if (!animator
-                || _entity == null
+                || !_speakerController
                 || !conversation
-                || conversation.Entity == null
-                || _entity.ID != conversation.Entity.ID) return;
+                || !conversation.Speaker
+                || _speakerController.Speaker != conversation.Speaker) return;
             AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
             foreach (string initialState in initialStates)
             {

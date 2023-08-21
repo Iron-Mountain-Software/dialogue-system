@@ -1,5 +1,5 @@
 using System.Collections;
-using SpellBoundAR.Characters;
+using SpellBoundAR.DialogueSystem.Speakers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,13 +38,13 @@ namespace SpellBoundAR.DialogueSystem.UI
             StopAllCoroutines();
             switch(dialogueLine.Portrait)
             {
-                case PortraitType.Happy:
+                case SpeakerPortraitCollection.PortraitType.Happy:
                     StartCoroutine(LerpColor(_image.color, happyColor));
                     break;
-                case PortraitType.Neutral:
+                case SpeakerPortraitCollection.PortraitType.Neutral:
                     StartCoroutine(LerpColor(_image.color, neutralColor));
                     break;
-                case PortraitType.Sad:
+                case SpeakerPortraitCollection.PortraitType.Sad:
                     StartCoroutine(LerpColor(_image.color, sadColor));
                     break;
             }

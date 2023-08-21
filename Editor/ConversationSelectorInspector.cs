@@ -1,3 +1,4 @@
+using SpellBoundAR.DialogueSystem.Selection;
 using UnityEditor;
 using UnityEngine;
 
@@ -22,7 +23,7 @@ namespace SpellBoundAR.DialogueSystem.Editor
         private void DrawRefreshButton()
         {
             if (!GUILayout.Button("Refresh")) return;
-            if (_conversationSelector) _conversationSelector.RefreshNextDialogueInteraction();
+            if (_conversationSelector) _conversationSelector.RefreshNextConversation();
         }
     }
 }

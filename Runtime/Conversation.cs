@@ -1,8 +1,10 @@
 using System;
+using System.IO;
 using SpellBoundAR.Conditions;
-using SpellBoundAR.DialogueSystem.Entities;
 using SpellBoundAR.DialogueSystem.Nodes;
 using IronMountain.ResourceUtilities;
+using SpellBoundAR.AssetManagement;
+using SpellBoundAR.DialogueSystem.Speakers;
 using SpellBoundAR.SavedAssetsSystem;
 using UnityEngine;
 using UnityEngine.Localization;
@@ -15,9 +17,10 @@ using UnityEditor.Localization;
 
 namespace SpellBoundAR.DialogueSystem
 {
-    public abstract class Conversation : NodeGraph, ISavedClass
+    public abstract class Conversation : NodeGraph, IIdentifiable
     {
         public static event Action<Conversation> OnAnyPlaythroughsChanged;
+        public event Action OnIsActiveChanged;
         public event Action OnPlaythroughsChanged;
 
         public enum BehaviorWhenQueued
@@ -47,8 +50,10 @@ namespace SpellBoundAR.DialogueSystem
         [SerializeField] private BehaviorWhenQueued behaviorWhenQueued;
         [SerializeField] private bool looping;
 
-        protected ConversationSavedData SavedData;
-
+        [Header("Cache")]
+        private bool _isActive;
+        private SavedInt _playthroughs;
+        
         public string ID
         {
             get => id;
@@ -56,7 +61,7 @@ namespace SpellBoundAR.DialogueSystem
         }
 
         public string Name => name;
-        public abstract IConversationEntity Entity { get; }
+        public Speaker Speaker { get; }
         public bool PrioritizeOverDefault => prioritizeOverDefault;
         public int Priority => priority;
 
@@ -105,63 +110,75 @@ namespace SpellBoundAR.DialogueSystem
 
         public BehaviorWhenQueued BehaviorWhenEnqueued => behaviorWhenQueued;
         public bool Looping => looping;
-        
-        public virtual void Save()
-        {
-            SavedData ??= new ConversationSavedData(this);
-        }
 
-        public virtual void Load()
+        public bool IsActive
         {
-            SavedData ??= new ConversationSavedData(this);
-        }
-        
-        public int Playthroughs
-        {
-            get
-            {
-                Load();
-                return SavedData.playthroughs;
-            }
+            get => _isActive;
             set
             {
-                Load();
-                SavedData.playthroughs = value;
-                Save();
+                if (_isActive == value) return;
+                _isActive = value;
+                OnIsActiveChanged?.Invoke();
+            }
+        }
+
+        public int Playthroughs
+        {
+            get => _playthroughs.Value;
+            set
+            {
+                if (_playthroughs.Value == value) return;
+                _playthroughs.Value = value;
                 OnPlaythroughsChanged?.Invoke();
                 OnAnyPlaythroughsChanged?.Invoke(this);
             }
         }
 
-        private void OnEnable()
+        protected virtual string Directory => Path.Combine("Conversations", ID);
+
+        protected virtual void OnEnable()
         {
-            if (condition) condition.OnConditionStateChanged += OnConditionStateChanged;
+            if (condition) condition.OnConditionStateChanged += RefreshActiveState;
+            OnPlaythroughsChanged += RefreshActiveState;
             ConversationsManager.AllConversations.Add(this);
-            OnConditionStateChanged();
+            RefreshActiveState();
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
-            if (condition) condition.OnConditionStateChanged -= OnConditionStateChanged;
+            if (condition) condition.OnConditionStateChanged -= RefreshActiveState;
+            OnPlaythroughsChanged -= RefreshActiveState;
             ConversationsManager.AllConversations.Remove(this);
         }
 
-        private void OnConditionStateChanged()
+        protected void InitializeSavedInformation()
         {
-            if (!condition) return;
-            if (condition.Evaluate())
+            string directory = Directory;
+            _playthroughs = new SavedInt(directory, "playthroughs.txt", 0, null);
+        }
+
+        private void RefreshActiveState()
+        {
+            if (condition && condition.Evaluate()) Activate();
+            else Deactivate();
+        }
+
+        private void Activate()
+        {
+            if (IsActive) return;
+            IsActive = true;
+            ConversationsManager.RegisterActiveConversation(this);
+            if (Playthroughs == 0 && behaviorWhenQueued == BehaviorWhenQueued.Played)
             {
-                ConversationsManager.RegisterActiveConversation(this);
-                if (Playthroughs > 0) return;
-                if (behaviorWhenQueued == BehaviorWhenQueued.Played)
-                {
-                    ConversationManager.EnqueueConversation(this);
-                }
+                ConversationManager.EnqueueConversation(this);
             }
-            else
-            {
-                ConversationsManager.UnregisterActiveConversation(this);
-            }
+        }
+
+        private void Deactivate()
+        {
+            if (!IsActive) return;
+            IsActive = false;
+            ConversationsManager.UnregisterActiveConversation(this);
         }
 
         public virtual void OnConversationStarted() { }

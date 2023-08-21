@@ -13,7 +13,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
         public override List<BasicResponse> GetDialogueResponses(ConversationUI conversationUI)
         {
             List<BasicResponse> dialogueResponses = new List<BasicResponse>();
-            List<Conversation> conversations = conversationUI.CurrentConversation.Entity.GetActiveDialogue();
+            Conversation thisConversation = conversationUI.CurrentConversation;
             IResponseStyle style = ScriptedResponseStyle
                 ? ScriptedResponseStyle
                 : new ResponseStyle(
@@ -23,9 +23,12 @@ namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
                     new Color(0.24f, 0.1f, 0.04f)
                 );
             var rowOffset = 0;
-            foreach (Conversation conversation in conversations)
+            foreach (Conversation conversation in thisConversation.Speaker.Conversations)
             {
-                if (conversation != conversationUI.CurrentConversation && !conversation.PrioritizeOverDefault)
+                if (conversation
+                    && conversation.IsActive
+                    && conversation != thisConversation
+                    && !conversation.PrioritizeOverDefault)
                 {
                     dialogueResponses.Add(new PlayQueuedDialogueResponse(
                         this, 

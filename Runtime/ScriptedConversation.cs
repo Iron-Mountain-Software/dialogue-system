@@ -1,4 +1,4 @@
-using SpellBoundAR.DialogueSystem.Entities;
+using SpellBoundAR.DialogueSystem.Speakers;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem
@@ -7,8 +7,6 @@ namespace SpellBoundAR.DialogueSystem
     public class ScriptedConversation : Conversation
     {
         [Header("Settings")]
-        [SerializeField] private ScriptedConversationEntity scriptedConversationEntity;
-
-        public override IConversationEntity Entity => scriptedConversationEntity;
+        [SerializeField] private Speaker speaker;
     }
 }

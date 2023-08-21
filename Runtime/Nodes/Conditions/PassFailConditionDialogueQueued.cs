@@ -6,7 +6,15 @@ namespace SpellBoundAR.DialogueSystem.Nodes.Conditions
 
         protected override bool TestCondition(ConversationUI conversationUI)
         {
-            return conversationUI.CurrentConversation.Entity.GetActiveDialogue().Count > 0;
+            Conversation thisConversation = conversationUI.CurrentConversation;
+            foreach (Conversation testConversation in thisConversation.Speaker.Conversations)
+            {
+                if (testConversation
+                    && testConversation.IsActive
+                    && testConversation != thisConversation
+                    && testConversation.PrioritizeOverDefault) return true;
+            }
+            return false;
         }
         
 #if UNITY_EDITOR

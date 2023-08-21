@@ -1,4 +1,5 @@
 using SpellBoundAR.Conditions;
+using SpellBoundAR.DialogueSystem.Speakers;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.Conditions
@@ -24,8 +25,8 @@ namespace SpellBoundAR.DialogueSystem.Conditions
         public override string DefaultName => (conversation ? conversation.name : "Null") + " was Played";
         public override string NegatedName => (conversation ? conversation.name : "Null") + " was NOT Played";
         
-        public override Sprite Depiction => conversation && conversation.Entity != null
-                ? conversation.Entity.Depiction
+        public override Sprite Depiction => conversation && conversation.Speaker != null
+                ? conversation.Speaker.Portraits.GetPortrait(SpeakerPortraitCollection.PortraitType.Neutral)
                 : null;
         
         public override bool HasErrors()

@@ -22,8 +22,8 @@ namespace SpellBoundAR.DialogueSystem.UI
 
         private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)
         {
-            if (!conversation || conversation.Entity == null || dialogueLine == null) return;
-            Sprite sprite = conversation.Entity.GetPortrait(dialogueLine.Portrait);
+            if (!conversation || !conversation.Speaker || dialogueLine == null) return;
+            Sprite sprite = conversation.Speaker.Portraits.GetPortrait(dialogueLine.Portrait);
             SetImageSprite(sprite);
         }
 

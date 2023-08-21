@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using SpellBoundAR.DialogueSystem.Entities;
+using SpellBoundAR.DialogueSystem.Speakers;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.UI.SpeechBubbleTail
@@ -9,33 +9,29 @@ namespace SpellBoundAR.DialogueSystem.UI.SpeechBubbleTail
     {
         public static event Action OnAnchorsChanged;
         
-        public static readonly Dictionary<string, Transform> Anchors = new ();
+        public static readonly List<SpeechBubbleAnchor> Anchors = new ();
 
-        public static void RegisterAnchor(IConversationEntity client, Transform anchor)
+        public static void RegisterAnchor(SpeechBubbleAnchor anchor)
         {
-            if (client == null || !anchor) return;
-            if (Anchors.ContainsKey(client.ID))
-            {
-                Anchors[client.ID] = anchor;
-            }
-            else Anchors.Add(client.ID, anchor);
+            if (!anchor || Anchors.Contains(anchor)) return;
+            Anchors.Add(anchor);
             OnAnchorsChanged?.Invoke();
         }
 
-        public static Transform GetAnchor(IConversationEntity client)
+        public static void UnregisterAnchor(SpeechBubbleAnchor anchor)
         {
-            if (client == null) return null;
-            return Anchors.ContainsKey(client.ID)
-                ? Anchors[client.ID]
-                : null;
-        }
-
-        public static void UnregisterAnchor(IConversationEntity client)
-        {
-            if (client == null) return;
-            if (!Anchors.ContainsKey(client.ID)) return;
-            Anchors.Remove(client.ID);
+            if (!anchor || !Anchors.Contains(anchor)) return;
+            Anchors.Remove(anchor);
             OnAnchorsChanged?.Invoke();
+        }
+        
+        public static Transform GetAnchor(Speaker speaker)
+        {
+            if (!speaker) return null;
+            return Anchors.Find(test =>
+                test
+                && test.SpeakerController
+                && test.SpeakerController.Speaker == speaker).transform;
         }
     }
 }

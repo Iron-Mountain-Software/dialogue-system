@@ -1,4 +1,4 @@
-﻿using SpellBoundAR.DialogueSystem.Entities;
+﻿using SpellBoundAR.DialogueSystem.Speakers;
 using SpellBoundAR.MainCameraManagement;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,8 +31,8 @@ namespace SpellBoundAR.DialogueSystem.UI.SpeechBubbleTail
         private void RefreshAnchor()
         {
             Conversation conversation = _conversationUI ? _conversationUI.CurrentConversation : null;
-            IConversationEntity entity = conversation ? conversation.Entity : null;
-            _anchor = SpeechBubbleAnchorsManager.GetAnchor(entity);
+            Speaker speaker = conversation ? conversation.Speaker : null;
+            _anchor = SpeechBubbleAnchorsManager.GetAnchor(speaker);
         }
         
         private void Update() => SetVerticesDirty();

@@ -1,6 +1,6 @@
-using SpellBoundAR.Characters;
 using SpellBoundAR.DialogueSystem.Animation;
 using IronMountain.ResourceUtilities;
+using SpellBoundAR.DialogueSystem.Speakers;
 using SpellBoundAR.VirtualCameraManagement;
 using UnityEngine;
 using UnityEngine.Localization;
@@ -17,7 +17,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 		[SerializeField] private LocalizedString text;
 		[SerializeField] private AudioClip audioClip;
 		[SerializeField] private LocalizedAsset<AudioClip> localizedAudio;
-		[SerializeField] protected PortraitType portrait;
+		[SerializeField] protected SpeakerPortraitCollection.PortraitType portrait;
 		[SerializeField] protected AnimationType animation;
 		[SerializeField] protected ResourceSprite sprite;
 		[SerializeField] protected VirtualCameraReference virtualCameraReference;

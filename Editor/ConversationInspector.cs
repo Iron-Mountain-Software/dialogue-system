@@ -23,7 +23,7 @@ namespace SpellBoundAR.DialogueSystem.Editor
         public override void OnInspectorGUI()
         {
             if (GUILayout.Button("Select", GUILayout.MinHeight(30))) 
-                Selection.activeObject = target;
+                UnityEditor.Selection.activeObject = target;
             //if (GUILayout.Button("Log Dialogue Interaction Content", GUILayout.MinHeight(30)))
                 //Debug.Log(DialogueInteractionPrinter.PrintDialogueInteraction((Conversation)target));
             EditorGUILayout.Space();

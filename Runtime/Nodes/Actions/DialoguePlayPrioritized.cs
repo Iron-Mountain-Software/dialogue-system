@@ -9,9 +9,12 @@ namespace SpellBoundAR.DialogueSystem.Nodes.Actions
             if (graph is Conversation conversation)
             {
                 Conversation nextConversation = null;
-                foreach (Conversation testConversation in conversation.Entity.GetActiveDialogue())
+                foreach (Conversation testConversation in conversation.Speaker.Conversations)
                 {
-                    if (!testConversation || testConversation == conversation || !testConversation.PrioritizeOverDefault) continue;
+                    if (!testConversation
+                        || !testConversation.IsActive
+                        || testConversation == conversation
+                        || !testConversation.PrioritizeOverDefault) continue;
                     if (!nextConversation || testConversation.Priority < nextConversation.Priority) nextConversation = testConversation;
                 }
                 if (nextConversation) ConversationManager.EnqueueConversation(nextConversation);
