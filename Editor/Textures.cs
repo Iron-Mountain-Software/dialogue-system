@@ -13,6 +13,42 @@ namespace SpellBoundAR.DialogueSystem.Editor
             }
         }
         
+        private static Texture2D _grayTexture;
+        public static Texture2D GrayTexture {
+            get
+            {
+                if (!_grayTexture) _grayTexture = InitializeTexture(new Color(0.29f, 0.29f, 0.29f));
+                return _grayTexture;
+            }
+        }
+        
+        private static Texture2D _greenTexture;
+        public static Texture2D GreenTexture {
+            get
+            {
+                if (!_greenTexture) _greenTexture = InitializeTexture(new Color(0.09f, 0.78f, 0.11f));
+                return _greenTexture;
+            }
+        }
+        
+        private static Texture2D _redTexture;
+        public static Texture2D RedTexture {
+            get
+            {
+                if (!_redTexture) _redTexture = InitializeTexture(new Color(0.76f, 0.11f, 0f));
+                return _redTexture;
+            }
+        }
+        
+        private static Texture2D _yellowTexture;
+        public static Texture2D YellowTexture {
+            get
+            {
+                if (!_yellowTexture) _yellowTexture = InitializeTexture(new Color(1f, 0.61f, 0.08f));
+                return _yellowTexture;
+            }
+        }
+        
         private static Texture2D InitializeTexture(Color color)
         {
             Texture2D texture = new Texture2D(1, 1);
