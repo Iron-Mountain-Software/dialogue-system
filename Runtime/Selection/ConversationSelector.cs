@@ -31,14 +31,14 @@ namespace SpellBoundAR.DialogueSystem.Selection
 
         public abstract void RefreshNextConversation();
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             if (speaker) speaker.OnActiveConversationsChanged += RefreshNextConversation;
             ConversationUI.OnDialogueInteractionEnded += OnDialogueInteractionEnded;
             RefreshNextConversation();
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             if (speaker) speaker.OnActiveConversationsChanged -= RefreshNextConversation;
             ConversationUI.OnDialogueInteractionEnded -= OnDialogueInteractionEnded;
