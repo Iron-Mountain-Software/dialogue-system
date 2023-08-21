@@ -31,7 +31,7 @@ namespace SpellBoundAR.DialogueSystem.UI.SpeechBubbleTail
         private void RefreshAnchor()
         {
             Conversation conversation = _conversationUI ? _conversationUI.CurrentConversation : null;
-            Speaker speaker = conversation ? conversation.Speaker : null;
+            ISpeaker speaker = conversation ? conversation.Speaker : null;
             _anchor = SpeechBubbleAnchorsManager.GetAnchor(speaker);
         }
         

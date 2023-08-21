@@ -22,7 +22,7 @@ namespace SpellBoundAR.DialogueSystem.UI
 
         private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)
         {
-            if (!conversation || !conversation.Speaker || dialogueLine == null) return;
+            if (!conversation || conversation.Speaker == null || dialogueLine == null) return;
             Sprite sprite = conversation.Speaker.Portraits.GetPortrait(dialogueLine.Portrait);
             SetImageSprite(sprite);
         }

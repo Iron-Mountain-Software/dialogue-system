@@ -25,9 +25,9 @@ namespace SpellBoundAR.DialogueSystem.UI.SpeechBubbleTail
             OnAnchorsChanged?.Invoke();
         }
         
-        public static Transform GetAnchor(Speaker speaker)
+        public static Transform GetAnchor(ISpeaker speaker)
         {
-            if (!speaker) return null;
+            if (speaker == null) return null;
             return Anchors.Find(test =>
                 test
                 && test.SpeakerController

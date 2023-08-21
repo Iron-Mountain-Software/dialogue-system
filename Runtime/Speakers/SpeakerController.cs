@@ -1,6 +1,7 @@
 using System;
 using SpellBoundAR.DialogueSystem.Selection;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace SpellBoundAR.DialogueSystem.Speakers
 {
@@ -10,13 +11,13 @@ namespace SpellBoundAR.DialogueSystem.Speakers
         public event Action OnEnabled;
         public event Action OnDisabled;
 
-        [SerializeField] private Speaker speaker;
+        [SerializeField] private Object speaker;
         [SerializeField] private ConversationSelector conversationSelector;
 
-        public Speaker Speaker
+        public ISpeaker Speaker
         {
-            get => speaker;
-            set => speaker = value;
+            get => speaker as ISpeaker;
+            set => speaker = value as Object;
         }
 
         public virtual ConversationSelector ConversationSelector
@@ -37,6 +38,12 @@ namespace SpellBoundAR.DialogueSystem.Speakers
                 ? ConversationSelector.NextConversation
                 : null;
             if (conversation) ConversationManager.PlayConversation(conversation);
+        }
+
+        private void OnValidate()
+        {
+            if (speaker is GameObject speakerObject) speaker = speakerObject.GetComponent<ISpeaker>() as Object;
+            if (speaker is not ISpeaker) speaker = null;
         }
     }
 }

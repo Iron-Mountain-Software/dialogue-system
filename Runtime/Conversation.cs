@@ -9,7 +9,7 @@ using SpellBoundAR.SavedAssetsSystem;
 using UnityEngine;
 using UnityEngine.Localization;
 using XNode;
-
+using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.Localization;
@@ -31,6 +31,7 @@ namespace SpellBoundAR.DialogueSystem
         
         // About
         [SerializeField] private string id;
+        [SerializeField] private Object speaker;
         
         // Priority
         [SerializeField] private bool prioritizeOverDefault = true;
@@ -59,9 +60,15 @@ namespace SpellBoundAR.DialogueSystem
             get => id;
             set => id = value;
         }
+        
+        public ISpeaker Speaker
+        {
+            get => speaker as ISpeaker;
+            set => speaker = value as Object;
+        }
+
 
         public string Name => name;
-        public Speaker Speaker { get; }
         public bool PrioritizeOverDefault => prioritizeOverDefault;
         public int Priority => priority;
 
@@ -185,6 +192,12 @@ namespace SpellBoundAR.DialogueSystem
 
 #if UNITY_EDITOR
 
+        private void OnValidate()
+        {
+            if (speaker is GameObject speakerObject) speaker = speakerObject.GetComponent<ISpeaker>() as Object;
+            if (speaker is not ISpeaker) speaker = null;
+        }
+        
         public virtual void Reset()
         {
             GenerateNewID();

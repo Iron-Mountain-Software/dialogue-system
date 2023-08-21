@@ -37,7 +37,7 @@ namespace SpellBoundAR.DialogueSystem.Animation
             if (!animator
                 || !_speakerController
                 || !conversation
-                || !conversation.Speaker
+                || conversation.Speaker == null
                 || _speakerController.Speaker != conversation.Speaker) return;
             AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
             foreach (string initialState in initialStates)
