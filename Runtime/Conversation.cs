@@ -193,7 +193,7 @@ namespace SpellBoundAR.DialogueSystem
 
 #if UNITY_EDITOR
 
-        private void OnValidate()
+        protected virtual void OnValidate()
         {
             if (speaker is GameObject speakerObject) speaker = speakerObject.GetComponent<ISpeaker>() as Object;
             if (speaker is not ISpeaker) speaker = null;
