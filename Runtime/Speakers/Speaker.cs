@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.Speakers
 {
-    [CreateAssetMenu(menuName = "Scriptable Objects/Dialogue/Scripted Conversation Entity")]
+    [CreateAssetMenu(menuName = "Scriptable Objects/Dialogue/Speaker")]
     public class Speaker : IdentifiableScriptableObject, ISpeaker
     {
         public event Action OnActiveConversationsChanged;

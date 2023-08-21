@@ -1,3 +1,4 @@
+using System.Linq;
 using SpellBoundAR.Conditions;
 using SpellBoundAR.Conditions.Editor;
 using UnityEditor;
@@ -22,8 +23,8 @@ namespace SpellBoundAR.DialogueSystem.Editor
 
         public override void OnInspectorGUI()
         {
-            if (GUILayout.Button("Select", GUILayout.MinHeight(30))) 
-                UnityEditor.Selection.activeObject = target;
+            DrawSelectThisButton();
+            DrawSelectAllForThisSpeakerButton();
             //if (GUILayout.Button("Log Dialogue Interaction Content", GUILayout.MinHeight(30)))
                 //Debug.Log(DialogueInteractionPrinter.PrintDialogueInteraction((Conversation)target));
             EditorGUILayout.Space();
@@ -36,20 +37,37 @@ namespace SpellBoundAR.DialogueSystem.Editor
             serializedObject.ApplyModifiedProperties();
         }
 
+        protected virtual void DrawSelectThisButton()
+        {
+            if (GUILayout.Button("Select this conversation", GUILayout.MinHeight(30)))
+                UnityEditor.Selection.activeObject = target;
+        }
+        
+        protected virtual void DrawSelectAllForThisSpeakerButton()
+        {
+            if (GUILayout.Button("Select all conversations for this speaker", GUILayout.MinHeight(30)))
+            {
+                UnityEditor.Selection.objects = ConversationsManager.AllConversations.Where(test =>
+                    test && test.Speaker == _conversation.Speaker).ToArray();
+            }
+        }
+
         protected virtual void DrawGeneralSection()
         {
             GUILayout.Space(10);
             EditorGUILayout.BeginVertical(Styles.Container, GUILayout.MinHeight(75));
             GUILayout.Label("General", Styles.Header, GUILayout.ExpandWidth(true));
-            EditorGUI.indentLevel++;
             EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("ID", GUILayout.MaxWidth(20));
+            GUILayout.Label("ID", GUILayout.MaxWidth(50));
             EditorGUI.BeginDisabledGroup(true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("id"), GUIContent.none);
             EditorGUI.EndDisabledGroup();
             EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Speaker", GUILayout.MaxWidth(50));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("speaker"), GUIContent.none);
+            EditorGUILayout.EndHorizontal();
             DrawMoreInGeneralSection();
-            EditorGUI.indentLevel--;
             EditorGUILayout.EndVertical();
         }
 
@@ -58,7 +76,6 @@ namespace SpellBoundAR.DialogueSystem.Editor
             GUILayout.Space(10);
             EditorGUILayout.BeginVertical(Styles.Container, GUILayout.MinHeight(75));
             GUILayout.Label("Priority", Styles.Header, GUILayout.ExpandWidth(true));
-            EditorGUI.indentLevel++;
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Prioritize");
             EditorGUILayout.PropertyField(serializedObject.FindProperty("prioritizeOverDefault"), GUIContent.none,
@@ -79,8 +96,6 @@ namespace SpellBoundAR.DialogueSystem.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("invokingLine"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("invokingIcon"), GUIContent.none);
             }
-
-            EditorGUI.indentLevel--;
             EditorGUILayout.EndVertical();
         }
 
@@ -89,12 +104,10 @@ namespace SpellBoundAR.DialogueSystem.Editor
             GUILayout.Space(10);
             EditorGUILayout.BeginVertical(Styles.Container, GUILayout.MinHeight(75));
             GUILayout.Label("Preview", Styles.Header, GUILayout.ExpandWidth(true));
-            EditorGUI.indentLevel++;
             EditorGUILayout.PropertyField(serializedObject.FindProperty("alertInConversationMenu"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("previewType"), GUIContent.none);
             if (serializedObject.FindProperty("previewType").enumValueFlag != (int) ConversationPreviewType.None)
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("previewText"), GUIContent.none);
-            EditorGUI.indentLevel--;
             EditorGUILayout.EndVertical();
         }
 
@@ -125,14 +138,12 @@ namespace SpellBoundAR.DialogueSystem.Editor
             EditorGUILayout.EndVertical();
             EditorGUILayout.EndHorizontal();
             
-            EditorGUI.indentLevel++;
             EditorGUILayout.PropertyField(serializedObject.FindProperty("condition"), GUIContent.none, false);
             if (conversation.Condition)
             {
                 CreateCachedEditor(conversation.Condition, null, ref _cachedConditionsEditor);
                 _cachedConditionsEditor.OnInspectorGUI();
             }
-            EditorGUI.indentLevel--;
             EditorGUILayout.EndVertical();
         }
 
@@ -141,10 +152,8 @@ namespace SpellBoundAR.DialogueSystem.Editor
             GUILayout.Space(10);
             EditorGUILayout.BeginVertical(Styles.Container, GUILayout.MinHeight(75));
             EditorGUILayout.LabelField("Playback", Styles.Header);
-            EditorGUI.indentLevel++;
             EditorGUILayout.PropertyField(serializedObject.FindProperty("behaviorWhenQueued"), false);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("looping"), false);
-            EditorGUI.indentLevel--;
             EditorGUILayout.EndVertical();
         }
     }

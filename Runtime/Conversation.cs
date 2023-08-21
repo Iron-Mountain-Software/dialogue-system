@@ -17,7 +17,8 @@ using UnityEditor.Localization;
 
 namespace SpellBoundAR.DialogueSystem
 {
-    public abstract class Conversation : NodeGraph, IIdentifiable
+    [CreateAssetMenu(menuName = "Scriptable Objects/Dialogue/Conversation")]
+    public class Conversation : NodeGraph, IIdentifiable
     {
         public static event Action<Conversation> OnAnyPlaythroughsChanged;
         public event Action OnIsActiveChanged;
