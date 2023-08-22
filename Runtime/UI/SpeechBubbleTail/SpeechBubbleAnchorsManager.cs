@@ -28,10 +28,11 @@ namespace SpellBoundAR.DialogueSystem.UI.SpeechBubbleTail
         public static Transform GetAnchor(ISpeaker speaker)
         {
             if (speaker == null) return null;
-            return Anchors.Find(test =>
-                test
-                && test.SpeakerController
-                && test.SpeakerController.Speaker == speaker).transform;
+            SpeechBubbleAnchor anchor = Anchors.Find(testAnchor =>
+                testAnchor
+                && testAnchor.SpeakerController
+                && testAnchor.SpeakerController.Speaker == speaker);
+            return anchor ? anchor.transform : null;
         }
     }
 }
