@@ -10,10 +10,12 @@ namespace SpellBoundAR.DialogueSystem.Speakers
     {
         public event Action OnActiveConversationsChanged;
 
-        [SerializeField] public Conversation defaultConversation;
+        [SerializeField] private string speakerName;
+        [SerializeField] private Conversation defaultConversation;
         [SerializeField] private List<Conversation> conversations = new ();
         [SerializeField] private SpeakerPortraitCollection portraits;
         
+        public string SpeakerName => speakerName;
         public Conversation DefaultConversation => defaultConversation;
         public List<Conversation> Conversations => conversations;
         public SpeakerPortraitCollection Portraits => portraits;

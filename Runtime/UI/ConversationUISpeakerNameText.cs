@@ -34,7 +34,7 @@ namespace SpellBoundAR.DialogueSystem.UI
             _text.text = _conversationUI
                          && _conversationUI.CurrentConversation
                          && _conversationUI.CurrentConversation.Speaker != null
-                ? _conversationUI.CurrentConversation.Speaker.Name
+                ? _conversationUI.CurrentConversation.Speaker.SpeakerName
                 : string.Empty;
         }
     }

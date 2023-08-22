@@ -8,6 +8,7 @@ namespace SpellBoundAR.DialogueSystem.Speakers
     {
         public event Action OnActiveConversationsChanged;
 
+        public string SpeakerName { get; }
         public Conversation DefaultConversation { get; }
         public List<Conversation> Conversations { get; }
         public SpeakerPortraitCollection Portraits { get; }
