@@ -146,6 +146,7 @@ namespace SpellBoundAR.DialogueSystem
 
         protected virtual void OnEnable()
         {
+            InitializeSavedInformation();
             if (condition) condition.OnConditionStateChanged += RefreshActiveState;
             OnPlaythroughsChanged += RefreshActiveState;
             ConversationsManager.AllConversations.Add(this);
