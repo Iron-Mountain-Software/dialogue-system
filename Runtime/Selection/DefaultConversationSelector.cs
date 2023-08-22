@@ -4,7 +4,7 @@ namespace SpellBoundAR.DialogueSystem.Selection
     {
         public override void RefreshNextConversation()
         {
-            NextConversation = Speaker ? Speaker.DefaultConversation : null;
+            NextConversation = Speaker?.DefaultConversation;
         }
     }
 }

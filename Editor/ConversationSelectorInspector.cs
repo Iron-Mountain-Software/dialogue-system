@@ -22,7 +22,7 @@ namespace SpellBoundAR.DialogueSystem.Editor
 
         private void DrawRefreshButton()
         {
-            if (!GUILayout.Button("Refresh")) return;
+            if (!GUILayout.Button("Refresh Next Conversation")) return;
             if (_conversationSelector) _conversationSelector.RefreshNextConversation();
         }
     }

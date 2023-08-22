@@ -5,7 +5,7 @@ namespace SpellBoundAR.DialogueSystem.Selection
         public override void RefreshNextConversation()
         {
             Conversation conversation = null;
-            if (Speaker)
+            if (Speaker != null)
             {
                 foreach (Conversation testConversation in Speaker.Conversations)
                 {

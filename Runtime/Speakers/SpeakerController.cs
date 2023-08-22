@@ -5,6 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace SpellBoundAR.DialogueSystem.Speakers
 {
+    [DisallowMultipleComponent]
     public class SpeakerController : MonoBehaviour
     {
         public event Action OnEnabled;
@@ -50,14 +51,14 @@ namespace SpellBoundAR.DialogueSystem.Speakers
         private void ValidateSpeaker()
         {
             if (speaker is GameObject speakerObject) speaker = speakerObject.GetComponent<ISpeaker>() as Object;
-            if (speaker is not ISpeaker) speaker = null;
-            if (!speaker) Debug.LogWarning("Warning: Missing a Speaker!", this);
+            if (speaker is not ISpeaker) speaker = gameObject.GetComponent<ISpeaker>() as Object;
+            if (!speaker) Debug.LogWarning("Warning: SpeakerController is missing a Speaker!", this);
         }
 
         private void ValidateConversationSelector()
         {
             if (!conversationSelector) conversationSelector = GetComponent<ConversationSelector>();
-            if (!conversationSelector) Debug.LogWarning("Warning: Missing a ConversationSelector!", this);
+            if (!conversationSelector) Debug.LogWarning("Warning: SpeakerController is missing a ConversationSelector!", this);
         }
 
 #endif
