@@ -9,7 +9,6 @@ namespace SpellBoundAR.DialogueSystem.Selection
     {
         public event Action<Conversation> OnNextConversationChanged;
 
-        [Header("References")]
         [SerializeField] private Object speaker;
         [SerializeField] private Conversation nextConversation;
 
