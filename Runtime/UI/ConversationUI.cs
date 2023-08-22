@@ -10,6 +10,8 @@ namespace SpellBoundAR.DialogueSystem
         public static event Action<Conversation> OnDialogueInteractionStarted;
         public static event Action<Conversation, DialogueLine> OnDialogueLinePlayed;
         public static event Action<Conversation> OnDialogueInteractionEnded;
+
+        public event Action OnConversationChanged;
         
         public event Action OnOpened;
         public event Action OnClosed;
@@ -34,6 +36,7 @@ namespace SpellBoundAR.DialogueSystem
                 if (_currentConversation) OnDialogueInteractionEnded?.Invoke(_currentConversation);
                 _currentConversation = value;
                 if (_currentConversation) OnDialogueInteractionStarted?.Invoke(_currentConversation);
+                OnConversationChanged?.Invoke();
             }
         }
     
