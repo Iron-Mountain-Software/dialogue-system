@@ -12,5 +12,6 @@ namespace SpellBoundAR.DialogueSystem.Speakers
         public Conversation DefaultConversation { get; }
         public List<Conversation> Conversations { get; }
         public SpeakerPortraitCollection Portraits { get; }
+        public SpeakerPortraitCollection FullBodyPortraits { get; }
     }
 }

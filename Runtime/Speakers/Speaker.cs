@@ -14,11 +14,13 @@ namespace SpellBoundAR.DialogueSystem.Speakers
         [SerializeField] private Conversation defaultConversation;
         [SerializeField] private List<Conversation> conversations = new ();
         [SerializeField] private SpeakerPortraitCollection portraits;
+        [SerializeField] private SpeakerPortraitCollection fullBodyPortraits;
         
         public string SpeakerName => speakerName;
         public Conversation DefaultConversation => defaultConversation;
         public List<Conversation> Conversations => conversations;
         public SpeakerPortraitCollection Portraits => portraits;
+        public SpeakerPortraitCollection FullBodyPortraits => fullBodyPortraits;
 
         private void OnEnable()
         {

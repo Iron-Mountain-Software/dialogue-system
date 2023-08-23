@@ -8,6 +8,8 @@ namespace SpellBoundAR.DialogueSystem.Speakers
     [DisallowMultipleComponent]
     public class SpeakerController : MonoBehaviour
     {
+        public event Action OnSpeakerChanged;
+        
         public event Action OnEnabled;
         public event Action OnDisabled;
 
@@ -17,7 +19,13 @@ namespace SpellBoundAR.DialogueSystem.Speakers
         public ISpeaker Speaker
         {
             get => speaker as ISpeaker;
-            set => speaker = value as Object;
+            set
+            {
+                if (speaker == value as Object) return;
+                speaker = (Object) value;
+                if (conversationSelector) conversationSelector.Speaker = value;
+                OnSpeakerChanged?.Invoke();
+            }
         }
 
         public virtual ConversationSelector ConversationSelector
@@ -53,6 +61,7 @@ namespace SpellBoundAR.DialogueSystem.Speakers
             if (speaker is GameObject speakerObject) speaker = speakerObject.GetComponent<ISpeaker>() as Object;
             if (speaker is not ISpeaker) speaker = gameObject.GetComponent<ISpeaker>() as Object;
             if (!speaker) Debug.LogWarning("Warning: SpeakerController is missing a Speaker!", this);
+            if (conversationSelector) conversationSelector.Speaker = Speaker;
         }
 
         private void ValidateConversationSelector()
