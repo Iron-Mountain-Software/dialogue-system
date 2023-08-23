@@ -168,7 +168,9 @@ namespace SpellBoundAR.DialogueSystem
 
         private void RefreshActiveState()
         {
-            if (condition && condition.Evaluate()) Activate();
+            bool conditionMet = condition && condition.Evaluate();
+            bool alreadyPlayed = !looping && Playthroughs > 0;
+            if (conditionMet && !alreadyPlayed) Activate();
             else Deactivate();
         }
 
