@@ -12,7 +12,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes.Conditions
                 if (testConversation
                     && testConversation.IsActive
                     && testConversation != thisConversation
-                    && testConversation.PrioritizeOverDefault) return true;
+                    && !testConversation.PrioritizeOverDefault) return true;
             }
             return false;
         }
