@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using SpellBoundAR.DialogueSystem.Selection;
 using SpellBoundAR.DialogueSystem.Speakers;
 using TMPro;
 using UnityEngine;
@@ -21,86 +23,82 @@ namespace SpellBoundAR.DialogueSystem.DialogueBubbles
         private DialogueBubbleAnimator _animator;
 
         private SpeakerController SpeakerController { get; set; }
+        private ConversationSelector ConversationSelector { get; set; }
 
         private void Awake()
         {
             _animator = GetComponent<DialogueBubbleAnimator>();
             SpeakerController = GetComponentInParent<SpeakerController>();
-            if (!SpeakerController) return;
-            SpeakerController.OnEnabled += OnDialogueTriggerEnabled;
-            SpeakerController.OnDisabled += OnDialogueTriggerDisabled;
+            ConversationSelector = GetComponentInParent<ConversationSelector>();
         }
 
-        private void OnDestroy()
+        private void OnEnable()
         {
-            if (!SpeakerController) return;
-            SpeakerController.OnEnabled -= OnDialogueTriggerEnabled;
-            SpeakerController.OnDisabled -= OnDialogueTriggerDisabled;
-        }
-        
-        private void Start() => Refresh();
-
-        private void OnDialogueTriggerEnabled()
-        {
-            if (SpeakerController && SpeakerController.ConversationSelector != null) SpeakerController.ConversationSelector.OnNextConversationChanged += ResolveState;
+            if (ConversationSelector) ConversationSelector.OnNextConversationChanged += ResolveConversation;
+            if (SpeakerController)
+            {
+                SpeakerController.OnEnabled += Refresh;
+                SpeakerController.OnDisabled += Refresh;
+            }
             Refresh();
         }
 
-        private void OnDialogueTriggerDisabled()
+        private void OnDisable()
         {
-            if (SpeakerController && SpeakerController.ConversationSelector != null) SpeakerController.ConversationSelector.OnNextConversationChanged -= ResolveState;
-            Refresh();
+            if (ConversationSelector) ConversationSelector.OnNextConversationChanged -= ResolveConversation;
+            if (SpeakerController)
+            {
+                SpeakerController.OnEnabled -= Refresh;
+                SpeakerController.OnDisabled -= Refresh;
+            }
         }
 
         private void Refresh()
         {
-            Conversation conversation = null;
-            if (SpeakerController
-                && SpeakerController.enabled
-                && SpeakerController.ConversationSelector != null)
-            {
-                conversation = SpeakerController.ConversationSelector.NextConversation;
-            }
-            ResolveState(conversation);
+            Conversation nextConversation = ConversationSelector ? ConversationSelector.NextConversation : null;
+            ResolveConversation(nextConversation);
         }
 
-        private void ResolveState(Conversation conversation)
+        private void ResolveConversation(Conversation nextConversation)
         {
-            if (!SpeakerController || !SpeakerController.enabled || !conversation)
+            if (!SpeakerController || !SpeakerController.enabled || !nextConversation)
             {
                 SetText(string.Empty);
                 Disappear();
+                return;
             }
-            else if (conversation == SpeakerController.ConversationSelector.Speaker.DefaultConversation)
+            
+            if (nextConversation == SpeakerController.Speaker.DefaultConversation)
             {
-                foreach(Conversation testConversation in SpeakerController.ConversationSelector.Speaker.Conversations)
+                foreach(Conversation testConversation in SpeakerController.Speaker.Conversations)
                 {
-                    if (testConversation.IsActive && testConversation.PreviewType != ConversationPreviewType.None)
-                    {
-                        AppearFor(testConversation ? testConversation : conversation);
-                        return;
-                    }
+                    if (!testConversation
+                        || testConversation.PreviewType == ConversationPreviewType.None
+                        || testConversation == SpeakerController.Speaker.DefaultConversation
+                        || !testConversation.IsActive) continue;
+                    AppearFor(testConversation);
+                    return;
                 }
-                AppearFor(conversation);
             }
-            else AppearFor(conversation);
+            
+            AppearFor(nextConversation);
         }
 
-        private void AppearFor(Conversation interaction)
+        private void AppearFor(Conversation conversation)
         {
-            switch (interaction.PreviewType)
+            switch (conversation.PreviewType)
             {
                 case ConversationPreviewType.None:
                     SetText(string.Empty);
                     Disappear();
                     break;
                 case ConversationPreviewType.SpeechBubble:
-                    SetText(interaction.PreviewText);
+                    SetText(conversation.PreviewText);
                     SetSprite(speechBubbleSprite, speechBubbleColor);
                     Appear();
                     break;
                 case ConversationPreviewType.ThoughtBubble:
-                    SetText(interaction.PreviewText);
+                    SetText(conversation.PreviewText);
                     SetSprite(thoughtBubbleSprite, thoughtBubbleColor);
                     Appear();
                     break;
