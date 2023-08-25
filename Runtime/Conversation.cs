@@ -166,7 +166,7 @@ namespace SpellBoundAR.DialogueSystem
             _playthroughs = new SavedInt(directory, "playthroughs.txt", 0, null);
         }
 
-        private void RefreshActiveState()
+        public void RefreshActiveState()
         {
             bool conditionMet = condition && condition.Evaluate();
             bool alreadyPlayed = !looping && Playthroughs > 0;
