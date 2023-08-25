@@ -23,8 +23,6 @@ namespace SpellBoundAR.DialogueSystem.Editor
 
         public override void OnInspectorGUI()
         {
-            DrawSelectThisButton();
-            DrawSelectAllForThisSpeakerButton();
             //if (GUILayout.Button("Log Dialogue Interaction Content", GUILayout.MinHeight(30)))
                 //Debug.Log(DialogueInteractionPrinter.PrintDialogueInteraction((Conversation)target));
             EditorGUILayout.Space();
@@ -34,6 +32,10 @@ namespace SpellBoundAR.DialogueSystem.Editor
             DrawConditionSection(_conversation);
             DrawPlaybackSection();
             DrawAdditionalSections();
+            DrawStateSections();
+            GUILayout.Space(10);
+            DrawSelectThisButton();
+            DrawSelectAllForThisSpeakerButton();
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -58,13 +60,13 @@ namespace SpellBoundAR.DialogueSystem.Editor
             EditorGUILayout.BeginVertical(Styles.Container, GUILayout.MinHeight(75));
             GUILayout.Label("General", Styles.Header, GUILayout.ExpandWidth(true));
             EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("ID", GUILayout.MaxWidth(50));
+            GUILayout.Label("ID", GUILayout.MaxWidth(100));
             EditorGUI.BeginDisabledGroup(true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("id"), GUIContent.none);
             EditorGUI.EndDisabledGroup();
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Speaker", GUILayout.MaxWidth(50));
+            GUILayout.Label("Speaker", GUILayout.MaxWidth(100));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("speaker"), GUIContent.none);
             EditorGUILayout.EndHorizontal();
             DrawMoreInGeneralSection();
@@ -154,6 +156,23 @@ namespace SpellBoundAR.DialogueSystem.Editor
             EditorGUILayout.LabelField("Playback", Styles.Header);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("behaviorWhenQueued"), false);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("looping"), false);
+            EditorGUILayout.EndVertical();
+        }
+
+        protected virtual void DrawStateSections()
+        {
+            GUILayout.Space(10);
+            EditorGUILayout.BeginVertical(Styles.Container, GUILayout.MinHeight(75));
+            EditorGUILayout.LabelField("Saved Data", Styles.Header);
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Active", GUILayout.MaxWidth(100));
+            EditorGUILayout.LabelField(_conversation.IsActive ? "TRUE" : "FALSE");
+            if (GUILayout.Button("Refresh", GUILayout.MaxWidth(75)) && _conversation) _conversation.RefreshActiveState();
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Playthroughs", GUILayout.MaxWidth(100));
+            EditorGUILayout.LabelField(_conversation.Playthroughs.ToString());
+            EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
         }
     }
