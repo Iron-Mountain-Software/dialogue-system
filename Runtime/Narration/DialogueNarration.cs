@@ -1,3 +1,5 @@
+using SpellBoundAR.DialogueSystem.Speakers;
+using SpellBoundAR.DialogueSystem.UI;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.Narration
@@ -46,7 +48,7 @@ namespace SpellBoundAR.DialogueSystem.Narration
             _audioSource.playOnAwake = false;
         }
 
-        private void OnDialogueLinePlayed(Conversation dialogueInteraction, DialogueLine dialogueLine)
+        private void OnDialogueLinePlayed(ISpeaker speaker, Conversation conversation, DialogueLine dialogueLine)
         {
             if (!_audioSource) InitializeAudioSource();
             if (_audioSource.isPlaying) _audioSource.Stop();

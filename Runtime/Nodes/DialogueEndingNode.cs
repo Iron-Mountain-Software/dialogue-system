@@ -1,4 +1,5 @@
 ﻿using System;
+using SpellBoundAR.DialogueSystem.UI;
 
 namespace SpellBoundAR.DialogueSystem.Nodes
 {

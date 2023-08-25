@@ -1,4 +1,5 @@
 using System.Collections;
+using SpellBoundAR.DialogueSystem.Speakers;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.UI
@@ -23,7 +24,7 @@ namespace SpellBoundAR.DialogueSystem.UI
             ConversationUI.OnDialogueLinePlayed -= TypeDialogueLine;
         }
         
-        private void TypeDialogueLine(Conversation conversation, DialogueLine dialogueLine)
+        private void TypeDialogueLine(ISpeaker speaker, Conversation conversation, DialogueLine dialogueLine)
         {
             if (dialogueLine == null) return;
             SetText(dialogueLine.Text);

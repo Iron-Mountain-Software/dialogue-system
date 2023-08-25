@@ -1,3 +1,6 @@
+using SpellBoundAR.DialogueSystem.Speakers;
+using SpellBoundAR.DialogueSystem.UI;
+
 namespace SpellBoundAR.DialogueSystem.Nodes.Conditions
 {
     public class PassFailConditionDialogueQueued : PassFailCondition
@@ -6,8 +9,9 @@ namespace SpellBoundAR.DialogueSystem.Nodes.Conditions
 
         protected override bool TestCondition(ConversationUI conversationUI)
         {
+            ISpeaker thisSpeaker = conversationUI.CurrentSpeaker;
             Conversation thisConversation = conversationUI.CurrentConversation;
-            foreach (Conversation testConversation in thisConversation.Speaker.Conversations)
+            foreach (Conversation testConversation in thisSpeaker.Conversations)
             {
                 if (testConversation
                     && testConversation.IsActive

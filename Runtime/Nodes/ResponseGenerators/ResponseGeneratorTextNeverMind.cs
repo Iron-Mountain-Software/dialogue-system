@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using SpellBoundAR.DialogueSystem.Responses;
+using SpellBoundAR.DialogueSystem.UI;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators

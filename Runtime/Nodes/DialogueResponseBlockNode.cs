@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using SpellBoundAR.DialogueSystem.Nodes.Conditions;
 using SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators;
+using SpellBoundAR.DialogueSystem.UI;
 using UnityEngine;
 using XNode;
 

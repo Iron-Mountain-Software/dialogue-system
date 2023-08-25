@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using SpellBoundAR.DialogueSystem.UI;
+using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.Nodes.Actions
 {
@@ -9,7 +10,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes.Actions
         [Input] public Connection input;
         [Output] public Connection output;
 
-        protected abstract void HandleAction();
+        protected abstract void HandleAction(ConversationUI conversationUI);
 
         public override DialogueNode GetNextNode(ConversationUI conversationUI)
         {
@@ -19,7 +20,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes.Actions
         public override void OnNodeEnter(ConversationUI conversationUI)
         {
             base.OnNodeEnter(conversationUI);
-            HandleAction();
+            HandleAction(conversationUI);
             conversationUI.CurrentNode = GetNextNode(conversationUI);
         }
 

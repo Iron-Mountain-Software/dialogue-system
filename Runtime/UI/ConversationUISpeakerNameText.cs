@@ -19,22 +19,21 @@ namespace SpellBoundAR.DialogueSystem.UI
 
         private void OnEnable()
         {
-            if (_conversationUI) _conversationUI.OnConversationChanged += Refresh; 
+            if (_conversationUI) _conversationUI.OnSpeakerChanged += Refresh; 
             Refresh();
         }
 
         private void OnDisable()
         {
-            if (_conversationUI) _conversationUI.OnConversationChanged -= Refresh; 
+            if (_conversationUI) _conversationUI.OnSpeakerChanged -= Refresh; 
         }
 
         private void Refresh()
         {
             if (!_text) return;
             _text.text = _conversationUI
-                         && _conversationUI.CurrentConversation
-                         && _conversationUI.CurrentConversation.Speaker != null
-                ? _conversationUI.CurrentConversation.Speaker.SpeakerName
+                         && _conversationUI.CurrentSpeaker != null
+                ? _conversationUI.CurrentSpeaker.SpeakerName
                 : string.Empty;
         }
     }

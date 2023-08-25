@@ -1,3 +1,4 @@
+using SpellBoundAR.DialogueSystem.UI;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.Nodes.Conditions

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using SpellBoundAR.DialogueSystem.Responses;
+using SpellBoundAR.DialogueSystem.Speakers;
+using SpellBoundAR.DialogueSystem.UI;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
@@ -13,6 +15,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
         public override List<BasicResponse> GetDialogueResponses(ConversationUI conversationUI)
         {
             List<BasicResponse> dialogueResponses = new List<BasicResponse>();
+            ISpeaker thisSpeaker = conversationUI.CurrentSpeaker;
             Conversation thisConversation = conversationUI.CurrentConversation;
             IResponseStyle style = ScriptedResponseStyle
                 ? ScriptedResponseStyle
@@ -23,7 +26,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
                     new Color(0.24f, 0.1f, 0.04f)
                 );
             var rowOffset = 0;
-            foreach (Conversation conversation in thisConversation.Speaker.Conversations)
+            foreach (Conversation conversation in thisSpeaker.Conversations)
             {
                 if (conversation
                     && conversation.IsActive
@@ -37,6 +40,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
                         row + rowOffset,
                         column,
                         style,
+                        thisSpeaker,
                         conversation));
                     rowOffset++;
                 }

@@ -16,22 +16,19 @@ namespace SpellBoundAR.DialogueSystem.UI.SpeechBubbleTail
         protected override void Awake()
         {
             _conversationUI = GetComponentInParent<ConversationUI>();
-            ConversationUI.OnDialogueInteractionStarted += OnDialogueInteractionStarted;
+            if (_conversationUI) _conversationUI.OnSpeakerChanged += RefreshAnchor;
             SpeechBubbleAnchorsManager.OnAnchorsChanged += RefreshAnchor;
         }
 
         protected override void OnDestroy()
         {
-            ConversationUI.OnDialogueInteractionStarted -= OnDialogueInteractionStarted;
+            if (_conversationUI) _conversationUI.OnSpeakerChanged -= RefreshAnchor;
             SpeechBubbleAnchorsManager.OnAnchorsChanged -= RefreshAnchor;
         }
-
-        private void OnDialogueInteractionStarted(Conversation conversation) => RefreshAnchor();
-
+        
         private void RefreshAnchor()
         {
-            Conversation conversation = _conversationUI ? _conversationUI.CurrentConversation : null;
-            ISpeaker speaker = conversation ? conversation.Speaker : null;
+            ISpeaker speaker = _conversationUI ? _conversationUI.CurrentSpeaker : null;
             _anchor = SpeechBubbleAnchorsManager.GetAnchor(speaker);
         }
         

@@ -1,3 +1,4 @@
+using SpellBoundAR.DialogueSystem.Speakers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,10 +21,10 @@ namespace SpellBoundAR.DialogueSystem.UI
             ConversationUI.OnDialogueLinePlayed -= OnDialogueLinePlayed;
         }
 
-        private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)
+        private void OnDialogueLinePlayed(ISpeaker speaker, Conversation conversation, DialogueLine dialogueLine)
         {
-            if (!conversation || conversation.Speaker == null || dialogueLine == null) return;
-            Sprite sprite = conversation.Speaker.Portraits.GetPortrait(dialogueLine.Portrait);
+            if (!conversation || speaker == null || dialogueLine == null) return;
+            Sprite sprite = speaker.Portraits.GetPortrait(dialogueLine.Portrait);
             SetImageSprite(sprite);
         }
 

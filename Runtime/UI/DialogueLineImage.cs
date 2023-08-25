@@ -1,3 +1,4 @@
+using SpellBoundAR.DialogueSystem.Speakers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,7 @@ namespace SpellBoundAR.DialogueSystem.UI
         private void Awake() => ConversationUI.OnDialogueLinePlayed += OnDialogueLinePlayed;
         private void OnDestroy() => ConversationUI.OnDialogueLinePlayed -= OnDialogueLinePlayed;
         
-        private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)
+        private void OnDialogueLinePlayed(ISpeaker speaker, Conversation conversation, DialogueLine dialogueLine)
         {
             if (dialogueLine == null) return;
             SetImage(dialogueLine.Sprite);

@@ -45,7 +45,7 @@ namespace SpellBoundAR.DialogueSystem.Speakers
             Conversation conversation = ConversationSelector 
                 ? ConversationSelector.NextConversation
                 : null;
-            if (conversation) ConversationManager.PlayConversation(conversation);
+            if (conversation) ConversationManager.PlayConversation(Speaker, conversation);
         }
 
 #if UNITY_EDITOR

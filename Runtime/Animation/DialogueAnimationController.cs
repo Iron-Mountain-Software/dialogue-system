@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using SpellBoundAR.DialogueSystem.Speakers;
+using SpellBoundAR.DialogueSystem.UI;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.Animation
@@ -32,13 +33,9 @@ namespace SpellBoundAR.DialogueSystem.Animation
         private void OnEnable() => ConversationUI.OnDialogueLinePlayed += OnDialogueLinePlayed;
         private void OnDisable() => ConversationUI.OnDialogueLinePlayed -= OnDialogueLinePlayed;
 
-        private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine) 
+        private void OnDialogueLinePlayed(ISpeaker speaker, Conversation conversation, DialogueLine dialogueLine) 
         {
-            if (!animator
-                || !_speakerController
-                || !conversation
-                || conversation.Speaker == null
-                || _speakerController.Speaker != conversation.Speaker) return;
+            if (!animator || !_speakerController || _speakerController.Speaker != speaker) return;
             AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
             foreach (string initialState in initialStates)
             {

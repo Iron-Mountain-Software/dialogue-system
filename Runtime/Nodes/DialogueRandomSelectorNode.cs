@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SpellBoundAR.DialogueSystem.UI;
 using XNode;
 using Random = UnityEngine.Random;
 

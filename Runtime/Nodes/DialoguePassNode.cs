@@ -1,3 +1,5 @@
+using SpellBoundAR.DialogueSystem.UI;
+
 namespace SpellBoundAR.DialogueSystem.Nodes
 {
     [NodeWidth(100)]

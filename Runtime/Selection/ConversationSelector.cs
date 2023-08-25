@@ -1,5 +1,6 @@
 using System;
 using SpellBoundAR.DialogueSystem.Speakers;
+using SpellBoundAR.DialogueSystem.UI;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -44,9 +45,9 @@ namespace SpellBoundAR.DialogueSystem.Selection
             ConversationUI.OnDialogueInteractionEnded -= OnDialogueInteractionEnded;
         }
 
-        private void OnDialogueInteractionEnded(Conversation conversation)
+        private void OnDialogueInteractionEnded(ISpeaker endingSpeaker, Conversation conversation)
         {
-            if (Speaker != null && Speaker.ID == conversation.Speaker.ID) RefreshNextConversation();
+            if (Speaker != null && Speaker.ID == endingSpeaker.ID) RefreshNextConversation();
         }
         
 #if UNITY_EDITOR

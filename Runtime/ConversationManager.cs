@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using SpellBoundAR.DialogueSystem.Speakers;
+using SpellBoundAR.DialogueSystem.UI;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -11,31 +13,35 @@ namespace SpellBoundAR.DialogueSystem
 
         public static event Action OnConversationQueueChanged;
         
-        private static readonly Queue<Conversation> Queue = new ();
+        private static readonly Queue<Tuple<ISpeaker, Conversation>> Queue = new ();
         
         public static int ConversationQueueLength() => Queue.Count;
         
-        public static Conversation PeekConversationQueue() => Queue.Peek();
+        public static Tuple<ISpeaker, Conversation> PeekConversationQueue() => Queue.Peek();
 
-        public static void EnqueueConversation(Conversation conversation)
+        public static void EnqueueConversation(ISpeaker speaker, Conversation conversation)
         {
-            if (!conversation || Queue.Contains(conversation)) return;
-            Queue.Enqueue(conversation);
+            if (speaker == null || !conversation) return;
+            foreach (var (item1, item2) in Queue)
+            {
+                if (item1 == speaker && item2 == conversation) return;
+            }
+            Queue.Enqueue(new Tuple<ISpeaker, Conversation>(speaker, conversation));
             OnConversationQueueChanged?.Invoke();
         }
 
-        public static Conversation DequeueConversation()
+        public static Tuple<ISpeaker, Conversation> DequeueConversation()
         {
-            Conversation conversation = Queue.Dequeue();            
+            Tuple<ISpeaker, Conversation> entry = Queue.Dequeue();            
             OnConversationQueueChanged?.Invoke();
-            return conversation;
+            return entry;
         }
 
-        public static ConversationUI PlayConversation(Conversation conversation)
+        public static ConversationUI PlayConversation(ISpeaker speaker, Conversation conversation)
         {
             ConversationUI conversationUI = Resources.Load<ConversationUI>(Path);
             if (!conversationUI) throw new Exception("Resources: Could not find: " + Path);
-            return Object.Instantiate(conversationUI).Initialize(conversation);
+            return Object.Instantiate(conversationUI).Initialize(speaker, conversation);
         }
 
         public static void StopConversation(ConversationUI conversationUI)

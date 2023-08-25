@@ -1,16 +1,18 @@
 using System;
 using SpellBoundAR.DialogueSystem.Nodes;
+using SpellBoundAR.DialogueSystem.Speakers;
 using SpellBoundAR.Drawers;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem
+namespace SpellBoundAR.DialogueSystem.UI
 {
     public class ConversationUI : MonoBehaviour
     {
-        public static event Action<Conversation> OnDialogueInteractionStarted;
-        public static event Action<Conversation, DialogueLine> OnDialogueLinePlayed;
-        public static event Action<Conversation> OnDialogueInteractionEnded;
+        public static event Action<ISpeaker, Conversation> OnDialogueInteractionStarted;
+        public static event Action<ISpeaker, Conversation, DialogueLine> OnDialogueLinePlayed;
+        public static event Action<ISpeaker, Conversation> OnDialogueInteractionEnded;
 
+        public event Action OnSpeakerChanged;
         public event Action OnConversationChanged;
         
         public event Action OnOpened;
@@ -24,18 +26,30 @@ namespace SpellBoundAR.DialogueSystem
         
         [Header("Cache")]
         public static int FrameOfLastProgression;
+        private ISpeaker _currentSpeaker;
         private Conversation _currentConversation;
         private DialogueNode _currentNode;
 
+        public ISpeaker CurrentSpeaker
+        {
+            get => _currentSpeaker;
+            private set
+            {
+                if (_currentSpeaker == value) return;
+                _currentSpeaker = value;
+                OnSpeakerChanged?.Invoke();
+            }
+        }
+        
         public Conversation CurrentConversation
         {
             get => _currentConversation;
             private set
             {
                 if (_currentConversation == value) return;
-                if (_currentConversation) OnDialogueInteractionEnded?.Invoke(_currentConversation);
+                if (_currentConversation) OnDialogueInteractionEnded?.Invoke(_currentSpeaker, _currentConversation);
                 _currentConversation = value;
-                if (_currentConversation) OnDialogueInteractionStarted?.Invoke(_currentConversation);
+                if (_currentConversation) OnDialogueInteractionStarted?.Invoke(_currentSpeaker, _currentConversation);
                 OnConversationChanged?.Invoke();
             }
         }
@@ -63,10 +77,12 @@ namespace SpellBoundAR.DialogueSystem
             Open();
         }
 
-        public ConversationUI Initialize(Conversation conversation)
+        public ConversationUI Initialize(ISpeaker speaker, Conversation conversation)
         {
+            _currentSpeaker = null;
             _currentConversation = null;
             _currentNode = null;
+            CurrentSpeaker = speaker;
             CurrentConversation = conversation;
             CurrentNode = (DialogueBeginningNode) conversation.nodes.Find(node => node is DialogueBeginningNode);
             CurrentConversation.OnConversationStarted();
@@ -88,7 +104,7 @@ namespace SpellBoundAR.DialogueSystem
 
         public void PlayDialogueLine(DialogueLine dialogueLine)
         {
-            OnDialogueLinePlayed?.Invoke(_currentConversation, dialogueLine);
+            OnDialogueLinePlayed?.Invoke(_currentSpeaker, _currentConversation, dialogueLine);
         }
 
         public void PlayNextDialogueNode()
@@ -110,8 +126,8 @@ namespace SpellBoundAR.DialogueSystem
         {
             if (ConversationManager.ConversationQueueLength() > 0)
             {
-                Conversation conversation = ConversationManager.DequeueConversation();
-                Initialize(conversation);
+                Tuple<ISpeaker, Conversation> entry = ConversationManager.DequeueConversation();
+                Initialize(entry.Item1, entry.Item2);
             }
             else Close();
         }

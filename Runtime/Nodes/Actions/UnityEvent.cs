@@ -1,3 +1,4 @@
+using SpellBoundAR.DialogueSystem.UI;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.Nodes.Actions
@@ -8,7 +9,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes.Actions
     {
         [SerializeField] private UnityEngine.Events.UnityEvent action;
 
-        protected override void HandleAction()
+        protected override void HandleAction(ConversationUI conversationUI)
         {
             action?.Invoke();
         }

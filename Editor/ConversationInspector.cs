@@ -35,7 +35,6 @@ namespace SpellBoundAR.DialogueSystem.Editor
             DrawStateSections();
             GUILayout.Space(10);
             DrawSelectThisButton();
-            DrawSelectAllForThisSpeakerButton();
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -43,15 +42,6 @@ namespace SpellBoundAR.DialogueSystem.Editor
         {
             if (GUILayout.Button("Select this conversation", GUILayout.MinHeight(30)))
                 UnityEditor.Selection.activeObject = target;
-        }
-        
-        protected virtual void DrawSelectAllForThisSpeakerButton()
-        {
-            if (GUILayout.Button("Select all conversations for this speaker", GUILayout.MinHeight(30)))
-            {
-                UnityEditor.Selection.objects = ConversationsManager.AllConversations.Where(test =>
-                    test && test.Speaker == _conversation.Speaker).ToArray();
-            }
         }
 
         protected virtual void DrawGeneralSection()
@@ -64,10 +54,6 @@ namespace SpellBoundAR.DialogueSystem.Editor
             EditorGUI.BeginDisabledGroup(true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("id"), GUIContent.none);
             EditorGUI.EndDisabledGroup();
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Speaker", GUILayout.MaxWidth(100));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("speaker"), GUIContent.none);
             EditorGUILayout.EndHorizontal();
             DrawMoreInGeneralSection();
             EditorGUILayout.EndVertical();

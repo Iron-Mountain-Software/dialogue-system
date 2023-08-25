@@ -32,7 +32,6 @@ namespace SpellBoundAR.DialogueSystem
         
         // About
         [SerializeField] private string id;
-        [SerializeField] private Object speaker;
         
         // Priority
         [SerializeField] private bool prioritizeOverDefault = true;
@@ -61,13 +60,6 @@ namespace SpellBoundAR.DialogueSystem
             get => id;
             set => id = value;
         }
-        
-        public ISpeaker Speaker
-        {
-            get => speaker as ISpeaker;
-            set => speaker = value as Object;
-        }
-
 
         public string Name => name;
         public bool PrioritizeOverDefault => prioritizeOverDefault;
@@ -179,10 +171,6 @@ namespace SpellBoundAR.DialogueSystem
             if (IsActive) return;
             IsActive = true;
             ConversationsManager.RegisterActiveConversation(this);
-            if (Playthroughs == 0 && behaviorWhenQueued == BehaviorWhenQueued.Played)
-            {
-                ConversationManager.EnqueueConversation(this);
-            }
         }
 
         private void Deactivate()
@@ -196,12 +184,6 @@ namespace SpellBoundAR.DialogueSystem
 
 #if UNITY_EDITOR
 
-        protected virtual void OnValidate()
-        {
-            if (speaker is GameObject speakerObject) speaker = speakerObject.GetComponent<ISpeaker>() as Object;
-            if (speaker is not ISpeaker) speaker = null;
-        }
-        
         public virtual void Reset()
         {
             GenerateNewID();
@@ -232,7 +214,7 @@ namespace SpellBoundAR.DialogueSystem
                    || GraphHasErrors();
         }
 
-        public bool GeneralSectionHasErrors => string.IsNullOrWhiteSpace(id) || speaker == null;
+        public bool GeneralSectionHasErrors => string.IsNullOrWhiteSpace(id);
         
         public bool PrioritySectionHasErrors => !prioritizeOverDefault &&
                                                 (invokingLine.IsEmpty || string.IsNullOrEmpty(invokingLine.TableReference));

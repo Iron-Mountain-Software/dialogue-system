@@ -57,6 +57,7 @@ namespace SpellBoundAR.DialogueSystem.Editor
 
         private void ExportDialogueLines(int language)
         {
+            /*
             RebuildLists();
             LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[language];
             Dictionary<string, List<string>> dialogueLines = new Dictionary<string, List<string>>();
@@ -96,6 +97,7 @@ namespace SpellBoundAR.DialogueSystem.Editor
                 foreach (string text in entry.Value) data += text + "\n";
                 SaveSystem.SaveSystem.SaveFile(ExportsDirectory, file, data);
             }
+            */
         }
     }
 }

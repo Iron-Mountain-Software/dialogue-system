@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using SpellBoundAR.DialogueSystem.Nodes;
 using SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators;
 using SpellBoundAR.DialogueSystem.Responses;
+using SpellBoundAR.DialogueSystem.Speakers;
 using SpellBoundAR.Drawers;
 using UnityEngine;
 
@@ -87,7 +88,7 @@ namespace SpellBoundAR.DialogueSystem.UI
             Destroy(gameObject, 1f);
         }
     
-        private void OnDialogueInteractionEnded(Conversation conversation)
+        private void OnDialogueInteractionEnded(ISpeaker speaker, Conversation conversation)
         {
             Destroy(gameObject);
         }

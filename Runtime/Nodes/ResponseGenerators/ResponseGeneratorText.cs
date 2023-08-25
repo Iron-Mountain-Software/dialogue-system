@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using SpellBoundAR.DialogueSystem.Responses;
 using IronMountain.ResourceUtilities;
+using SpellBoundAR.DialogueSystem.UI;
 using UnityEngine;
 using UnityEngine.Localization;
 
