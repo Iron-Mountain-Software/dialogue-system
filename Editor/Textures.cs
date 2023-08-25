@@ -4,12 +4,21 @@ namespace SpellBoundAR.DialogueSystem.Editor
 {
     public class Textures : MonoBehaviour
     {
-        private static Texture2D _containerTexture;
-        public static Texture2D ContainerTexture {
+        private static Texture2D _validContainerTexture;
+        public static Texture2D ValidContainerTexture {
             get
             {
-                if (!_containerTexture) _containerTexture = InitializeTexture(new Color(0.2f, 0.2f, 0.2f));
-                return _containerTexture;
+                if (!_validContainerTexture) _validContainerTexture = InitializeTexture(new Color(0.2f, 0.2f, 0.2f));
+                return _validContainerTexture;
+            }
+        }
+        
+        private static Texture2D _invalidContainerTexture;
+        public static Texture2D InvalidContainerTexture {
+            get
+            {
+                if (!_invalidContainerTexture) _invalidContainerTexture = InitializeTexture(new Color(0.41f, 0f, 0.04f));
+                return _invalidContainerTexture;
             }
         }
         

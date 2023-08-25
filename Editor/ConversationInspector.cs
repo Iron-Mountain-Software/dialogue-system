@@ -57,7 +57,7 @@ namespace SpellBoundAR.DialogueSystem.Editor
         protected virtual void DrawGeneralSection()
         {
             GUILayout.Space(10);
-            EditorGUILayout.BeginVertical(Styles.Container, GUILayout.MinHeight(75));
+            EditorGUILayout.BeginVertical(_conversation.GeneralSectionHasErrors ? Styles.InvalidContainer : Styles.ValidContainer, GUILayout.MinHeight(75));
             GUILayout.Label("General", Styles.Header, GUILayout.ExpandWidth(true));
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("ID", GUILayout.MaxWidth(100));
@@ -76,7 +76,7 @@ namespace SpellBoundAR.DialogueSystem.Editor
         protected virtual void DrawPrioritySection()
         {
             GUILayout.Space(10);
-            EditorGUILayout.BeginVertical(Styles.Container, GUILayout.MinHeight(75));
+            EditorGUILayout.BeginVertical(_conversation.PrioritySectionHasErrors ? Styles.InvalidContainer : Styles.ValidContainer, GUILayout.MinHeight(75));
             GUILayout.Label("Priority", Styles.Header, GUILayout.ExpandWidth(true));
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Prioritize");
@@ -104,7 +104,7 @@ namespace SpellBoundAR.DialogueSystem.Editor
         protected virtual void DrawPreviewSection()
         {
             GUILayout.Space(10);
-            EditorGUILayout.BeginVertical(Styles.Container, GUILayout.MinHeight(75));
+            EditorGUILayout.BeginVertical(_conversation.PreviewHasErrors ? Styles.InvalidContainer : Styles.ValidContainer, GUILayout.MinHeight(75));
             GUILayout.Label("Preview", Styles.Header, GUILayout.ExpandWidth(true));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("alertInConversationMenu"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("previewType"), GUIContent.none);
@@ -116,8 +116,7 @@ namespace SpellBoundAR.DialogueSystem.Editor
         protected virtual void DrawConditionSection(Conversation conversation)
         {
             GUILayout.Space(10);
-            EditorGUILayout.BeginVertical(Styles.Container, GUILayout.MinHeight(75));
-
+            EditorGUILayout.BeginVertical(_conversation.ConditionHasErrors ? Styles.InvalidContainer : Styles.ValidContainer, GUILayout.MinHeight(75));
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.BeginVertical();
             EditorGUILayout.LabelField("Condition", Styles.Header);
@@ -152,7 +151,7 @@ namespace SpellBoundAR.DialogueSystem.Editor
         protected virtual void DrawPlaybackSection()
         {
             GUILayout.Space(10);
-            EditorGUILayout.BeginVertical(Styles.Container, GUILayout.MinHeight(75));
+            EditorGUILayout.BeginVertical(Styles.ValidContainer, GUILayout.MinHeight(75));
             EditorGUILayout.LabelField("Playback", Styles.Header);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("behaviorWhenQueued"), false);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("looping"), false);
@@ -162,7 +161,7 @@ namespace SpellBoundAR.DialogueSystem.Editor
         protected virtual void DrawStateSections()
         {
             GUILayout.Space(10);
-            EditorGUILayout.BeginVertical(Styles.Container, GUILayout.MinHeight(75));
+            EditorGUILayout.BeginVertical(Styles.ValidContainer, GUILayout.MinHeight(75));
             EditorGUILayout.LabelField("Saved Data", Styles.Header);
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Active", GUILayout.MaxWidth(100));

@@ -221,6 +221,26 @@ namespace SpellBoundAR.DialogueSystem
                     return true;
             return false;
         }
+        
+        [ContextMenu("Test For Errors")]
+        public bool HasErrors()
+        {
+            return GeneralSectionHasErrors
+                   || PrioritySectionHasErrors
+                   || PreviewHasErrors
+                   || ConditionHasErrors
+                   || GraphHasErrors();
+        }
+
+        public bool GeneralSectionHasErrors => string.IsNullOrWhiteSpace(id) || speaker == null;
+        
+        public bool PrioritySectionHasErrors => !prioritizeOverDefault &&
+                                                (invokingLine.IsEmpty || string.IsNullOrEmpty(invokingLine.TableReference));
+
+        public bool PreviewHasErrors => previewType != ConversationPreviewType.None &&
+                                        (previewText.IsEmpty || string.IsNullOrEmpty(previewText.TableReference));
+
+        public bool ConditionHasErrors => !condition || condition.HasErrors();
 
         public bool GraphHasErrors()
         {
@@ -229,32 +249,13 @@ namespace SpellBoundAR.DialogueSystem
                     return true;
             return false;
         }
-
+        
         [ContextMenu("Log Graph Errors")]
         public void LogGraphErrors()
         {
             foreach (var node in nodes)
                 if (node is DialogueNode dialogueNode && dialogueNode.HasErrors())
                     Debug.Log(dialogueNode.Name, dialogueNode);
-        }
-
-        public bool PreviewHasErrors => previewType != ConversationPreviewType.None &&
-                                        (previewText.IsEmpty || string.IsNullOrEmpty(previewText.TableReference));
-
-        public bool InvokerHasErrors => !prioritizeOverDefault &&
-                                        (!invokingIcon || invokingLine.IsEmpty ||
-                                         string.IsNullOrEmpty(invokingLine.TableReference));
-
-        public bool ConditionHasErrors => !condition || condition.HasErrors();
-
-        [ContextMenu("Test For Errors")]
-        public bool HasErrors()
-        {
-            return string.IsNullOrWhiteSpace(id)
-                   || ConditionHasErrors
-                   || PreviewHasErrors
-                   || InvokerHasErrors
-                   || GraphHasErrors();
         }
 
 #endif

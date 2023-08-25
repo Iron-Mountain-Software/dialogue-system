@@ -32,10 +32,16 @@ namespace SpellBoundAR.DialogueSystem.Editor
             normal = {textColor = Color.white, background = Textures.GreenTexture}
         };
         
-        public static readonly GUIStyle Container = new ()
+        public static readonly GUIStyle ValidContainer = new ()
         {
             padding = new RectOffset(7,7,7,7),
-            normal = { background = Textures.ContainerTexture }
+            normal = { background = Textures.ValidContainerTexture }
+        };
+        
+        public static readonly GUIStyle InvalidContainer = new ()
+        {
+            padding = new RectOffset(7,7,7,7),
+            normal = { background = Textures.InvalidContainerTexture }
         };
 
         public static readonly GUIStyle Header = new ()
