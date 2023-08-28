@@ -165,22 +165,7 @@ namespace SpellBoundAR.DialogueSystem
         {
             bool conditionMet = condition && condition.Evaluate();
             bool alreadyPlayed = !looping && Playthroughs > 0;
-            if (conditionMet && !alreadyPlayed) Activate();
-            else Deactivate();
-        }
-
-        private void Activate()
-        {
-            if (IsActive) return;
-            IsActive = true;
-            ConversationsManager.RegisterActiveConversation(this);
-        }
-
-        private void Deactivate()
-        {
-            if (!IsActive) return;
-            IsActive = false;
-            ConversationsManager.UnregisterActiveConversation(this);
+            IsActive = conditionMet && !alreadyPlayed;
         }
 
         public virtual void OnConversationStarted() { }
