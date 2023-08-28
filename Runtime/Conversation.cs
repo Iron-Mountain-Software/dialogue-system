@@ -156,6 +156,7 @@ namespace SpellBoundAR.DialogueSystem
         {
             string directory = Directory;
             _playthroughs = new SavedInt(directory, "playthroughs.txt", 0, null);
+            RefreshActiveState();
         }
 
         public void RefreshActiveState()
