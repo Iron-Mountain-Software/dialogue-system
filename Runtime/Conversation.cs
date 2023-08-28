@@ -20,7 +20,9 @@ namespace SpellBoundAR.DialogueSystem
     [CreateAssetMenu(menuName = "Scriptable Objects/Dialogue/Conversation")]
     public class Conversation : NodeGraph, IIdentifiable
     {
+        public static event Action<Conversation> OnAnyIsActiveChanged;
         public static event Action<Conversation> OnAnyPlaythroughsChanged;
+        
         public event Action OnIsActiveChanged;
         public event Action OnPlaythroughsChanged;
 
@@ -119,6 +121,7 @@ namespace SpellBoundAR.DialogueSystem
                 if (_isActive == value) return;
                 _isActive = value;
                 OnIsActiveChanged?.Invoke();
+                OnAnyIsActiveChanged?.Invoke(this);
             }
         }
 
