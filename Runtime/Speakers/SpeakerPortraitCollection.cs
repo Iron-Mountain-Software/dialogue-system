@@ -1,4 +1,5 @@
 using System;
+using IronMountain.ResourceUtilities;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.Speakers
@@ -14,16 +15,19 @@ namespace SpellBoundAR.DialogueSystem.Speakers
         }
 
         [SerializeField] private Sprite happyPortrait;
+        [SerializeField] private ResourceSprite happyPortraitResource;
         [SerializeField] private Sprite neutralPortrait;
+        [SerializeField] private ResourceSprite neutralPortraitResource;
         [SerializeField] private Sprite sadPortrait;
+        [SerializeField] private ResourceSprite sadPortraitResource;
 
         public Sprite GetPortrait(PortraitType type)
         {
             return type switch
             {
-                PortraitType.Happy => happyPortrait,
-                PortraitType.Neutral => neutralPortrait,
-                PortraitType.Sad => sadPortrait,
+                PortraitType.Happy => happyPortrait ? happyPortrait : happyPortraitResource ? happyPortraitResource.Asset : null,
+                PortraitType.Neutral => neutralPortrait ? neutralPortrait : neutralPortraitResource ? neutralPortraitResource.Asset : null,
+                PortraitType.Sad => sadPortrait ? sadPortrait : sadPortraitResource ? sadPortraitResource.Asset : null,
                 _ => null
             };
         }
