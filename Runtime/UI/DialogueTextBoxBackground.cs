@@ -1,4 +1,4 @@
-using SpellBoundAR.CanvasGroups;
+using IronMountain.StandardAnimations.CanvasGroups;
 using SpellBoundAR.DialogueSystem.Nodes;
 using UnityEngine;
 
