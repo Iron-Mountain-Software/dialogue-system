@@ -130,8 +130,6 @@ namespace SpellBoundAR.DialogueSystem
             {
                 if (_playthroughs.Value == value) return;
                 _playthroughs.Value = value;
-                OnPlaythroughsChanged?.Invoke();
-                OnAnyPlaythroughsChanged?.Invoke(this);
             }
         }
 
@@ -139,7 +137,8 @@ namespace SpellBoundAR.DialogueSystem
 
         protected virtual void OnEnable()
         {
-            InitializeSavedInformation();
+            LoadSavedData();
+            BroadcastSavedData();
             if (condition) condition.OnConditionStateChanged += RefreshActiveState;
             OnPlaythroughsChanged += RefreshActiveState;
             ConversationsManager.AllConversations.Add(this);
@@ -153,13 +152,20 @@ namespace SpellBoundAR.DialogueSystem
             ConversationsManager.AllConversations.Remove(this);
         }
 
-        protected void InitializeSavedInformation()
+        protected void LoadSavedData()
         {
             string directory = Directory;
-            _playthroughs = new SavedInt(directory, "playthroughs.txt", 0, null);
+            _playthroughs = new SavedInt(directory, "playthroughs.txt", 0, () =>
+            {
+                OnPlaythroughsChanged?.Invoke();
+                OnAnyPlaythroughsChanged?.Invoke(this);
+            });
+        }
+
+        protected void BroadcastSavedData()
+        {
             OnPlaythroughsChanged?.Invoke();
             OnAnyPlaythroughsChanged?.Invoke(this);
-            RefreshActiveState();
         }
 
         public void RefreshActiveState()
