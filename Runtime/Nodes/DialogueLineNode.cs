@@ -15,8 +15,9 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 		[Input] public Connection input;
 		[Output] public Connection output;
 		
-		[SerializeField] private LocalizedString text;
+		[SerializeField] private string simpleText;
 		[SerializeField] private AudioClip audioClip;
+		[SerializeField] private LocalizedString text;
 		[SerializeField] private LocalizedAsset<AudioClip> localizedAudio;
 		[SerializeField] protected SpeakerPortraitCollection.PortraitType portrait;
 		[SerializeField] protected AnimationType animation;
@@ -29,27 +30,22 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 			{
 				if (Application.isPlaying)
 				{
-					return text.IsEmpty ? string.Empty : text.GetLocalizedString();
+					return text.IsEmpty ? simpleText : text.GetLocalizedString();
 				}
 #if UNITY_EDITOR
-				if (text.IsEmpty || string.IsNullOrEmpty(text.TableReference)) return string.Empty;
+				if (text.IsEmpty || string.IsNullOrEmpty(text.TableReference)) return simpleText;
 				var collection = UnityEditor.Localization.LocalizationEditorSettings.GetStringTableCollection(text.TableReference);
 				var entry = collection && collection.SharedData ? collection.SharedData.GetEntryFromReference(text.TableEntryReference) : null;
-				return entry != null ? entry.Key : string.Empty;
+				return entry != null ? entry.Key : simpleText;
 #else
 				return string.Empty;
 #endif
 			}
 		}
 
-		public AudioClip AudioClip
-		{
-			get
-			{
-				if (audioClip) return audioClip;
-				return !localizedAudio.IsEmpty && Application.isPlaying ? localizedAudio.LoadAsset() : null;
-			}
-		}
+		public AudioClip AudioClip => !localizedAudio.IsEmpty && Application.isPlaying
+				? localizedAudio.LoadAsset()
+				: audioClip;
 
 		protected virtual DialogueLine GetDialogueLine()
 		{
