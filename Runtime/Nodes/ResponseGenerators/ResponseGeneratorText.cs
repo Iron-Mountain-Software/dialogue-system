@@ -9,6 +9,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
 {
     public class ResponseGeneratorText : ResponseGenerator
     {
+        [SerializeField] protected string stringText;
         [SerializeField] protected LocalizedString text;
         [SerializeField] protected ResourceSprite sprite;
 
@@ -34,13 +35,13 @@ namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
             {
                 if (Application.isPlaying)
                 {
-                    return text.IsEmpty ? string.Empty : text.GetLocalizedString();
+                    return text.IsEmpty ? stringText : text.GetLocalizedString();
                 }
 #if UNITY_EDITOR
-                if (text.IsEmpty || string.IsNullOrEmpty(text.TableReference)) return string.Empty;
+                if (text.IsEmpty || string.IsNullOrEmpty(text.TableReference)) return stringText;
                 var collection = UnityEditor.Localization.LocalizationEditorSettings.GetStringTableCollection(text.TableReference);
                 var entry = collection.SharedData.GetEntryFromReference(text.TableEntryReference);
-                return entry != null ? entry.Key : string.Empty;
+                return entry != null ? entry.Key : stringText;
 #else
 				return string.Empty;
 #endif
