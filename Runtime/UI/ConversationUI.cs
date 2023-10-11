@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using IronMountain.StandardAnimations.RectTransforms;
 using SpellBoundAR.DialogueSystem.Nodes;
 using SpellBoundAR.DialogueSystem.Speakers;
@@ -20,15 +22,20 @@ namespace SpellBoundAR.DialogueSystem.UI
 
         [Header("Static Settings")]
         private const float DestructionDelay = .5f;
-        
+
+        [Header("Settings")]
+        [SerializeField] private bool continueAfterNarration = false;
+
         [Header("References")]
         [SerializeField] private Drawer drawer;
         
         [Header("Cache")]
-        public static int FrameOfLastProgression;
         private ISpeaker _currentSpeaker;
         private Conversation _currentConversation;
         private DialogueNode _currentNode;
+
+        public int FrameOfLastProgression { get; private set; }
+        public float TimeOfLastProgression { get; private set; }
 
         public ISpeaker CurrentSpeaker
         {
@@ -63,6 +70,7 @@ namespace SpellBoundAR.DialogueSystem.UI
                 if (_currentNode) _currentNode.OnNodeExit(this);
                 _currentNode = value;
                 FrameOfLastProgression = Time.frameCount;
+                TimeOfLastProgression = Time.time;
                 if (_currentNode) _currentNode.OnNodeEnter(this);
             }
         }
@@ -104,7 +112,17 @@ namespace SpellBoundAR.DialogueSystem.UI
 
         public void PlayDialogueLine(DialogueLine dialogueLine)
         {
+            StopAllCoroutines();
+            StartCoroutine(PlayDialogueLineRunner(dialogueLine));
+        }
+
+        private IEnumerator PlayDialogueLineRunner(DialogueLine dialogueLine)
+        {
             OnDialogueLinePlayed?.Invoke(_currentSpeaker, _currentConversation, dialogueLine);
+            if (!continueAfterNarration) yield break;
+            float narrationLength = dialogueLine != null && dialogueLine.AudioClip ? dialogueLine.AudioClip.length : 1f;
+            yield return new WaitForSeconds(narrationLength);
+            PlayNextDialogueNode();
         }
 
         public void PlayNextDialogueNode()

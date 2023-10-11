@@ -1,3 +1,4 @@
+using System;
 using SpellBoundAR.DialogueSystem.UI;
 using UnityEngine;
 
@@ -5,28 +6,31 @@ namespace SpellBoundAR.DialogueSystem
 {
     public class DialogueTouchInputManager : MonoBehaviour
     {
+        [SerializeField] private ConversationUI conversationUI;
         [SerializeField] private DialogueLineTyper dialogueLineTyper;
 
-        [Header("Cache")]
-        private ConversationUI _conversationUI;
-        
         private void Awake()
         {
-            _conversationUI = GetComponentInParent<ConversationUI>();
+            if (!conversationUI) conversationUI = GetComponentInParent<ConversationUI>();
+        }
+
+        private void OnValidate()
+        {
+            if (!conversationUI) conversationUI = GetComponentInParent<ConversationUI>();
         }
 
         private void Update()
         {
-            if (_conversationUI
-                && _conversationUI.CurrentConversation
-                && ConversationUI.FrameOfLastProgression != Time.frameCount
+            if (conversationUI
+                && conversationUI.CurrentConversation
+                && conversationUI.FrameOfLastProgression != Time.frameCount
                 && Input.GetMouseButtonUp(0))
             {
                 if (dialogueLineTyper && dialogueLineTyper.IsAnimating)
                 {
                     dialogueLineTyper.ForceFinishAnimating();
                 }
-                else _conversationUI.PlayNextDialogueNode();
+                else conversationUI.PlayNextDialogueNode();
             }
         }
     }
