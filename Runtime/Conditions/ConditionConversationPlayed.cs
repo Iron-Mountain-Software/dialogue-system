@@ -11,6 +11,7 @@ namespace SpellBoundAR.DialogueSystem.Conditions
         private void OnEnable()
         {
             if (conversation) conversation.OnPlaythroughsChanged += OnPlaythroughsChanged;
+            OnPlaythroughsChanged();
         }
 
         private void OnDisable()
