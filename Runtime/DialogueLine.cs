@@ -13,7 +13,7 @@ namespace SpellBoundAR.DialogueSystem
         public SpeakerPortraitCollection.PortraitType Portrait { get; }
         public AnimationType Animation { get; }
         public Sprite Sprite { get; }
-        public VirtualCameraReference StaticVirtualCameraReference { get; }
+        public VirtualCameraReference VirtualCameraReference { get; }
 
         public DialogueLine(
             ISpeaker speaker,
@@ -22,14 +22,15 @@ namespace SpellBoundAR.DialogueSystem
             SpeakerPortraitCollection.PortraitType portrait,
             AnimationType animation,
             Sprite sprite,
-            VirtualCameraReference staticVirtualCameraReference)
+            VirtualCameraReference virtualCameraReference)
         {
+            Speaker = speaker;
             Text = text;
             AudioClip = audioClip;
             Portrait = portrait;
             Animation = animation;
             Sprite = sprite;
-            StaticVirtualCameraReference = staticVirtualCameraReference;
+            VirtualCameraReference = virtualCameraReference;
         }
     }
 }

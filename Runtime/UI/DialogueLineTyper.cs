@@ -31,9 +31,7 @@ namespace SpellBoundAR.DialogueSystem.UI
 
         protected abstract void Reset();
         
-        protected abstract void OnDialogueLinePlayed(
-            Conversation conversation,
-            DialogueLine dialogueLine);
+        protected abstract void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine);
 
         protected abstract IEnumerator AnimateRunner(float letterRate);
 
