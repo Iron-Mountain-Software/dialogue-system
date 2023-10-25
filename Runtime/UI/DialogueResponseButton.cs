@@ -16,7 +16,7 @@ namespace SpellBoundAR.DialogueSystem.UI
 
         [Header("Cache")]
         private BasicResponse _basicResponse;
-        private ConversationUI _conversationUI;
+        private ConversationPlayer _conversationUI;
 
         public BasicResponse BasicResponse
         {
@@ -29,7 +29,7 @@ namespace SpellBoundAR.DialogueSystem.UI
             }
         }
 
-        public virtual void Initialize(BasicResponse basicResponse, ConversationUI conversationUI)
+        public virtual void Initialize(BasicResponse basicResponse, ConversationPlayer conversationUI)
         {
             if (basicResponse == null) { Destroy(gameObject); return; }
             BasicResponse = basicResponse;

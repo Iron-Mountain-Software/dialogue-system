@@ -12,10 +12,10 @@ namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
     {
         public override string Name => "QUEUED RESPONSES";
     
-        public override List<BasicResponse> GetDialogueResponses(ConversationUI conversationUI)
+        public override List<BasicResponse> GetDialogueResponses(ConversationPlayer conversationUI)
         {
             List<BasicResponse> dialogueResponses = new List<BasicResponse>();
-            ISpeaker thisSpeaker = conversationUI.CurrentSpeaker;
+            ISpeaker thisSpeaker = conversationUI.DefaultSpeaker;
             Conversation thisConversation = conversationUI.CurrentConversation;
             IResponseStyle style = ScriptedResponseStyle
                 ? ScriptedResponseStyle

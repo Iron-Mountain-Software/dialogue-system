@@ -38,16 +38,16 @@ namespace SpellBoundAR.DialogueSystem.UI
         private void Awake()
         {
             DialogueResponseBlockNode.OnDialogueResponseBlockExited += OnDialogueResponseBlockExited;
-            ConversationUI.OnDialogueInteractionEnded += OnDialogueInteractionEnded;
+            ConversationPlayer.OnDialogueInteractionEnded += OnDialogueInteractionEnded;
         }
 
         private void OnDestroy()
         {
             DialogueResponseBlockNode.OnDialogueResponseBlockExited -= OnDialogueResponseBlockExited;
-            ConversationUI.OnDialogueInteractionEnded -= OnDialogueInteractionEnded;
+            ConversationPlayer.OnDialogueInteractionEnded -= OnDialogueInteractionEnded;
         }
 
-        public void Initialize(DialogueResponseBlockNode dialogueResponseBlock, ConversationUI conversationUI)
+        public void Initialize(DialogueResponseBlockNode dialogueResponseBlock, ConversationPlayer conversationUI)
         {
             Drawer.CloseImmediate();
             List<ResponseGenerator> responseGenerators = dialogueResponseBlock.GetResponseGenerators();
@@ -80,7 +80,7 @@ namespace SpellBoundAR.DialogueSystem.UI
             Drawer.Open();
         }
 
-        private void OnDialogueResponseBlockExited(DialogueResponseBlockNode dialogueResponse, ConversationUI conversationUI)
+        private void OnDialogueResponseBlockExited(DialogueResponseBlockNode dialogueResponse, ConversationPlayer conversationUI)
         {
             Drawer.Close();
             Destroy(gameObject, 1f);

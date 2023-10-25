@@ -12,18 +12,18 @@ namespace SpellBoundAR.DialogueSystem.Nodes
         [Input] public Connection input;
         public override string Name => graph ? "[out] " + graph.name : "[out]";
 
-        public override DialogueNode GetNextNode(ConversationUI conversationUI)
+        public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
         {
             return null;
         }
 
-        public override void OnNodeEnter(ConversationUI conversationUI)
+        public override void OnNodeEnter(ConversationPlayer conversationUI)
         {
             base.OnNodeEnter(conversationUI);
             conversationUI.CompleteDialogueInteraction();
         }
 
-        public override void OnNodeExit(ConversationUI conversationUI)
+        public override void OnNodeExit(ConversationPlayer conversationUI)
         {
             base.OnNodeExit(conversationUI);
             OnDialogueEndingExited?.Invoke(this);

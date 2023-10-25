@@ -22,9 +22,9 @@ namespace SpellBoundAR.DialogueSystem
         public static void EnqueueConversation(ISpeaker speaker, Conversation conversation)
         {
             if (speaker == null || !conversation) return;
-            foreach (var (item1, item2) in Queue)
+            foreach (var (queuedSpeaker, queuedConversation) in Queue)
             {
-                if (item1 == speaker && item2 == conversation) return;
+                if (queuedSpeaker == speaker && queuedConversation == conversation) return;
             }
             Queue.Enqueue(new Tuple<ISpeaker, Conversation>(speaker, conversation));
             OnConversationQueueChanged?.Invoke();
@@ -37,14 +37,14 @@ namespace SpellBoundAR.DialogueSystem
             return entry;
         }
 
-        public static ConversationUI PlayConversation(ISpeaker speaker, Conversation conversation)
+        public static ConversationPlayer PlayConversation(ISpeaker speaker, Conversation conversation)
         {
-            ConversationUI conversationUI = Resources.Load<ConversationUI>(Path);
+            ConversationPlayer conversationUI = Resources.Load<ConversationPlayer>(Path);
             if (!conversationUI) throw new Exception("Resources: Could not find: " + Path);
             return Object.Instantiate(conversationUI).Initialize(speaker, conversation);
         }
 
-        public static void StopConversation(ConversationUI conversationUI)
+        public static void StopConversation(ConversationPlayer conversationUI)
         {
             if (!conversationUI) return;
             conversationUI.Close();

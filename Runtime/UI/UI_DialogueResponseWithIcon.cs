@@ -8,7 +8,7 @@ namespace SpellBoundAR.DialogueSystem.UI
     {
         [SerializeField] private Image icon;
 
-        public override void Initialize(BasicResponse basicResponse, ConversationUI conversationUI)
+        public override void Initialize(BasicResponse basicResponse, ConversationPlayer conversationUI)
         {
             if (basicResponse == null) { Destroy(gameObject); return; }
             base.Initialize(basicResponse, conversationUI);

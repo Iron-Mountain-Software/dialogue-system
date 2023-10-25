@@ -10,7 +10,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes.Actions
     {
         [SerializeField] private string sceneName;
 
-        protected override void HandleAction(ConversationUI conversationUI)
+        protected override void HandleAction(ConversationPlayer conversationUI)
         {
             SceneManager.LoadScene(sceneName);
         }

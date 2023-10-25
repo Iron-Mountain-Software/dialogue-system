@@ -55,10 +55,10 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 				? localizedAudio.LoadAsset()
 				: audioClip;
 
-		protected virtual DialogueLine GetDialogueLine(ConversationUI conversationUI)
+		protected virtual DialogueLine GetDialogueLine(ConversationPlayer conversationUI)
 		{
 			ISpeaker speaker = speakerType == SpeakerType.Default
-				? conversationUI.CurrentSpeaker
+				? conversationUI.DefaultSpeaker
 				: customSpeaker;
 			return new (
 				speaker,
@@ -85,12 +85,12 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 			}
 		}
 
-		public override DialogueNode GetNextNode(ConversationUI conversationUI)
+		public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
 		{
 			return GetOutputPort("output")?.Connection?.node as DialogueNode;
 		}
 
-		public override void OnNodeEnter(ConversationUI conversationUI)
+		public override void OnNodeEnter(ConversationPlayer conversationUI)
 		{
 			base.OnNodeEnter(conversationUI);
 			DialogueLine dialogueLine = GetDialogueLine(conversationUI);

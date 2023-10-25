@@ -35,14 +35,14 @@ namespace SpellBoundAR.DialogueSystem.Selection
         protected virtual void OnEnable()
         {
             if (Speaker != null) Speaker.OnActiveConversationsChanged += RefreshNextConversation;
-            ConversationUI.OnDialogueInteractionEnded += OnDialogueInteractionEnded;
+            ConversationPlayer.OnDialogueInteractionEnded += OnDialogueInteractionEnded;
             RefreshNextConversation();
         }
 
         protected virtual void OnDisable()
         {
             if (Speaker != null) Speaker.OnActiveConversationsChanged -= RefreshNextConversation;
-            ConversationUI.OnDialogueInteractionEnded -= OnDialogueInteractionEnded;
+            ConversationPlayer.OnDialogueInteractionEnded -= OnDialogueInteractionEnded;
         }
 
         private void OnDialogueInteractionEnded(ISpeaker endingSpeaker, Conversation conversation)

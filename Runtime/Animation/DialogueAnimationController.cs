@@ -30,8 +30,8 @@ namespace SpellBoundAR.DialogueSystem.Animation
             _animations.Add(AnimationType.Question, question);
         }
 
-        private void OnEnable() => ConversationUI.OnDialogueLinePlayed += OnDialogueLinePlayed;
-        private void OnDisable() => ConversationUI.OnDialogueLinePlayed -= OnDialogueLinePlayed;
+        private void OnEnable() => ConversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
+        private void OnDisable() => ConversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
 
         private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine) 
         {

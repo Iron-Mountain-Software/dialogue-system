@@ -11,10 +11,10 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 
         public List<DialogueLineMainContent> AlternateContent => alternateContent;
         
-        protected override DialogueLine GetDialogueLine(ConversationUI conversationUI)
+        protected override DialogueLine GetDialogueLine(ConversationPlayer conversationUI)
         {
             ISpeaker speaker = SpeakerType == SpeakerType.Default
-                ? conversationUI.CurrentSpeaker
+                ? conversationUI.DefaultSpeaker
                 : CustomSpeaker;
             int random = Random.Range(-1, alternateContent.Count);
             if (random == -1)

@@ -13,12 +13,12 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 
         public override string Name => graph ? "[in] " + graph.name : "[in]";
 
-        public override DialogueNode GetNextNode(ConversationUI conversationUI)
+        public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
         {
             return GetOutputPort("output")?.Connection?.node as DialogueNode;
         }
 
-        public override void OnNodeEnter(ConversationUI conversationUI)
+        public override void OnNodeEnter(ConversationPlayer conversationUI)
         {
             base.OnNodeEnter(conversationUI);
             OnDialogueBeginningEntered?.Invoke(this);

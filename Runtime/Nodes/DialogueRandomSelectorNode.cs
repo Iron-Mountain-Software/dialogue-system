@@ -14,7 +14,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 
         public override string Name => "Random Selector";
 
-        public override DialogueNode GetNextNode(ConversationUI conversationUI)
+        public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
         {
             NodePort outputPort = GetOutputPort("output");
             List<NodePort> connectionPorts = outputPort?.GetConnections();
@@ -23,7 +23,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes
             return connectionPorts[randomIndex].node as DialogueNode;
         }
 
-        public override void OnNodeEnter(ConversationUI conversationUI)
+        public override void OnNodeEnter(ConversationPlayer conversationUI)
         {
             base.OnNodeEnter(conversationUI);
             conversationUI.CurrentNode = GetNextNode(conversationUI);

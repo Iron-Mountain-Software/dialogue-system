@@ -6,17 +6,17 @@ namespace SpellBoundAR.DialogueSystem
 {
     public class DialogueTouchInputManager : MonoBehaviour
     {
-        [SerializeField] private ConversationUI conversationUI;
+        [SerializeField] private ConversationPlayer conversationUI;
         [SerializeField] private DialogueLineTyper dialogueLineTyper;
 
         private void Awake()
         {
-            if (!conversationUI) conversationUI = GetComponentInParent<ConversationUI>();
+            if (!conversationUI) conversationUI = GetComponentInParent<ConversationPlayer>();
         }
 
         private void OnValidate()
         {
-            if (!conversationUI) conversationUI = GetComponentInParent<ConversationUI>();
+            if (!conversationUI) conversationUI = GetComponentInParent<ConversationPlayer>();
         }
 
         private void Update()

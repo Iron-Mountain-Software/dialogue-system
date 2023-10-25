@@ -17,12 +17,12 @@ namespace SpellBoundAR.DialogueSystem.Narration
         private void OnEnable()
         {
             RefreshRequirements();
-            ConversationUI.OnDialogueLinePlayed += OnDialogueLinePlayed;
+            ConversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
         }
 
         private void OnDisable()
         {
-            ConversationUI.OnDialogueLinePlayed -= OnDialogueLinePlayed;
+            ConversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
         }
 
         public void RefreshRequirements()

@@ -12,15 +12,15 @@ namespace SpellBoundAR.DialogueSystem.Nodes
     [NodeTint("#0061CC")]
     public class DialogueResponseBlockNode : DialogueNode
     {
-        public static event Action<DialogueResponseBlockNode, ConversationUI> OnDialogueResponseBlockEntered;
-        public static event Action<DialogueResponseBlockNode, ConversationUI> OnDialogueResponseBlockExited;
+        public static event Action<DialogueResponseBlockNode, ConversationPlayer> OnDialogueResponseBlockEntered;
+        public static event Action<DialogueResponseBlockNode, ConversationPlayer> OnDialogueResponseBlockExited;
 	
         [Input] public Connection input;
         [Output] public Connection output;
 
         public override string Name => "Response Generators";
 
-        public override DialogueNode GetNextNode(ConversationUI conversationUI)
+        public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
         {
             return null;
         }
@@ -40,13 +40,13 @@ namespace SpellBoundAR.DialogueSystem.Nodes
             return responseGenerators;
         }
 
-        public override void OnNodeEnter(ConversationUI conversationUI)
+        public override void OnNodeEnter(ConversationPlayer conversationUI)
         {
             base.OnNodeEnter(conversationUI);
             OnDialogueResponseBlockEntered?.Invoke(this, conversationUI);
         }
 
-        public override void OnNodeExit(ConversationUI conversationUI)
+        public override void OnNodeExit(ConversationPlayer conversationUI)
         {
             base.OnNodeExit(conversationUI);
             OnDialogueResponseBlockExited?.Invoke(this, conversationUI);

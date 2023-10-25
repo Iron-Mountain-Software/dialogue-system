@@ -13,12 +13,12 @@ namespace SpellBoundAR.DialogueSystem.UI
         private void Awake()
         {
             _image = GetComponent<Image>();
-            ConversationUI.OnDialogueLinePlayed += OnDialogueLinePlayed;
+            ConversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
         }
 
         private void OnDestroy()
         {
-            ConversationUI.OnDialogueLinePlayed -= OnDialogueLinePlayed;
+            ConversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
         }
 
         private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)

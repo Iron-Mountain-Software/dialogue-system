@@ -9,25 +9,25 @@ namespace SpellBoundAR.DialogueSystem.Nodes.Conditions
 		[Output] public Connection fail;
 
 		[Header("Cache")]
-		protected ConversationUI ConversationUI;
+		protected ConversationPlayer ConversationUI;
 
-		protected abstract bool TestCondition(ConversationUI conversationUI);
+		protected abstract bool TestCondition(ConversationPlayer conversationUI);
 
 		public override string Name => "Pass fail";
 
-        public override DialogueNode GetNextNode(ConversationUI conversationUI)
+        public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
         {
 	        return TestCondition(conversationUI) ?
 		        GetOutputPort("pass")?.Connection?.node as DialogueNode :
 		        GetOutputPort("fail")?.Connection?.node as DialogueNode;
         }
 
-        public override void OnNodeEnter(ConversationUI conversationUI)
+        public override void OnNodeEnter(ConversationPlayer conversationUI)
         {
 	        conversationUI.CurrentNode = GetNextNode(conversationUI);
         }
 
-        public override void OnNodeExit(ConversationUI conversationUI) { }
+        public override void OnNodeExit(ConversationPlayer conversationUI) { }
 
 #if UNITY_EDITOR
 

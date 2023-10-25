@@ -21,12 +21,12 @@ namespace SpellBoundAR.DialogueSystem.UI
         protected virtual void Awake()
         {
             Reset();
-            ConversationUI.OnDialogueLinePlayed += OnDialogueLinePlayed;
+            ConversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
         }
 
         protected virtual void OnDestroy()
         {
-            ConversationUI.OnDialogueLinePlayed -= OnDialogueLinePlayed;
+            ConversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
         }
 
         protected abstract void Reset();

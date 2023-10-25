@@ -10,14 +10,14 @@ namespace SpellBoundAR.DialogueSystem.Nodes.Actions
         [Input] public Connection input;
         [Output] public Connection output;
 
-        protected abstract void HandleAction(ConversationUI conversationUI);
+        protected abstract void HandleAction(ConversationPlayer conversationUI);
 
-        public override DialogueNode GetNextNode(ConversationUI conversationUI)
+        public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
         {
             return GetOutputPort("output")?.Connection?.node as DialogueNode;
         }
         
-        public override void OnNodeEnter(ConversationUI conversationUI)
+        public override void OnNodeEnter(ConversationPlayer conversationUI)
         {
             base.OnNodeEnter(conversationUI);
             HandleAction(conversationUI);

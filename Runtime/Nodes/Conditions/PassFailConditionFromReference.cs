@@ -9,7 +9,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes.Conditions
         [SerializeField] private SpellBoundAR.Conditions.Condition condition;
         public override string Name => not ? condition.NegatedName : condition.DefaultName;
 
-        protected override bool TestCondition(ConversationUI conversationUI)
+        protected override bool TestCondition(ConversationPlayer conversationUI)
         {
             return not ? !condition.Evaluate() : condition.Evaluate();
         }

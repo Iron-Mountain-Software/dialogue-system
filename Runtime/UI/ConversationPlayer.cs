@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using IronMountain.StandardAnimations.RectTransforms;
 using SpellBoundAR.DialogueSystem.Nodes;
 using SpellBoundAR.DialogueSystem.Speakers;
@@ -8,13 +7,13 @@ using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.UI
 {
-    public class ConversationUI : MonoBehaviour
+    public class ConversationPlayer : MonoBehaviour
     {
         public static event Action<ISpeaker, Conversation> OnDialogueInteractionStarted;
         public static event Action<Conversation, DialogueLine> OnDialogueLinePlayed;
         public static event Action<ISpeaker, Conversation> OnDialogueInteractionEnded;
 
-        public event Action OnSpeakerChanged;
+        public event Action OnDefaultSpeakerChanged;
         public event Action OnConversationChanged;
         
         public event Action OnOpened;
@@ -30,21 +29,21 @@ namespace SpellBoundAR.DialogueSystem.UI
         [SerializeField] private Drawer drawer;
         
         [Header("Cache")]
-        private ISpeaker _currentSpeaker;
+        private ISpeaker _defaultSpeaker;
         private Conversation _currentConversation;
         private DialogueNode _currentNode;
 
         public int FrameOfLastProgression { get; private set; }
         public float TimeOfLastProgression { get; private set; }
 
-        public ISpeaker CurrentSpeaker
+        public ISpeaker DefaultSpeaker
         {
-            get => _currentSpeaker;
+            get => _defaultSpeaker;
             private set
             {
-                if (_currentSpeaker == value) return;
-                _currentSpeaker = value;
-                OnSpeakerChanged?.Invoke();
+                if (_defaultSpeaker == value) return;
+                _defaultSpeaker = value;
+                OnDefaultSpeakerChanged?.Invoke();
             }
         }
         
@@ -54,9 +53,9 @@ namespace SpellBoundAR.DialogueSystem.UI
             private set
             {
                 if (_currentConversation == value) return;
-                if (_currentConversation) OnDialogueInteractionEnded?.Invoke(_currentSpeaker, _currentConversation);
+                if (_currentConversation) OnDialogueInteractionEnded?.Invoke(_defaultSpeaker, _currentConversation);
                 _currentConversation = value;
-                if (_currentConversation) OnDialogueInteractionStarted?.Invoke(_currentSpeaker, _currentConversation);
+                if (_currentConversation) OnDialogueInteractionStarted?.Invoke(_defaultSpeaker, _currentConversation);
                 OnConversationChanged?.Invoke();
             }
         }
@@ -80,17 +79,20 @@ namespace SpellBoundAR.DialogueSystem.UI
             if (drawer) drawer.CloseImmediate();
         }
 
+        private void OnEnable() => ConversationPlayersManager.Register(this);
+        private void OnDisable() => ConversationPlayersManager.Unregister(this);
+
         private void Start()
         {
             Open();
         }
 
-        public ConversationUI Initialize(ISpeaker speaker, Conversation conversation)
+        public ConversationPlayer Initialize(ISpeaker speaker, Conversation conversation)
         {
-            _currentSpeaker = null;
+            _defaultSpeaker = null;
             _currentConversation = null;
             _currentNode = null;
-            CurrentSpeaker = speaker;
+            DefaultSpeaker = speaker;
             CurrentConversation = conversation;
             CurrentNode = (DialogueBeginningNode) conversation.nodes.Find(node => node is DialogueBeginningNode);
             CurrentConversation.OnConversationStarted();

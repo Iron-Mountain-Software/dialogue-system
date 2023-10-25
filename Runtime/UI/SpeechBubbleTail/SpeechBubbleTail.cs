@@ -10,25 +10,25 @@ namespace SpellBoundAR.DialogueSystem.UI.SpeechBubbleTail
     public class SpeechBubbleTail : Graphic
     {
         [Header("Cache")]
-        private ConversationUI _conversationUI;
+        private ConversationPlayer _conversationUI;
         private Transform _anchor;
 
         protected override void Awake()
         {
-            _conversationUI = GetComponentInParent<ConversationUI>();
-            if (_conversationUI) _conversationUI.OnSpeakerChanged += RefreshAnchor;
+            _conversationUI = GetComponentInParent<ConversationPlayer>();
+            if (_conversationUI) _conversationUI.OnDefaultSpeakerChanged += RefreshAnchor;
             SpeechBubbleAnchorsManager.OnAnchorsChanged += RefreshAnchor;
         }
 
         protected override void OnDestroy()
         {
-            if (_conversationUI) _conversationUI.OnSpeakerChanged -= RefreshAnchor;
+            if (_conversationUI) _conversationUI.OnDefaultSpeakerChanged -= RefreshAnchor;
             SpeechBubbleAnchorsManager.OnAnchorsChanged -= RefreshAnchor;
         }
         
         private void RefreshAnchor()
         {
-            ISpeaker speaker = _conversationUI ? _conversationUI.CurrentSpeaker : null;
+            ISpeaker speaker = _conversationUI ? _conversationUI.DefaultSpeaker : null;
             _anchor = SpeechBubbleAnchorsManager.GetAnchor(speaker);
         }
         

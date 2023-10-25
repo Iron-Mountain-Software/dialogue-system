@@ -9,13 +9,13 @@ namespace SpellBoundAR.DialogueSystem.Nodes
         [SerializeField] [HideInInspector] private string id;
 
         public abstract string Name { get; }
-        public abstract DialogueNode GetNextNode(ConversationUI conversationUI);
+        public abstract DialogueNode GetNextNode(ConversationPlayer conversationUI);
 
-        public virtual void OnNodeEnter(ConversationUI conversationUI) { }
+        public virtual void OnNodeEnter(ConversationPlayer conversationUI) { }
 
-        public virtual void OnNodeExit(ConversationUI conversationUI) { }
+        public virtual void OnNodeExit(ConversationPlayer conversationUI) { }
 
-        public DialogueNode GetNextHaltingNode(ConversationUI conversationUI)
+        public DialogueNode GetNextHaltingNode(ConversationPlayer conversationUI)
         {
             DialogueNode node = GetNextNode(conversationUI);
             while (node)

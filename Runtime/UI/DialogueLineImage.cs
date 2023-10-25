@@ -8,8 +8,8 @@ namespace SpellBoundAR.DialogueSystem.UI
     {
         [SerializeField] private Image image;
         
-        private void Awake() => ConversationUI.OnDialogueLinePlayed += OnDialogueLinePlayed;
-        private void OnDestroy() => ConversationUI.OnDialogueLinePlayed -= OnDialogueLinePlayed;
+        private void Awake() => ConversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
+        private void OnDestroy() => ConversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
         
         private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)
         {
@@ -22,7 +22,7 @@ namespace SpellBoundAR.DialogueSystem.UI
         {
             if (!image) return;
             image.sprite = sprite;
-            image.color = sprite ? Color.white : Color.clear;
+            image.enabled = sprite;
             image.preserveAspect = true;
         }
     }

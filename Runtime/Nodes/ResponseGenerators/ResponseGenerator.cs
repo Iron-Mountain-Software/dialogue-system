@@ -20,19 +20,19 @@ namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
 
         public ScriptedResponseStyle ScriptedResponseStyle => style;
         
-        public abstract List<BasicResponse> GetDialogueResponses(ConversationUI conversationUI);
+        public abstract List<BasicResponse> GetDialogueResponses(ConversationPlayer conversationUI);
 
-        public override DialogueNode GetNextNode(ConversationUI conversationUI)
+        public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
         {
             return GetOutputPort("output")?.Connection?.node as DialogueNode;
         }
         
-        public override void OnNodeEnter(ConversationUI conversationUI)
+        public override void OnNodeEnter(ConversationPlayer conversationUI)
         {
             conversationUI.CurrentNode = GetNextNode(conversationUI);
         }
     
-        public override void OnNodeExit(ConversationUI conversationUI) { }
+        public override void OnNodeExit(ConversationPlayer conversationUI) { }
 
         public override void OnCreateConnection(NodePort @from, NodePort to)
         {

@@ -24,12 +24,12 @@ namespace SpellBoundAR.DialogueSystem.UI
             _image = GetComponent<Image>();
             _image.sprite = null;
             _image.preserveAspect = true;
-            ConversationUI.OnDialogueLinePlayed += OnDialogueLinePlayed;
+            ConversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
         }
 
         private void OnDestroy()
         {
-            ConversationUI.OnDialogueLinePlayed -= OnDialogueLinePlayed;
+            ConversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
         }
 
         private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)

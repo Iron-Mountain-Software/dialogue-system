@@ -7,9 +7,9 @@ namespace SpellBoundAR.DialogueSystem.Nodes.Conditions
     {
         public override string Name => "DIALOGUE QUEUED CHECK";
 
-        protected override bool TestCondition(ConversationUI conversationUI)
+        protected override bool TestCondition(ConversationPlayer conversationUI)
         {
-            ISpeaker thisSpeaker = conversationUI.CurrentSpeaker;
+            ISpeaker thisSpeaker = conversationUI.DefaultSpeaker;
             Conversation thisConversation = conversationUI.CurrentConversation;
             foreach (Conversation testConversation in thisSpeaker.Conversations)
             {

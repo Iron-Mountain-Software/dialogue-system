@@ -18,12 +18,12 @@ namespace SpellBoundAR.DialogueSystem.UI
         private void Awake()
         {
             _rectTransform = GetComponent<RectTransform>();
-            ConversationUI.OnDialogueLinePlayed += OnDialogueLinePlayed;
+            ConversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
         }
 
         private void OnDestroy()
         {
-            ConversationUI.OnDialogueLinePlayed -= OnDialogueLinePlayed;
+            ConversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
         }
 
         private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)

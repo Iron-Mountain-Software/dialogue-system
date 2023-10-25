@@ -7,11 +7,11 @@ namespace SpellBoundAR.DialogueSystem.Nodes.Actions
     [NodeTint("#FFCA3A")]
     public class DialoguePlayPrioritized : DialogueAction
     {
-        protected override void HandleAction(ConversationUI conversationUI)
+        protected override void HandleAction(ConversationPlayer conversationUI)
         {
             if (graph is Conversation conversation)
             {
-                ISpeaker currentSpeaker = conversationUI.CurrentSpeaker;
+                ISpeaker currentSpeaker = conversationUI.DefaultSpeaker;
                 Conversation nextConversation = null;
                 foreach (Conversation testConversation in currentSpeaker.Conversations)
                 {

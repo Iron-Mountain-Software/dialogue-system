@@ -50,7 +50,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
 
         private Sprite Sprite => sprite ? sprite.Asset : null;
     
-        public override List<BasicResponse> GetDialogueResponses(ConversationUI conversationUI)
+        public override List<BasicResponse> GetDialogueResponses(ConversationPlayer conversationUI)
         {
             IResponseStyle style = ScriptedResponseStyle
                 ? ScriptedResponseStyle

@@ -9,7 +9,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes.Actions
     {
         [SerializeField] private UnityEngine.Events.UnityEvent action;
 
-        protected override void HandleAction(ConversationUI conversationUI)
+        protected override void HandleAction(ConversationPlayer conversationUI)
         {
             action?.Invoke();
         }

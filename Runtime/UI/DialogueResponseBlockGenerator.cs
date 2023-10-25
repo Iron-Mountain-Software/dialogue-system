@@ -16,7 +16,7 @@ namespace SpellBoundAR.DialogueSystem.UI
         private void Awake() => DialogueResponseBlockNode.OnDialogueResponseBlockEntered += OnDialogueResponseBlockEntered;
         private void OnDestroy() => DialogueResponseBlockNode.OnDialogueResponseBlockEntered -= OnDialogueResponseBlockEntered;
 
-        private void OnDialogueResponseBlockEntered(DialogueResponseBlockNode dialogueResponseBlock, ConversationUI conversationUI)
+        private void OnDialogueResponseBlockEntered(DialogueResponseBlockNode dialogueResponseBlock, ConversationPlayer conversationUI)
         {
             if (!dialogueResponseBlockPrefab) return;
             GameObject instantiated = Instantiate(dialogueResponseBlockPrefab, DialogueResponseBlockParent);
