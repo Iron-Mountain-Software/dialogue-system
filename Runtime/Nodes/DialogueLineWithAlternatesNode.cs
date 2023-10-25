@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using SpellBoundAR.DialogueSystem.Speakers;
+using SpellBoundAR.DialogueSystem.UI;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.Nodes
@@ -9,12 +11,16 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 
         public List<DialogueLineMainContent> AlternateContent => alternateContent;
         
-        protected override DialogueLine GetDialogueLine()
+        protected override DialogueLine GetDialogueLine(ConversationUI conversationUI)
         {
+            ISpeaker speaker = SpeakerType == SpeakerType.Default
+                ? conversationUI.CurrentSpeaker
+                : CustomSpeaker;
             int random = Random.Range(-1, alternateContent.Count);
             if (random == -1)
             {
                 return new DialogueLine(
+                    speaker,
                     Text,
                     AudioClip,
                     portrait,
@@ -24,6 +30,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes
                 );
             }
             return new DialogueLine(
+                speaker,
                 alternateContent[random].Text,
                 alternateContent[random].AudioClip,
                 portrait,

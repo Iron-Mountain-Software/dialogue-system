@@ -21,17 +21,18 @@ namespace SpellBoundAR.DialogueSystem.UI
             ConversationUI.OnDialogueLinePlayed -= OnDialogueLinePlayed;
         }
 
-        private void OnDialogueLinePlayed(ISpeaker speaker, Conversation conversation, DialogueLine dialogueLine)
+        private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)
         {
-            if (!conversation || speaker == null || dialogueLine == null) return;
-            Sprite sprite = speaker.Portraits.GetPortrait(dialogueLine.Portrait);
-            SetImageSprite(sprite);
+            SetImageSprite(dialogueLine is {Speaker: {Portraits: { }}}
+                ? dialogueLine.Speaker.Portraits.GetPortrait(dialogueLine.Portrait)
+                : null);
         }
 
         private void SetImageSprite(Sprite sprite)
         {
             if (!_image) return;
             _image.sprite = sprite;
+            _image.enabled = _image.sprite;
             _image.preserveAspect = true;
         }
     }

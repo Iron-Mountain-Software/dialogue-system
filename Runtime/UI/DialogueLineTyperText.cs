@@ -36,21 +36,21 @@ namespace SpellBoundAR.DialogueSystem.UI
             _currentIndex = 0;
         }
 
-        protected override void OnDialogueLinePlayed(ISpeaker speaker, Conversation conversation, DialogueLine dialogueLine)
+        protected override void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)
         {
             StopAllCoroutines();
             _dialogueLine = dialogueLine != null ? dialogueLine.Text : string.Empty;
-            if (PrependSpeakerName && speaker != null)
+            if (PrependSpeakerName && dialogueLine is {Speaker: { }})
             {
                 if (UseSpeakerColor)
                 {
-                    _speaker = "<color=#" + ColorUtility.ToHtmlStringRGBA(speaker.Color) + ">"
-                               + speaker.SpeakerName
+                    _speaker = "<color=#" + ColorUtility.ToHtmlStringRGBA(dialogueLine.Speaker.Color) + ">"
+                               + dialogueLine.Speaker.SpeakerName
                                + SpeakerNameSeparator
                                + "</color>";
                 }
-                else _speaker = speaker.SpeakerName
-                               + SpeakerNameSeparator;
+                else _speaker = dialogueLine.Speaker.SpeakerName
+                                + SpeakerNameSeparator;
             }
             else _speaker = string.Empty;
             Text.text = _dialogueLine;

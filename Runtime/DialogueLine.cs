@@ -7,6 +7,7 @@ namespace SpellBoundAR.DialogueSystem
 {
     public class DialogueLine
     {
+        public ISpeaker Speaker { get; }
         public string Text { get; }
         public AudioClip AudioClip { get; }
         public SpeakerPortraitCollection.PortraitType Portrait { get; }
@@ -15,6 +16,7 @@ namespace SpellBoundAR.DialogueSystem
         public VirtualCameraReference StaticVirtualCameraReference { get; }
 
         public DialogueLine(
+            ISpeaker speaker,
             string text,
             AudioClip audioClip,
             SpeakerPortraitCollection.PortraitType portrait,

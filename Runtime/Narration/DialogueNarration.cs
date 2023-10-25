@@ -48,7 +48,7 @@ namespace SpellBoundAR.DialogueSystem.Narration
             _audioSource.playOnAwake = false;
         }
 
-        private void OnDialogueLinePlayed(ISpeaker speaker, Conversation conversation, DialogueLine dialogueLine)
+        private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)
         {
             if (!_audioSource) InitializeAudioSource();
             if (_audioSource.isPlaying) _audioSource.Stop();

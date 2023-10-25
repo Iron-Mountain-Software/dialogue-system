@@ -33,9 +33,9 @@ namespace SpellBoundAR.DialogueSystem.Animation
         private void OnEnable() => ConversationUI.OnDialogueLinePlayed += OnDialogueLinePlayed;
         private void OnDisable() => ConversationUI.OnDialogueLinePlayed -= OnDialogueLinePlayed;
 
-        private void OnDialogueLinePlayed(ISpeaker speaker, Conversation conversation, DialogueLine dialogueLine) 
+        private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine) 
         {
-            if (!animator || !_speakerController || _speakerController.Speaker != speaker) return;
+            if (!animator || !_speakerController || _speakerController.Speaker != dialogueLine.Speaker) return;
             AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
             foreach (string initialState in initialStates)
             {

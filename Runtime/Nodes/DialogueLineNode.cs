@@ -15,6 +15,8 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 		[Input] public Connection input;
 		[Output] public Connection output;
 		
+		[SerializeField] private SpeakerType speakerType;
+		[SerializeField] private Speaker customSpeaker;
 		[SerializeField] private string simpleText;
 		[SerializeField] private AudioClip audioClip;
 		[SerializeField] private LocalizedString text;
@@ -23,6 +25,10 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 		[SerializeField] protected AnimationType animation;
 		[SerializeField] protected ResourceSprite sprite;
 		[SerializeField] protected VirtualCameraReference virtualCameraReference;
+
+		public SpeakerType SpeakerType => speakerType;
+
+		public Speaker CustomSpeaker => customSpeaker;
 
 		public string Text
 		{
@@ -43,13 +49,19 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 			}
 		}
 
+		public LocalizedString LocalizedText => text;
+
 		public AudioClip AudioClip => !localizedAudio.IsEmpty && Application.isPlaying
 				? localizedAudio.LoadAsset()
 				: audioClip;
 
-		protected virtual DialogueLine GetDialogueLine()
+		protected virtual DialogueLine GetDialogueLine(ConversationUI conversationUI)
 		{
+			ISpeaker speaker = speakerType == SpeakerType.Default
+				? conversationUI.CurrentSpeaker
+				: customSpeaker;
 			return new (
+				speaker,
 				Text,
 				AudioClip,
 				portrait,
@@ -81,7 +93,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 		public override void OnNodeEnter(ConversationUI conversationUI)
 		{
 			base.OnNodeEnter(conversationUI);
-			DialogueLine dialogueLine = GetDialogueLine();
+			DialogueLine dialogueLine = GetDialogueLine(conversationUI);
 			conversationUI.PlayDialogueLine(dialogueLine);
 			DialogueNode nextHaltingNode = GetNextHaltingNode(conversationUI);
 			if (nextHaltingNode is DialogueResponseBlockNode) conversationUI.CurrentNode = GetNextNode(conversationUI);

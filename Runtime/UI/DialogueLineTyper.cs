@@ -32,7 +32,6 @@ namespace SpellBoundAR.DialogueSystem.UI
         protected abstract void Reset();
         
         protected abstract void OnDialogueLinePlayed(
-            ISpeaker speaker,
             Conversation conversation,
             DialogueLine dialogueLine);
 

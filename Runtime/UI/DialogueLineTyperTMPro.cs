@@ -29,22 +29,22 @@ namespace SpellBoundAR.DialogueSystem.UI
             Text.maxVisibleCharacters = Text.text.Length;
         }
 
-        protected override void OnDialogueLinePlayed(ISpeaker speaker, Conversation conversation, DialogueLine dialogueLine)
+        protected override void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)
         {
             StopAllCoroutines();
             string text = dialogueLine != null ? dialogueLine.Text : string.Empty;
 
-            if (PrependSpeakerName && speaker != null)
+            if (PrependSpeakerName && dialogueLine is {Speaker: { }})
             {
                 if (UseSpeakerColor)
                 {
-                    text = "<#" + ColorUtility.ToHtmlStringRGBA(speaker.Color) + ">"
-                           + speaker.SpeakerName 
+                    text = "<#" + ColorUtility.ToHtmlStringRGBA(dialogueLine.Speaker.Color) + ">"
+                           + dialogueLine.Speaker.SpeakerName 
                            + SpeakerNameSeparator
                            + "</color>" 
                            + text;
                 }
-                else text = speaker.SpeakerName 
+                else text = dialogueLine.Speaker.SpeakerName 
                             + SpeakerNameSeparator 
                             + text;
             }
