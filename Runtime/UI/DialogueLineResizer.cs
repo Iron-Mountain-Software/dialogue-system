@@ -1,3 +1,4 @@
+using System;
 using SpellBoundAR.DialogueSystem.Speakers;
 using UnityEngine;
 
@@ -13,17 +14,23 @@ namespace SpellBoundAR.DialogueSystem.UI
         [SerializeField] private Vector2 maximumAnchorWithoutImage = Vector2.one;
 
         [Header("Cache")]
+        private ConversationPlayer _conversationPlayer;
         private RectTransform _rectTransform;
         
         private void Awake()
         {
+            _conversationPlayer = GetComponentInParent<ConversationPlayer>();
             _rectTransform = GetComponent<RectTransform>();
-            ConversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
         }
 
-        private void OnDestroy()
+        private void OnEnable()
         {
-            ConversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
+            if (_conversationPlayer) _conversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
+        }
+
+        private void OnDisable()
+        {
+            if (_conversationPlayer) _conversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
         }
 
         private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)

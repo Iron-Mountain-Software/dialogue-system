@@ -1,3 +1,4 @@
+using System;
 using SpellBoundAR.DialogueSystem.Speakers;
 using SpellBoundAR.DialogueSystem.UI;
 using UnityEngine;
@@ -9,20 +10,30 @@ namespace SpellBoundAR.DialogueSystem.Narration
     [RequireComponent(typeof(AudioSource))]
     public class DialogueNarration : MonoBehaviour
     {
-        [Header("References")]
-        private AudioSource _audioSource;
+        [SerializeField] private ConversationPlayer conversationPlayer;
+        [SerializeField] private AudioSource audioSource;
     
-        private void Awake() => InitializeAudioSource();
+        private void Awake()
+        {
+            InitializeAudioSource();
+            if (!conversationPlayer) conversationPlayer = GetComponentInParent<ConversationPlayer>();
+        }
+
+        private void OnValidate()
+        {
+            InitializeAudioSource();
+            if (!conversationPlayer) conversationPlayer = GetComponentInParent<ConversationPlayer>();
+        }
 
         private void OnEnable()
         {
             RefreshRequirements();
-            ConversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
+            if (conversationPlayer) conversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
         }
 
         private void OnDisable()
         {
-            ConversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
+            if (conversationPlayer) conversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
         }
 
         public void RefreshRequirements()
@@ -40,22 +51,22 @@ namespace SpellBoundAR.DialogueSystem.Narration
 
         private void InitializeAudioSource()
         {
-            _audioSource = GetComponent<AudioSource>();
-            if (!_audioSource) _audioSource = gameObject.AddComponent<AudioSource>();
-            _audioSource.clip = null;
-            _audioSource.mute = false;
-            _audioSource.loop = false;
-            _audioSource.playOnAwake = false;
+            audioSource = GetComponent<AudioSource>();
+            if (!audioSource) audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.clip = null;
+            audioSource.mute = false;
+            audioSource.loop = false;
+            audioSource.playOnAwake = false;
         }
 
         private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)
         {
-            if (!_audioSource) InitializeAudioSource();
-            if (_audioSource.isPlaying) _audioSource.Stop();
+            if (!audioSource) InitializeAudioSource();
+            if (audioSource.isPlaying) audioSource.Stop();
             if (dialogueLine.AudioClip)
             {
-                _audioSource.clip = dialogueLine.AudioClip;
-                _audioSource.Play();
+                audioSource.clip = dialogueLine.AudioClip;
+                audioSource.Play();
             }
         }
     }

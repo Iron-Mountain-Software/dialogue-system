@@ -4,12 +4,13 @@ using UnityEngine.UI;
 
 namespace SpellBoundAR.DialogueSystem.UI
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Image))]
-    public class DialogueLineImage : MonoBehaviour
+    public class SpeakerPortraitImage : MonoBehaviour
     {
         [SerializeField] private ConversationPlayer conversationPlayer;
         [SerializeField] private Image image;
-        
+    
         private void Awake()
         {
             if (!conversationPlayer) conversationPlayer = GetComponentInParent<ConversationPlayer>();
@@ -24,26 +25,26 @@ namespace SpellBoundAR.DialogueSystem.UI
 
         private void OnEnable()
         {
-            conversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
+            if (conversationPlayer) conversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
         }
 
         private void OnDisable()
         {
-            conversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
+            if (conversationPlayer) conversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
         }
 
         private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)
         {
-            if (dialogueLine == null) return;
-            SetImage(dialogueLine.Sprite);
-            gameObject.SetActive(dialogueLine.Sprite);
+            SetImageSprite(dialogueLine is {Speaker: {Portraits: { }}}
+                ? dialogueLine.Speaker.Portraits.GetPortrait(dialogueLine.Portrait)
+                : null);
         }
 
-        private void SetImage(Sprite sprite)
+        private void SetImageSprite(Sprite sprite)
         {
             if (!image) return;
             image.sprite = sprite;
-            image.enabled = sprite;
+            image.enabled = image.sprite;
             image.preserveAspect = true;
         }
     }

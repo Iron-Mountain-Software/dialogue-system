@@ -10,12 +10,13 @@ namespace SpellBoundAR.DialogueSystem.UI
     public class ConversationPlayer : MonoBehaviour
     {
         public static event Action<ISpeaker, Conversation> OnDialogueInteractionStarted;
-        public static event Action<Conversation, DialogueLine> OnDialogueLinePlayed;
+        public static event Action<Conversation, DialogueLine> OnAnyDialogueLinePlayed;
         public static event Action<ISpeaker, Conversation> OnDialogueInteractionEnded;
 
         public event Action OnDefaultSpeakerChanged;
         public event Action OnConversationChanged;
-        
+        public event Action<Conversation, DialogueLine> OnDialogueLinePlayed;
+
         public event Action OnOpened;
         public event Action OnClosed;
 
@@ -121,6 +122,7 @@ namespace SpellBoundAR.DialogueSystem.UI
         private IEnumerator PlayDialogueLineRunner(DialogueLine dialogueLine)
         {
             OnDialogueLinePlayed?.Invoke(_currentConversation, dialogueLine);
+            OnAnyDialogueLinePlayed?.Invoke(_currentConversation, dialogueLine);
             if (!continueAfterNarration) yield break;
             float narrationLength = dialogueLine != null && dialogueLine.AudioClip ? dialogueLine.AudioClip.length : 1f;
             yield return new WaitForSeconds(narrationLength);

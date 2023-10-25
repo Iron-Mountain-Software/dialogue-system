@@ -1,11 +1,12 @@
+using System;
 using System.Collections;
-using SpellBoundAR.DialogueSystem.Speakers;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.UI
 {
     public abstract class DialogueLineTyper : MonoBehaviour
     {
+        [SerializeField] private ConversationPlayer conversationPlayer;
         [SerializeField] private bool prependSpeakerName;
         [SerializeField] private bool useSpeakerColor;
         [SerializeField] private string speakerNameSeparator = ": ";
@@ -20,13 +21,23 @@ namespace SpellBoundAR.DialogueSystem.UI
         
         protected virtual void Awake()
         {
-            Reset();
-            ConversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
+            if (!conversationPlayer) conversationPlayer = GetComponentInParent<ConversationPlayer>();
         }
 
-        protected virtual void OnDestroy()
+        private void OnValidate()
         {
-            ConversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
+            if (!conversationPlayer) conversationPlayer = GetComponentInParent<ConversationPlayer>();
+        }
+        
+        private void OnEnable()
+        {
+            Reset();
+            if (conversationPlayer) conversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
+        }
+        
+        protected virtual void OnDisable()
+        {
+            if (conversationPlayer) conversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
         }
 
         protected abstract void Reset();

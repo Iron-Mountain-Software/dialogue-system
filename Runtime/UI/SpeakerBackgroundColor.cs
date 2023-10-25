@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using SpellBoundAR.DialogueSystem.Speakers;
 using UnityEngine;
@@ -5,8 +6,8 @@ using UnityEngine.UI;
 
 namespace SpellBoundAR.DialogueSystem.UI
 {
-    [RequireComponent(typeof(Image))]
-    public class DialogueSpeakerBackgroundColor : MonoBehaviour
+    [RequireComponent(typeof(Graphic))]
+    public class SpeakerBackgroundColor : MonoBehaviour
     {
         [Header("Static Settings")]
         private const float AnimationSeconds = .5f;
@@ -16,36 +17,40 @@ namespace SpellBoundAR.DialogueSystem.UI
         [SerializeField] private Color neutralColor = new Color(0.99f, 0.56f, 0.05f);
         [SerializeField] private Color sadColor = new Color(0.06f, 0.25f, 0.98f);
         
-        [Header("Cache")]
-        private Image _image;
+        [Header("References")]
+        [SerializeField] private ConversationPlayer conversationPlayer;
+        [SerializeField] private Graphic graphic;
     
         private void Awake()
         {
-            _image = GetComponent<Image>();
-            _image.sprite = null;
-            _image.preserveAspect = true;
-            ConversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
+            if (!conversationPlayer) conversationPlayer = GetComponentInParent<ConversationPlayer>();
+            if (!graphic) graphic = GetComponent<Graphic>();
         }
 
-        private void OnDestroy()
+        private void OnEnable()
         {
-            ConversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
+            if (conversationPlayer) conversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
+        }
+
+        private void OnDisable()
+        {
+            if (conversationPlayer) conversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
         }
 
         private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)
         {
-            if (!_image || dialogueLine == null) return;
+            if (!graphic || dialogueLine == null) return;
             StopAllCoroutines();
             switch(dialogueLine.Portrait)
             {
                 case SpeakerPortraitCollection.PortraitType.Happy:
-                    StartCoroutine(LerpColor(_image.color, happyColor));
+                    StartCoroutine(LerpColor(graphic.color, happyColor));
                     break;
                 case SpeakerPortraitCollection.PortraitType.Neutral:
-                    StartCoroutine(LerpColor(_image.color, neutralColor));
+                    StartCoroutine(LerpColor(graphic.color, neutralColor));
                     break;
                 case SpeakerPortraitCollection.PortraitType.Sad:
-                    StartCoroutine(LerpColor(_image.color, sadColor));
+                    StartCoroutine(LerpColor(graphic.color, sadColor));
                     break;
             }
         }
@@ -55,10 +60,10 @@ namespace SpellBoundAR.DialogueSystem.UI
             for (float timer = 0; timer < AnimationSeconds; timer += Time.deltaTime)
             {
                 float progress = timer / AnimationSeconds;
-                if (_image) _image.color = Color.Lerp(startColor, endColor, progress);
+                if (graphic) graphic.color = Color.Lerp(startColor, endColor, progress);
                 yield return null;
             }
-            if (_image) _image.color = endColor;
+            if (graphic) graphic.color = endColor;
         }
     }
 }
