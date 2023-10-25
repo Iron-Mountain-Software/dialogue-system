@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using SpellBoundAR.DialogueSystem.Speakers;
 using TMPro;
 using UnityEngine;
 
@@ -20,12 +21,37 @@ namespace SpellBoundAR.DialogueSystem.UI
                 return _text;
             }
         }
-
-        protected override void SetText(string text) 
+        
+        protected override void Reset()
         {
             StopAllCoroutines();
+            Text.text = string.Empty;
+            Text.maxVisibleCharacters = Text.text.Length;
+        }
+
+        protected override void OnDialogueLinePlayed(ISpeaker speaker, Conversation conversation, DialogueLine dialogueLine)
+        {
+            StopAllCoroutines();
+            string text = dialogueLine != null ? dialogueLine.Text : string.Empty;
+
+            if (PrependSpeakerName && speaker != null)
+            {
+                if (UseSpeakerColor)
+                {
+                    text = "<#" + ColorUtility.ToHtmlStringRGBA(speaker.Color) + ">"
+                           + speaker.SpeakerName 
+                           + SpeakerNameSeparator
+                           + "</color>" 
+                           + text;
+                }
+                else text = speaker.SpeakerName 
+                            + SpeakerNameSeparator 
+                            + text;
+            }
+            
             Text.text = text;
             Text.maxVisibleCharacters = Text.text.Length;
+            AnimateByLetterRate(DefaultLetterRate);
         }
 
         protected override IEnumerator AnimateRunner(float letterRate) 

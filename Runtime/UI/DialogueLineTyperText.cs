@@ -1,14 +1,17 @@
 using System.Collections;
+using SpellBoundAR.DialogueSystem.Speakers;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace SpellBoundAR.DialogueSystem.UI
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Text))]
     public class DialogueLineTyperText : DialogueLineTyper
     {
+        [SerializeField] private Text text;
+
         [Header("Cache")]
-        private Text _text;
         private string _target;
         private int _currentIndex;
 
@@ -18,17 +21,41 @@ namespace SpellBoundAR.DialogueSystem.UI
         {
             get
             {
-                if (!_text) _text = GetComponent<Text>();
-                return _text;
+                if (!text) text = GetComponent<Text>();
+                if (!text) text = gameObject.AddComponent<Text>();
+                return text;
             }
         }
 
-        protected override void SetText(string text) 
+        protected override void Reset()
         {
             StopAllCoroutines();
-            _target = text;
+            Text.text = string.Empty;
+            _target = string.Empty;
+            _currentIndex = 0;
+        }
+
+        protected override void OnDialogueLinePlayed(ISpeaker speaker, Conversation conversation, DialogueLine dialogueLine)
+        {
+            StopAllCoroutines();
+            _target = dialogueLine != null ? dialogueLine.Text : string.Empty;
+            if (PrependSpeakerName && speaker != null)
+            {
+                if (UseSpeakerColor)
+                {
+                    _target = "<color=#" + ColorUtility.ToHtmlStringRGBA(speaker.Color) + ">"
+                              + speaker.SpeakerName 
+                              + SpeakerNameSeparator
+                              + "</color>" 
+                              + _target;
+                }
+                else _target = speaker.SpeakerName 
+                               + SpeakerNameSeparator 
+                               + _target;
+            }
             Text.text = _target;
             _currentIndex = _target.Length + 1;
+            AnimateByLetterRate(DefaultLetterRate);
         }
 
         protected override IEnumerator AnimateRunner(float letterRate) 

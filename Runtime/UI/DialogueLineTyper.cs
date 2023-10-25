@@ -6,33 +6,40 @@ namespace SpellBoundAR.DialogueSystem.UI
 {
     public abstract class DialogueLineTyper : MonoBehaviour
     {
-        [Header("Settings")]
+        [SerializeField] private bool prependSpeakerName;
+        [SerializeField] private bool useSpeakerColor;
+        [SerializeField] private string speakerNameSeparator = ": ";
         [SerializeField] private float defaultLetterRate = 0.04f;
 
+        protected bool PrependSpeakerName => prependSpeakerName;
+        protected bool UseSpeakerColor => useSpeakerColor;
+        protected string SpeakerNameSeparator => speakerNameSeparator;
         protected float DefaultLetterRate => defaultLetterRate;
         
         public abstract bool IsAnimating { get; }
         
         protected virtual void Awake()
         {
-            SetText(string.Empty);
-            ConversationUI.OnDialogueLinePlayed += TypeDialogueLine;
+            Reset();
+            ConversationUI.OnDialogueLinePlayed += OnDialogueLinePlayed;
         }
 
         protected virtual void OnDestroy()
         {
-            ConversationUI.OnDialogueLinePlayed -= TypeDialogueLine;
-        }
-        
-        private void TypeDialogueLine(ISpeaker speaker, Conversation conversation, DialogueLine dialogueLine)
-        {
-            if (dialogueLine == null) return;
-            SetText(dialogueLine.Text);
-            AnimateByLetterRate(defaultLetterRate);
+            ConversationUI.OnDialogueLinePlayed -= OnDialogueLinePlayed;
         }
 
-        protected abstract void SetText(string text);
-                
+        protected abstract void Reset();
+        
+        protected abstract void OnDialogueLinePlayed(
+            ISpeaker speaker,
+            Conversation conversation,
+            DialogueLine dialogueLine);
+
+        protected abstract IEnumerator AnimateRunner(float letterRate);
+
+        public abstract void ForceFinishAnimating();
+        
         public void Animate() 
         {
             StopAllCoroutines();
@@ -54,9 +61,5 @@ namespace SpellBoundAR.DialogueSystem.UI
             StopAllCoroutines();
             StartCoroutine(AnimateRunner(letterRate));
         }
-
-        protected abstract IEnumerator AnimateRunner(float letterRate);
-
-        public abstract void ForceFinishAnimating();
     }
 }
