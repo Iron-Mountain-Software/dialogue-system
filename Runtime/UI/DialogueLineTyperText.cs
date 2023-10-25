@@ -12,10 +12,11 @@ namespace SpellBoundAR.DialogueSystem.UI
         [SerializeField] private Text text;
 
         [Header("Cache")]
-        private string _target;
+        private string _speaker;
+        private string _dialogueLine;
         private int _currentIndex;
 
-        public override bool IsAnimating => _currentIndex <= _target.Length;
+        public override bool IsAnimating => _currentIndex <= _dialogueLine.Length;
 
         private Text Text
         {
@@ -31,30 +32,29 @@ namespace SpellBoundAR.DialogueSystem.UI
         {
             StopAllCoroutines();
             Text.text = string.Empty;
-            _target = string.Empty;
+            _dialogueLine = string.Empty;
             _currentIndex = 0;
         }
 
         protected override void OnDialogueLinePlayed(ISpeaker speaker, Conversation conversation, DialogueLine dialogueLine)
         {
             StopAllCoroutines();
-            _target = dialogueLine != null ? dialogueLine.Text : string.Empty;
+            _dialogueLine = dialogueLine != null ? dialogueLine.Text : string.Empty;
             if (PrependSpeakerName && speaker != null)
             {
                 if (UseSpeakerColor)
                 {
-                    _target = "<color=#" + ColorUtility.ToHtmlStringRGBA(speaker.Color) + ">"
-                              + speaker.SpeakerName 
-                              + SpeakerNameSeparator
-                              + "</color>" 
-                              + _target;
+                    _speaker = "<color=#" + ColorUtility.ToHtmlStringRGBA(speaker.Color) + ">"
+                               + speaker.SpeakerName
+                               + SpeakerNameSeparator
+                               + "</color>";
                 }
-                else _target = speaker.SpeakerName 
-                               + SpeakerNameSeparator 
-                               + _target;
+                else _speaker = speaker.SpeakerName
+                               + SpeakerNameSeparator;
             }
-            Text.text = _target;
-            _currentIndex = _target.Length + 1;
+            else _speaker = string.Empty;
+            Text.text = _dialogueLine;
+            _currentIndex = _dialogueLine.Length + 1;
             AnimateByLetterRate(DefaultLetterRate);
         }
 
@@ -63,7 +63,7 @@ namespace SpellBoundAR.DialogueSystem.UI
             Text.text = string.Empty;
             _currentIndex = 1;
             while (IsAnimating) {
-                Text.text = _target[.._currentIndex];
+                Text.text = _speaker + _dialogueLine[.._currentIndex];
                 if (letterRate > 0) { yield return new WaitForSeconds(letterRate); }
                 _currentIndex++;
             }
@@ -72,8 +72,8 @@ namespace SpellBoundAR.DialogueSystem.UI
         public override void ForceFinishAnimating() 
         {
             StopAllCoroutines();
-            Text.text = _target;
-            _currentIndex = _target.Length + 1;
+            Text.text = _dialogueLine;
+            _currentIndex = _dialogueLine.Length + 1;
         }
     }
 }
