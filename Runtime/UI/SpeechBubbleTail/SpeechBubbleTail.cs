@@ -1,5 +1,4 @@
 ﻿using SpellBoundAR.DialogueSystem.Speakers;
-using SpellBoundAR.MainCameraManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,27 +8,33 @@ namespace SpellBoundAR.DialogueSystem.UI.SpeechBubbleTail
     [RequireComponent(typeof(CanvasRenderer))]
     public class SpeechBubbleTail : Graphic
     {
-        [Header("Cache")]
-        private ConversationPlayer _conversationUI;
-        private Transform _anchor;
-
+        [SerializeField] private ConversationPlayer conversationPlayer;
+        [SerializeField] private Transform anchor;
+        [SerializeField] private new Camera camera;
+        
         protected override void Awake()
         {
-            _conversationUI = GetComponentInParent<ConversationPlayer>();
-            if (_conversationUI) _conversationUI.OnDefaultSpeakerChanged += RefreshAnchor;
+            conversationPlayer = GetComponentInParent<ConversationPlayer>();
+            if (conversationPlayer) conversationPlayer.OnDefaultSpeakerChanged += RefreshAnchor;
             SpeechBubbleAnchorsManager.OnAnchorsChanged += RefreshAnchor;
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            if (!camera) camera = Camera.main;
         }
 
         protected override void OnDestroy()
         {
-            if (_conversationUI) _conversationUI.OnDefaultSpeakerChanged -= RefreshAnchor;
+            if (conversationPlayer) conversationPlayer.OnDefaultSpeakerChanged -= RefreshAnchor;
             SpeechBubbleAnchorsManager.OnAnchorsChanged -= RefreshAnchor;
         }
         
         private void RefreshAnchor()
         {
-            ISpeaker speaker = _conversationUI ? _conversationUI.DefaultSpeaker : null;
-            _anchor = SpeechBubbleAnchorsManager.GetAnchor(speaker);
+            ISpeaker speaker = conversationPlayer ? conversationPlayer.DefaultSpeaker : null;
+            anchor = SpeechBubbleAnchorsManager.GetAnchor(speaker);
         }
         
         private void Update() => SetVerticesDirty();
@@ -38,9 +43,9 @@ namespace SpellBoundAR.DialogueSystem.UI.SpeechBubbleTail
         {
             vh.Clear();
 
-            if (_anchor == null) { return; }
+            if (anchor == null || camera == null) return;
 
-            Vector3 screenPosition = MainCameraManager.Instance.MainCamera.WorldToScreenPoint(_anchor.position);
+            Vector3 screenPosition = camera.WorldToScreenPoint(anchor.position);
 
             Vector2 pivot = rectTransform.pivot;
             Rect rect = rectTransform.rect;
