@@ -1,5 +1,6 @@
 using System;
 using SpellBoundAR.DialogueSystem.Selection;
+using SpellBoundAR.DialogueSystem.Starters;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -15,6 +16,7 @@ namespace SpellBoundAR.DialogueSystem.Speakers
 
         [SerializeField] private Object speaker;
         [SerializeField] private ConversationSelector conversationSelector;
+        [SerializeField] private ConversationStarter conversationStarter;
 
         public ISpeaker Speaker
         {
@@ -36,6 +38,15 @@ namespace SpellBoundAR.DialogueSystem.Speakers
                 return conversationSelector;
             }
         }
+        
+        public virtual ConversationStarter ConversationStarter
+        {
+            get
+            {
+                if (!conversationStarter) conversationStarter = GetComponent<ConversationStarterFromResource>();
+                return conversationStarter;
+            }
+        }
 
         public Conversation NextConversation => ConversationSelector 
             ? ConversationSelector.NextConversation
@@ -53,9 +64,10 @@ namespace SpellBoundAR.DialogueSystem.Speakers
             OnDisabled?.Invoke();
         }
 
-        public virtual void PlayConversation()
+        public virtual void StartConversation()
         {
-            ConversationManager.PlayConversation(Speaker, NextConversation);
+            if (!ConversationStarter || Speaker == null || !NextConversation) return;
+            ConversationStarter.StartConversation(Speaker, NextConversation);
         }
 
 #if UNITY_EDITOR
@@ -64,6 +76,7 @@ namespace SpellBoundAR.DialogueSystem.Speakers
         {
             ValidateSpeaker();
             ValidateConversationSelector();
+            ValidateConversationStarter();
         }
 
         private void ValidateSpeaker()
@@ -78,6 +91,12 @@ namespace SpellBoundAR.DialogueSystem.Speakers
         {
             if (!conversationSelector) conversationSelector = GetComponent<ConversationSelector>();
             if (!conversationSelector) Debug.LogWarning("Warning: SpeakerController is missing a ConversationSelector!", this);
+        }
+        
+        private void ValidateConversationStarter()
+        {
+            if (!conversationStarter) conversationStarter = GetComponent<ConversationStarter>();
+            if (!conversationStarter) Debug.LogWarning("Warning: SpeakerController is missing a ConversationStarter!", this);
         }
 
 #endif

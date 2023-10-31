@@ -9,7 +9,7 @@ namespace SpellBoundAR.DialogueSystem.Speakers
         
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (speakerController) speakerController.PlayConversation();
+            if (speakerController) speakerController.StartConversation();
         }
 
 #if UNITY_EDITOR

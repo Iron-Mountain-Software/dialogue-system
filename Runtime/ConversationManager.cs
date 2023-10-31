@@ -36,20 +36,5 @@ namespace SpellBoundAR.DialogueSystem
             OnConversationQueueChanged?.Invoke();
             return entry;
         }
-
-        public static ConversationPlayer PlayConversation(ISpeaker speaker, Conversation conversation)
-        {
-            if (speaker == null || !conversation) return null;
-            ConversationPlayer conversationUI = Resources.Load<ConversationPlayer>(Path);
-            if (!conversationUI) throw new Exception("Resources: Could not find: " + Path);
-            return Object.Instantiate(conversationUI).Initialize(speaker, conversation);
-        }
-
-        public static void StopConversation(ConversationPlayer conversationUI)
-        {
-            if (!conversationUI) return;
-            conversationUI.Close();
-            Resources.UnloadUnusedAssets();
-        }
     }
 }

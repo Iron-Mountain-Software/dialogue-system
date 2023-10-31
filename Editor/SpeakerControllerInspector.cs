@@ -17,7 +17,7 @@ namespace SpellBoundAR.DialogueSystem.Editor
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
-            if (GUILayout.Button("Play Conversation") && _speakerController) _speakerController.PlayConversation();
+            if (GUILayout.Button("Start Conversation") && _speakerController) _speakerController.StartConversation();
         }
     }
 }
