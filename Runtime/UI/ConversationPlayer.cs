@@ -31,6 +31,7 @@ namespace SpellBoundAR.DialogueSystem.UI
         private ISpeaker _defaultSpeaker;
         private Conversation _currentConversation;
         private DialogueNode _currentNode;
+        private DialogueLine _currentDialogueLine;
         private DialogueResponseBlock _currentResponseBlock;
 
         public int FrameOfLastProgression { get; private set; }
@@ -73,6 +74,21 @@ namespace SpellBoundAR.DialogueSystem.UI
                 if (_currentNode) _currentNode.OnNodeEnter(this);
             }
         }
+        
+        public DialogueLine CurrentDialogueLine
+        {
+            get => _currentDialogueLine;
+            set
+            {
+                if (_currentDialogueLine == value) return;
+                _currentDialogueLine = value;
+                if (_currentDialogueLine != null)
+                {
+                    OnDialogueLinePlayed?.Invoke(_currentConversation, _currentDialogueLine);
+                    OnAnyDialogueLinePlayed?.Invoke(_currentConversation, _currentDialogueLine);
+                }
+            }
+        }
 
         private void OnEnable() => ConversationPlayersManager.Register(this);
         private void OnDisable() => ConversationPlayersManager.Unregister(this);
@@ -87,6 +103,7 @@ namespace SpellBoundAR.DialogueSystem.UI
             _defaultSpeaker = null;
             _currentConversation = null;
             _currentNode = null;
+            _currentDialogueLine = null;
             DefaultSpeaker = speaker;
             CurrentConversation = conversation;
             CurrentNode = (DialogueBeginningNode) conversation.nodes.Find(node => node is DialogueBeginningNode);
@@ -108,16 +125,19 @@ namespace SpellBoundAR.DialogueSystem.UI
         public void PlayDialogueLine(DialogueLine dialogueLine)
         {
             StopAllCoroutines();
-            StartCoroutine(PlayDialogueLineRunner(dialogueLine));
+            CurrentDialogueLine = dialogueLine;
+            if (continueAfterNarration)
+            {
+                float seconds = dialogueLine != null && dialogueLine.AudioClip 
+                    ? dialogueLine.AudioClip.length 
+                    : 2f;
+                StartCoroutine(WaitToContinue(seconds));
+            }
         }
 
-        private IEnumerator PlayDialogueLineRunner(DialogueLine dialogueLine)
+        private IEnumerator WaitToContinue(float seconds)
         {
-            OnDialogueLinePlayed?.Invoke(_currentConversation, dialogueLine);
-            OnAnyDialogueLinePlayed?.Invoke(_currentConversation, dialogueLine);
-            if (!continueAfterNarration) yield break;
-            float narrationLength = dialogueLine != null && dialogueLine.AudioClip ? dialogueLine.AudioClip.length : 2f;
-            yield return new WaitForSeconds(narrationLength);
+            yield return new WaitForSeconds(seconds);
             PlayNextDialogueNode();
         }
 
@@ -147,6 +167,7 @@ namespace SpellBoundAR.DialogueSystem.UI
             if (CurrentConversation) CurrentConversation.Playthroughs++;
             CurrentNode = null;
             CurrentConversation = null;
+            CurrentDialogueLine = null;
         }
 
 #if UNITY_EDITOR
