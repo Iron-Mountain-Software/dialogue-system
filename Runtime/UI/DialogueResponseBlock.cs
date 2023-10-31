@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using IronMountain.StandardAnimations.RectTransforms;
 using SpellBoundAR.DialogueSystem.Nodes;
 using SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators;
 using SpellBoundAR.DialogueSystem.Responses;
@@ -8,7 +7,6 @@ using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.UI
 {
-    [RequireComponent(typeof(Drawer))]
     public class DialogueResponseBlock : MonoBehaviour
     {
         [Header("Settings")]
@@ -20,18 +18,6 @@ namespace SpellBoundAR.DialogueSystem.UI
         [SerializeField] private GameObject rowPrefab;
         [SerializeField] private GameObject dialogueResponsePrefab;
         [SerializeField] private GameObject dialogueResponseWithIconPrefab;
-
-        [Header("Cache")]
-        private Drawer _drawer;
-
-        private Drawer Drawer
-        {
-            get
-            {
-                if (!_drawer) _drawer = GetComponent<Drawer>();
-                return _drawer;
-            }
-        }
 
         private Transform RowParent => rowParent ? rowParent : transform;
 
@@ -49,7 +35,6 @@ namespace SpellBoundAR.DialogueSystem.UI
 
         public void Initialize(DialogueResponseBlockNode dialogueResponseBlock, ConversationPlayer conversationUI)
         {
-            Drawer.CloseImmediate();
             List<ResponseGenerator> responseGenerators = dialogueResponseBlock.GetResponseGenerators();
             List<BasicResponse> dialogueResponses = new List<BasicResponse>();
             foreach (ResponseGenerator responseGenerator in responseGenerators)
@@ -77,12 +62,10 @@ namespace SpellBoundAR.DialogueSystem.UI
                 DialogueResponseButton responseButton = instantiated.GetComponent<DialogueResponseButton>();
                 responseButton.Initialize(dialogueResponse, conversationUI);
             }
-            Drawer.Open();
         }
 
         private void OnDialogueResponseBlockExited(DialogueResponseBlockNode dialogueResponse, ConversationPlayer conversationUI)
         {
-            Drawer.Close();
             Destroy(gameObject, 1f);
         }
     

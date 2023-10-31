@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using IronMountain.StandardAnimations.RectTransforms;
 using SpellBoundAR.DialogueSystem.Nodes;
 using SpellBoundAR.DialogueSystem.Speakers;
 using UnityEngine;
@@ -26,9 +25,6 @@ namespace SpellBoundAR.DialogueSystem.UI
         [Header("Settings")]
         [SerializeField] private bool continueAfterNarration = false;
 
-        [Header("References")]
-        [SerializeField] private Drawer drawer;
-        
         [Header("Cache")]
         private ISpeaker _defaultSpeaker;
         private Conversation _currentConversation;
@@ -75,11 +71,6 @@ namespace SpellBoundAR.DialogueSystem.UI
             }
         }
 
-        private void Awake()
-        {
-            if (drawer) drawer.CloseImmediate();
-        }
-
         private void OnEnable() => ConversationPlayersManager.Register(this);
         private void OnDisable() => ConversationPlayersManager.Unregister(this);
 
@@ -102,13 +93,11 @@ namespace SpellBoundAR.DialogueSystem.UI
 
         public void Open()
         {
-            if (drawer) drawer.Open();
             OnOpened?.Invoke();
         }
 
         public void Close()
         {
-            if (drawer) drawer.Close();
             Destroy(gameObject, DestructionDelay);
             OnClosed?.Invoke();
         }
