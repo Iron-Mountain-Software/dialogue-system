@@ -4,12 +4,14 @@ using SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators;
 using SpellBoundAR.DialogueSystem.Responses;
 using SpellBoundAR.DialogueSystem.Speakers;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace SpellBoundAR.DialogueSystem.UI
 {
     public class DialogueResponseBlock : MonoBehaviour
     {
         [Header("Settings")]
+        [SerializeField] private float destructionDelay = 1;
         [SerializeField] private float xPadding;
         [SerializeField] private float yPadding;
         [SerializeField] private float spacing;
@@ -18,20 +20,9 @@ namespace SpellBoundAR.DialogueSystem.UI
         [SerializeField] private GameObject rowPrefab;
         [SerializeField] private GameObject dialogueResponsePrefab;
         [SerializeField] private GameObject dialogueResponseWithIconPrefab;
-
+        [SerializeField] private UnityEvent onDestroy;
+        
         private Transform RowParent => rowParent ? rowParent : transform;
-
-        private void Awake()
-        {
-            DialogueResponseBlockNode.OnDialogueResponseBlockExited += OnDialogueResponseBlockExited;
-            ConversationPlayer.OnDialogueInteractionEnded += OnDialogueInteractionEnded;
-        }
-
-        private void OnDestroy()
-        {
-            DialogueResponseBlockNode.OnDialogueResponseBlockExited -= OnDialogueResponseBlockExited;
-            ConversationPlayer.OnDialogueInteractionEnded -= OnDialogueInteractionEnded;
-        }
 
         public void Initialize(DialogueResponseBlockNode dialogueResponseBlock, ConversationPlayer conversationUI)
         {
@@ -64,14 +55,10 @@ namespace SpellBoundAR.DialogueSystem.UI
             }
         }
 
-        private void OnDialogueResponseBlockExited(DialogueResponseBlockNode dialogueResponse, ConversationPlayer conversationUI)
+        public void Destroy()
         {
-            Destroy(gameObject, 1f);
-        }
-    
-        private void OnDialogueInteractionEnded(ISpeaker speaker, Conversation conversation)
-        {
-            Destroy(gameObject);
+            onDestroy?.Invoke();
+            Destroy(gameObject, destructionDelay);
         }
 
         private void OnValidate()

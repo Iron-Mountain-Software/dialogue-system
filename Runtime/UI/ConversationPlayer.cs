@@ -24,11 +24,14 @@ namespace SpellBoundAR.DialogueSystem.UI
 
         [Header("Settings")]
         [SerializeField] private bool continueAfterNarration = false;
-
+        [SerializeField] private Transform responseBlockParent;
+        [SerializeField] private DialogueResponseBlock responseBlockPrefab;
+        
         [Header("Cache")]
         private ISpeaker _defaultSpeaker;
         private Conversation _currentConversation;
         private DialogueNode _currentNode;
+        private DialogueResponseBlock _currentResponseBlock;
 
         public int FrameOfLastProgression { get; private set; }
         public float TimeOfLastProgression { get; private set; }
@@ -113,9 +116,23 @@ namespace SpellBoundAR.DialogueSystem.UI
             OnDialogueLinePlayed?.Invoke(_currentConversation, dialogueLine);
             OnAnyDialogueLinePlayed?.Invoke(_currentConversation, dialogueLine);
             if (!continueAfterNarration) yield break;
-            float narrationLength = dialogueLine != null && dialogueLine.AudioClip ? dialogueLine.AudioClip.length : 1f;
+            float narrationLength = dialogueLine != null && dialogueLine.AudioClip ? dialogueLine.AudioClip.length : 2f;
             yield return new WaitForSeconds(narrationLength);
             PlayNextDialogueNode();
+        }
+
+        public void GenerateResponseBlock(DialogueResponseBlockNode dialogueResponseBlockNode)
+        {
+            if (_currentResponseBlock || !responseBlockPrefab) return;
+            Transform parent = responseBlockParent ? responseBlockParent : transform;
+            _currentResponseBlock = Instantiate(responseBlockPrefab, parent);
+            _currentResponseBlock.Initialize(dialogueResponseBlockNode, this);
+        }
+
+        public void DestroyResponseBlock()
+        {
+            if (_currentResponseBlock) _currentResponseBlock.Destroy();
+            _currentResponseBlock = null;
         }
 
         public void PlayNextDialogueNode()
@@ -131,5 +148,15 @@ namespace SpellBoundAR.DialogueSystem.UI
             CurrentNode = null;
             CurrentConversation = null;
         }
+
+#if UNITY_EDITOR
+        
+        private void OnValidate()
+        {
+            if (!responseBlockParent) responseBlockParent = transform;
+        }
+        
+#endif
+        
     }
 }

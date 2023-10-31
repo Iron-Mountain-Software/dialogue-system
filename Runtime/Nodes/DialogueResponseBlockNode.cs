@@ -43,13 +43,13 @@ namespace SpellBoundAR.DialogueSystem.Nodes
         public override void OnNodeEnter(ConversationPlayer conversationUI)
         {
             base.OnNodeEnter(conversationUI);
-            OnDialogueResponseBlockEntered?.Invoke(this, conversationUI);
+            conversationUI.GenerateResponseBlock(this);
         }
 
         public override void OnNodeExit(ConversationPlayer conversationUI)
         {
             base.OnNodeExit(conversationUI);
-            OnDialogueResponseBlockExited?.Invoke(this, conversationUI);
+            conversationUI.DestroyResponseBlock();
         }
         
         public override void OnCreateConnection(NodePort @from, NodePort to)
