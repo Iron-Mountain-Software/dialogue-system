@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using SpellBoundAR.Conditions;
+using IronMountain.Conditions;
 using SpellBoundAR.DialogueSystem.Nodes;
 using IronMountain.ResourceUtilities;
 using SpellBoundAR.AssetManagement;

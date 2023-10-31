@@ -1,6 +1,5 @@
-using System.Linq;
-using SpellBoundAR.Conditions;
-using SpellBoundAR.Conditions.Editor;
+using IronMountain.Conditions;
+using IronMountain.Conditions.Editor;
 using UnityEditor;
 using UnityEngine;
 

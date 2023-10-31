@@ -1,4 +1,4 @@
-using SpellBoundAR.Conditions;
+using IronMountain.Conditions;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.Conditions
