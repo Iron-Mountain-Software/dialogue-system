@@ -66,7 +66,7 @@ namespace SpellBoundAR.DialogueSystem.Speakers
 
         public virtual void StartConversation()
         {
-            if (!ConversationStarter || Speaker == null || !NextConversation) return;
+            if (!enabled || !ConversationStarter || Speaker == null || !NextConversation) return;
             ConversationStarter.StartConversation(Speaker, NextConversation);
         }
 

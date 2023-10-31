@@ -10,7 +10,7 @@ namespace SpellBoundAR.DialogueSystem.Starters
         
         public override ConversationPlayer StartConversation(ISpeaker speaker, Conversation conversation)
         {
-            if (!prefab || speaker == null || !conversation) return null;
+            if (!enabled || !prefab || speaker == null || !conversation) return null;
             return Instantiate(prefab).Initialize(speaker, conversation);
         }
     }

@@ -11,7 +11,7 @@ namespace SpellBoundAR.DialogueSystem.Starters
         
         public override ConversationPlayer StartConversation(ISpeaker speaker, Conversation conversation)
         {
-            if (speaker == null || !conversation) return null;
+            if (!enabled || speaker == null || !conversation) return null;
             ConversationPlayer conversationPlayer = Resources.Load<ConversationPlayer>(path);
             if (!conversationPlayer) throw new Exception("Resources: Could not find: " + path);
             return Instantiate(conversationPlayer).Initialize(speaker, conversation);
