@@ -136,22 +136,11 @@ namespace SpellBoundAR.DialogueSystem.UI
             if (nextNode) CurrentNode = nextNode;
         }
 
-        public void CompleteDialogueInteraction()
+        public void CompleteConversation()
         {
-            CurrentConversation.Playthroughs++;
+            if (CurrentConversation) CurrentConversation.Playthroughs++;
             CurrentNode = null;
             CurrentConversation = null;
-            PlayNextConversationOrClose();
-        }
-
-        protected virtual void PlayNextConversationOrClose()
-        {
-            if (ConversationManager.ConversationQueueLength() > 0)
-            {
-                Tuple<ISpeaker, Conversation> entry = ConversationManager.DequeueConversation();
-                Initialize(entry.Item1, entry.Item2);
-            }
-            else Close();
         }
     }
 }

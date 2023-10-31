@@ -8,15 +8,15 @@ namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
 {
     [NodeWidth(200)]
     [NodeTint("#80461B")]
-    public class ResponseGeneratorQueuedDialogue : ResponseGenerator
+    public class ResponseGeneratorActiveDialogue : ResponseGenerator
     {
-        public override string Name => "QUEUED RESPONSES";
+        public override string Name => "ACTIVE CONVERSATIONS";
     
-        public override List<BasicResponse> GetDialogueResponses(ConversationPlayer conversationUI)
+        public override List<BasicResponse> GetDialogueResponses(ConversationPlayer conversationPlayer)
         {
             List<BasicResponse> dialogueResponses = new List<BasicResponse>();
-            ISpeaker thisSpeaker = conversationUI.DefaultSpeaker;
-            Conversation thisConversation = conversationUI.CurrentConversation;
+            ISpeaker thisSpeaker = conversationPlayer.DefaultSpeaker;
+            Conversation thisConversation = conversationPlayer.CurrentConversation;
             IResponseStyle style = ScriptedResponseStyle
                 ? ScriptedResponseStyle
                 : new ResponseStyle(
@@ -33,8 +33,9 @@ namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
                     && conversation != thisConversation
                     && !conversation.PrioritizeOverDefault)
                 {
-                    dialogueResponses.Add(new PlayQueuedDialogueResponse(
-                        this, 
+                    dialogueResponses.Add(new PlayConversationResponse(
+                        conversationPlayer,
+                        this,
                         conversation.InvokingLine,
                         conversation.InvokingIcon,
                         row + rowOffset,

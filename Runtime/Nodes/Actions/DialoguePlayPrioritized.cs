@@ -9,19 +9,21 @@ namespace SpellBoundAR.DialogueSystem.Nodes.Actions
     {
         protected override void HandleAction(ConversationPlayer conversationUI)
         {
-            if (graph is Conversation conversation)
+            if (graph is not Conversation conversation) return;
+            ISpeaker currentSpeaker = conversationUI.DefaultSpeaker;
+            Conversation nextConversation = null;
+            foreach (Conversation testConversation in currentSpeaker.Conversations)
             {
-                ISpeaker currentSpeaker = conversationUI.DefaultSpeaker;
-                Conversation nextConversation = null;
-                foreach (Conversation testConversation in currentSpeaker.Conversations)
-                {
-                    if (!testConversation
-                        || !testConversation.IsActive
-                        || testConversation == conversation
-                        || !testConversation.PrioritizeOverDefault) continue;
-                    if (!nextConversation || testConversation.Priority < nextConversation.Priority) nextConversation = testConversation;
-                }
-                if (nextConversation) ConversationManager.EnqueueConversation(currentSpeaker, nextConversation);
+                if (!testConversation
+                    || !testConversation.IsActive
+                    || testConversation == conversation
+                    || !testConversation.PrioritizeOverDefault) continue;
+                if (!nextConversation || testConversation.Priority < nextConversation.Priority) nextConversation = testConversation;
+            }
+            if (nextConversation)
+            {
+                conversationUI.CompleteConversation();
+                conversationUI.Initialize(currentSpeaker, nextConversation);
             }
         }
 

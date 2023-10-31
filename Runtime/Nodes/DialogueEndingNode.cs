@@ -20,7 +20,8 @@ namespace SpellBoundAR.DialogueSystem.Nodes
         public override void OnNodeEnter(ConversationPlayer conversationUI)
         {
             base.OnNodeEnter(conversationUI);
-            conversationUI.CompleteDialogueInteraction();
+            conversationUI.CompleteConversation();
+            conversationUI.Close();
         }
 
         public override void OnNodeExit(ConversationPlayer conversationUI)
