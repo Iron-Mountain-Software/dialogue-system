@@ -36,16 +36,26 @@ namespace SpellBoundAR.DialogueSystem.Speakers
                 return conversationSelector;
             }
         }
-        
-        protected virtual void OnEnable() => OnEnabled?.Invoke();
-        protected virtual void OnDisable() => OnDisabled?.Invoke();
+
+        public Conversation NextConversation => ConversationSelector 
+            ? ConversationSelector.NextConversation
+            : null;
+
+        protected virtual void OnEnable()
+        {
+            SpeakerControllersManager.Register(this);
+            OnEnabled?.Invoke();
+        }
+
+        protected virtual void OnDisable()
+        {
+            SpeakerControllersManager.Unregister(this);
+            OnDisabled?.Invoke();
+        }
 
         public virtual void PlayConversation()
         {
-            Conversation conversation = ConversationSelector 
-                ? ConversationSelector.NextConversation
-                : null;
-            if (conversation) ConversationManager.PlayConversation(Speaker, conversation);
+            ConversationManager.PlayConversation(Speaker, NextConversation);
         }
 
 #if UNITY_EDITOR
@@ -71,7 +81,6 @@ namespace SpellBoundAR.DialogueSystem.Speakers
         }
 
 #endif
-        
 
     }
 }

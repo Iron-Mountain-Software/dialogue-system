@@ -39,6 +39,7 @@ namespace SpellBoundAR.DialogueSystem
 
         public static ConversationPlayer PlayConversation(ISpeaker speaker, Conversation conversation)
         {
+            if (speaker == null || !conversation) return null;
             ConversationPlayer conversationUI = Resources.Load<ConversationPlayer>(Path);
             if (!conversationUI) throw new Exception("Resources: Could not find: " + Path);
             return Object.Instantiate(conversationUI).Initialize(speaker, conversation);
