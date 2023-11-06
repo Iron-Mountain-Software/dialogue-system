@@ -16,14 +16,11 @@ namespace SpellBoundAR.DialogueSystem.UI
         public event Action OnConversationChanged;
         public event Action<Conversation, DialogueLine> OnDialogueLinePlayed;
 
-        public event Action OnOpened;
         public event Action OnClosed;
-
-        [Header("Static Settings")]
-        private const float DestructionDelay = .5f;
-
+        
         [Header("Settings")]
         [SerializeField] private bool continueAfterNarration = false;
+        [SerializeField] private float destructionDelay = .5f;
         [SerializeField] private Transform responseBlockParent;
         [SerializeField] private DialogueResponseBlock responseBlockPrefab;
         
@@ -92,12 +89,7 @@ namespace SpellBoundAR.DialogueSystem.UI
 
         private void OnEnable() => ConversationPlayersManager.Register(this);
         private void OnDisable() => ConversationPlayersManager.Unregister(this);
-
-        private void Start()
-        {
-            Open();
-        }
-
+        
         public ConversationPlayer Initialize(ISpeaker speaker, Conversation conversation)
         {
             _defaultSpeaker = null;
@@ -111,14 +103,9 @@ namespace SpellBoundAR.DialogueSystem.UI
             return this;
         }
 
-        public void Open()
-        {
-            OnOpened?.Invoke();
-        }
-
         public void Close()
         {
-            Destroy(gameObject, DestructionDelay);
+            Destroy(gameObject, destructionDelay);
             OnClosed?.Invoke();
         }
 
