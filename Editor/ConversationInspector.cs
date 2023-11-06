@@ -118,8 +118,10 @@ namespace SpellBoundAR.DialogueSystem.Editor
             }
             else if (!conversation.Condition && GUILayout.Button("Add"))
             {
-                AddConditionMenu addConditionMenu = new AddConditionMenu(conversation, "Condition");
-                addConditionMenu.OnConditionCreated += (condition) => conversation.Condition = condition;
+                AddConditionMenu.Open(conversation, "Condition", newCondition =>
+                {
+                    conversation.Condition = newCondition;
+                });
             }
             EditorGUILayout.EndVertical();
             EditorGUILayout.EndHorizontal();
