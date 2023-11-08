@@ -8,9 +8,7 @@ namespace SpellBoundAR.DialogueSystem.UI
 {
     public class ConversationPlayer : MonoBehaviour
     {
-        public static event Action<ISpeaker, Conversation> OnDialogueInteractionStarted;
         public static event Action<Conversation, DialogueLine> OnAnyDialogueLinePlayed;
-        public static event Action<ISpeaker, Conversation> OnDialogueInteractionEnded;
 
         public event Action OnDefaultSpeakerChanged;
         public event Action OnConversationChanged;
@@ -51,9 +49,7 @@ namespace SpellBoundAR.DialogueSystem.UI
             private set
             {
                 if (_currentConversation == value) return;
-                if (_currentConversation) OnDialogueInteractionEnded?.Invoke(_defaultSpeaker, _currentConversation);
                 _currentConversation = value;
-                if (_currentConversation) OnDialogueInteractionStarted?.Invoke(_defaultSpeaker, _currentConversation);
                 OnConversationChanged?.Invoke();
             }
         }

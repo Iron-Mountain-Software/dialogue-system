@@ -35,21 +35,16 @@ namespace SpellBoundAR.DialogueSystem.Selection
         protected virtual void OnEnable()
         {
             if (Speaker != null) Speaker.OnActiveConversationsChanged += RefreshNextConversation;
-            ConversationPlayer.OnDialogueInteractionEnded += OnDialogueInteractionEnded;
+            ConversationPlayersManager.OnConversationPlayersChanged += RefreshNextConversation;
             RefreshNextConversation();
         }
 
         protected virtual void OnDisable()
         {
             if (Speaker != null) Speaker.OnActiveConversationsChanged -= RefreshNextConversation;
-            ConversationPlayer.OnDialogueInteractionEnded -= OnDialogueInteractionEnded;
+            ConversationPlayersManager.OnConversationPlayersChanged -= RefreshNextConversation;
         }
 
-        private void OnDialogueInteractionEnded(ISpeaker endingSpeaker, Conversation conversation)
-        {
-            if (Speaker != null && Speaker.ID == endingSpeaker.ID) RefreshNextConversation();
-        }
-        
 #if UNITY_EDITOR
         
         private void OnValidate()
