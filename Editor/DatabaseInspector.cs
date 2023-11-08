@@ -1,3 +1,4 @@
+using System;
 using SpellBoundAR.AssetManagement.Editor;
 using UnityEditor;
 using UnityEngine;
@@ -10,7 +11,28 @@ namespace SpellBoundAR.DialogueSystem.Editor
         private static readonly string ExportsDirectory = "Exports";
         private static readonly string ExportsFile = "Dialogue Lines.txt";
 
-        private Conversation _selectedDialogueInteraction = null;
+        private Database _database;
+        private ConversationListEditor _conversationListEditor = null;
+
+        private void OnEnable()
+        {
+            _database = (Database) target;
+            _conversationListEditor = new ConversationListEditor();
+            if (_conversationListEditor != null) _conversationListEditor.OnSelectedConversationChanged += OnSelectedConversationChanged;
+        }
+
+        private void OnSelectedConversationChanged()
+        {
+            if (_conversationListEditor != null && _conversationListEditor.SelectedConversation)
+            {
+                UnityEditor.Selection.activeObject = _conversationListEditor.SelectedConversation;
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (_conversationListEditor != null) _conversationListEditor.OnSelectedConversationChanged -= OnSelectedConversationChanged;
+        }
 
         protected override void RebuildLists()
         {
@@ -19,36 +41,27 @@ namespace SpellBoundAR.DialogueSystem.Editor
 
         protected override void SortLists()
         {
-            ((Database)target).Conversations.SortList();
+            _database.Conversations.SortList();
         }
 
         protected override void RebuildDictionaries()
         {
-            ((Database)target).Conversations.RebuildDictionary();
+            _database.Conversations.RebuildDictionary();
         }
 
         public override string ToString()
         {
-            return ((Database)target).Conversations.ToString("Conversations");
+            return _database.Conversations.ToString("Conversations");
         }
 
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
-            
             EditorGUILayout.Space();
-            
             if (GUILayout.Button("Export Dialogue Lines (EN)")) ExportDialogueLines(0);
             if (GUILayout.Button("Export Dialogue Lines (ES)")) ExportDialogueLines(1);
-
             EditorGUILayout.Space();
-            
-            Conversation newSelectedDialogueInteraction = ConversationsEditor.DrawDialogueInteractionList(_selectedDialogueInteraction);
-            if (_selectedDialogueInteraction != newSelectedDialogueInteraction)
-            {
-                _selectedDialogueInteraction = newSelectedDialogueInteraction;
-                UnityEditor.Selection.activeObject = _selectedDialogueInteraction;
-            }
+            _conversationListEditor.Draw(_database.Conversations.list);
         }
 
         private void ExportDialogueLines(int language)

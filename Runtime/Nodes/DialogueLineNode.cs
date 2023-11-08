@@ -101,17 +101,18 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 		
 #if UNITY_EDITOR
 
+		private bool MissingAudioClip => !audioClip && localizedAudio.IsEmpty;
+		private bool MissingText => string.IsNullOrWhiteSpace(simpleText) && (text.IsEmpty || string.IsNullOrEmpty(text.TableReference));
+
 		protected override bool ExtensionHasWarnings()
 		{
-			return !audioClip && localizedAudio.IsEmpty;
+			return MissingAudioClip || MissingText;
 		}
 
 		protected override bool ExtensionHasErrors()
 		{
 			return GetInputPort("input").ConnectionCount == 0
-			       || GetOutputPort("output").ConnectionCount != 1
-			       || text.IsEmpty
-			       || string.IsNullOrEmpty(text.TableReference);
+			       || GetOutputPort("output").ConnectionCount != 1;
 		}
 		
 #endif
