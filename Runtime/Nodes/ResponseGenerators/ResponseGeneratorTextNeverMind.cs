@@ -24,7 +24,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
             }
         }
         
-        public override List<BasicResponse> GetDialogueResponses(ConversationPlayer conversationUI)
+        public override List<BasicResponse> GetDialogueResponses(ConversationPlayer conversationPlayer)
         {
             IResponseStyle style = ScriptedResponseStyle
                 ? ScriptedResponseStyle
@@ -36,7 +36,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
                 );
             List<BasicResponse> dialogueResponses = new List<BasicResponse>
             {
-                new (this, Text, null, row, column, style)
+                new (conversationPlayer, this, Text, null, row, column, style)
             };
             return dialogueResponses;
         }

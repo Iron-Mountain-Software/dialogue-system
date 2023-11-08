@@ -45,9 +45,7 @@ namespace SpellBoundAR.DialogueSystem.UI
 
         public void OnClick()
         {
-            if (_basicResponse == null) return;
-            _basicResponse.ExecuteResponse();
-            _conversationUI.CurrentNode = _basicResponse.Node;
+            _basicResponse?.ExecuteResponse();
         }
     }
 }

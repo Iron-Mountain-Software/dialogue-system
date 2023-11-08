@@ -20,7 +20,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
 
         public ScriptedResponseStyle ScriptedResponseStyle => style;
         
-        public abstract List<BasicResponse> GetDialogueResponses(ConversationPlayer conversationUI);
+        public abstract List<BasicResponse> GetDialogueResponses(ConversationPlayer conversationPlayer);
 
         public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
         {

@@ -1,5 +1,6 @@
 using System;
 using SpellBoundAR.DialogueSystem.Nodes;
+using SpellBoundAR.DialogueSystem.UI;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.Responses
@@ -7,7 +8,8 @@ namespace SpellBoundAR.DialogueSystem.Responses
     [Serializable]
     public class BasicResponse
     {
-        public DialogueNode Node { get; }
+        public ConversationPlayer ConversationPlayer { get; }
+        public DialogueNode SourceNode { get; }
         public string Text { get; }
         public Sprite Icon { get; protected set; }
     
@@ -18,11 +20,13 @@ namespace SpellBoundAR.DialogueSystem.Responses
 
         public virtual void ExecuteResponse()
         {
+            if (ConversationPlayer) ConversationPlayer.CurrentNode = SourceNode;
         }
 
-        public BasicResponse(DialogueNode node, string text, Sprite sprite, int row, int column, IResponseStyle style)
+        public BasicResponse(ConversationPlayer conversationPlayer, DialogueNode sourceNode, string text, Sprite sprite, int row, int column, IResponseStyle style)
         {
-            Node = node;
+            ConversationPlayer = conversationPlayer;
+            SourceNode = sourceNode;
             Text = text;
             Icon = sprite;
             Row = row;
