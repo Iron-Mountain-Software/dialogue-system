@@ -26,6 +26,14 @@ namespace SpellBoundAR.DialogueSystem.Editor.Nodes
         public override void OnBodyGUI()
         {
             serializedObject.Update();
+            
+            EditorGUILayout.BeginHorizontal();
+            NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("input"));
+            EditorGUILayout.BeginVertical();
+            NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("pass"));
+            NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("fail"));
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.EndHorizontal();
 
             _conditionEditor.Draw(ref _passFailConditionFromReference.condition);
             
