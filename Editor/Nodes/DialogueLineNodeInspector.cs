@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using XNodeEditor;
 
-namespace SpellBoundAR.DialogueSystem.Editor
+namespace SpellBoundAR.DialogueSystem.Editor.Nodes
 {
     [CustomNodeEditor(typeof(DialogueLineNode))]
     public class DialogueLineNodeInspector : NodeEditor

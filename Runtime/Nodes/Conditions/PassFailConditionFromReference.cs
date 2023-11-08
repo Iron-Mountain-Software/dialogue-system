@@ -3,15 +3,18 @@ using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.Nodes.Conditions
 {
+    [NodeWidth(500)]
     public class PassFailConditionFromReference : PassFailCondition
     {
         [SerializeField] private bool not;
-        [SerializeField] private IronMountain.Conditions.Condition condition;
+        [SerializeField] public IronMountain.Conditions.Condition condition;
         public override string Name => not ? condition.NegatedName : condition.DefaultName;
 
         protected override bool TestCondition(ConversationPlayer conversationUI)
         {
-            return not ? !condition.Evaluate() : condition.Evaluate();
+            return not 
+                ? !condition.Evaluate() 
+                : condition.Evaluate();
         }
         
 #if UNITY_EDITOR

@@ -1,6 +1,6 @@
 {
   "name": "com.spellboundar.dialogue-system",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "displayName": "Dialogue System",
   "description": "A system for writing and playing branching dialogue.",
   "unity": "2019.1",
@@ -25,7 +25,7 @@
     "com.spellboundar.asset-management": "1.0.2",
     "com.spellboundar.virtual-camera-management": "1.0.2",
     "com.iron-mountain.save-system": "1.0.2",
-    "com.iron-mountain.conditions": "1.2.4",
+    "com.iron-mountain.conditions": "1.2.5",
     "com.iron-mountain.resource-utilities": "1.1.2"
   }
 }

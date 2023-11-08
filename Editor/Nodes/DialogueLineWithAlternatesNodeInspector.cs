@@ -1,3 +1,4 @@
+using SpellBoundAR.DialogueSystem.Editor.Nodes;
 using SpellBoundAR.DialogueSystem.Nodes;
 using XNodeEditor;
 
