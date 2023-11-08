@@ -17,8 +17,6 @@ namespace SpellBoundAR.DialogueSystem.Editor
             _conversation = (Conversation) target;
         }
 
-        protected virtual void DrawMoreInGeneralSection() { }
-        protected virtual void DrawAdditionalSections() { }
 
         public override void OnInspectorGUI()
         {
@@ -30,7 +28,7 @@ namespace SpellBoundAR.DialogueSystem.Editor
             DrawPreviewSection();
             DrawConditionSection(_conversation);
             DrawPlaybackSection();
-            DrawAdditionalSections();
+            DrawOtherProperties();
             DrawStateSections();
             GUILayout.Space(10);
             DrawSelectThisButton();
@@ -54,7 +52,6 @@ namespace SpellBoundAR.DialogueSystem.Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("id"), GUIContent.none);
             EditorGUI.EndDisabledGroup();
             EditorGUILayout.EndHorizontal();
-            DrawMoreInGeneralSection();
             EditorGUILayout.EndVertical();
         }
 
@@ -143,6 +140,30 @@ namespace SpellBoundAR.DialogueSystem.Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("behaviorWhenQueued"), false);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("looping"), false);
             EditorGUILayout.EndVertical();
+        }
+
+        protected virtual void DrawOtherProperties()
+        {
+            GUILayout.Space(10);
+            EditorGUILayout.BeginVertical(Styles.ValidContainer, GUILayout.MinHeight(75));
+            EditorGUILayout.LabelField("Other", Styles.Header);
+            DrawPropertiesExcluding(serializedObject,
+                "m_Script",
+                "nodes",
+                "id",
+                "prioritizeOverDefault",
+                "priority",
+                "invokingLine",
+                "invokingIcon",
+                "alertInConversationMenu",
+                "previewType",
+                "previewText",
+                "condition",
+                "behaviorWhenQueued",
+                "looping"
+            );
+            EditorGUILayout.EndVertical();
+            
         }
 
         protected virtual void DrawStateSections()
