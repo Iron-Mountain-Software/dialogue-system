@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,19 +23,18 @@ namespace SpellBoundAR.DialogueSystem.UI
 
         private void OnEnable()
         {
-            conversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
+            if (conversationPlayer) conversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
         }
 
         private void OnDisable()
         {
-            conversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
+            if (conversationPlayer) conversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
         }
 
         private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)
         {
             if (dialogueLine == null) return;
             SetImage(dialogueLine.Sprite);
-            gameObject.SetActive(dialogueLine.Sprite);
         }
 
         private void SetImage(Sprite sprite)
