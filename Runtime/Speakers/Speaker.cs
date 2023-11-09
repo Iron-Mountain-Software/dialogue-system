@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
-using SpellBoundAR.AssetManagement;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.Speakers
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Dialogue/Speaker")]
-    public class Speaker : IdentifiableScriptableObject, ISpeaker
+    public class Speaker : ScriptableObject, ISpeaker
     {
         public event Action OnActiveConversationsChanged;
 
+        [SerializeField] private string id;
         [SerializeField] private string speakerName;
         [SerializeField] private Color color;
         [SerializeField] private Conversation defaultConversation;
@@ -17,6 +17,7 @@ namespace SpellBoundAR.DialogueSystem.Speakers
         [SerializeField] private SpeakerPortraitCollection portraits;
         [SerializeField] private SpeakerPortraitCollection fullBodyPortraits;
         
+        public string ID => id;
         public string SpeakerName => speakerName;
         public Color Color => color;
         public Conversation DefaultConversation => defaultConversation;
@@ -44,5 +45,20 @@ namespace SpellBoundAR.DialogueSystem.Speakers
         {
             OnActiveConversationsChanged?.Invoke();
         }
+        
+#if UNITY_EDITOR
+
+        public virtual void Reset()
+        {
+            GenerateNewID();
+        }
+        
+        [ContextMenu("Generate New ID")]
+        private void GenerateNewID()
+        {
+            id = UnityEditor.GUID.Generate().ToString();
+        }
+
+#endif
     }
 }

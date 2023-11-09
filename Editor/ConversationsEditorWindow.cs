@@ -1,7 +1,11 @@
-using System;
 using System.Collections.Generic;
+using System.Text;
+using IronMountain.SaveSystem;
+using SpellBoundAR.DialogueSystem.Nodes;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
+using XNode;
 
 namespace SpellBoundAR.DialogueSystem.Editor
 {
@@ -88,15 +92,49 @@ namespace SpellBoundAR.DialogueSystem.Editor
         private void DrawSidebar()
         {
             EditorGUILayout.BeginVertical(GUILayout.ExpandWidth(true));
-            if (GUILayout.Button("Refresh"))
-            {
-                RefreshConversationsList();
-            }
+            if (GUILayout.Button("Refresh")) RefreshConversationsList();
+
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Export Dialogue Lines (EN)")) ExportDialogueLines(0);
+            if (GUILayout.Button("Export Dialogue Lines (ES)")) ExportDialogueLines(1);
+            EditorGUILayout.EndHorizontal();
+
             _sidebarScroll.x = 0;
             _sidebarScroll = GUILayout.BeginScrollView(_sidebarScroll, false, false);
             _conversationListEditor.Draw(_conversations);
             GUILayout.EndScrollView();
             EditorGUILayout.EndVertical();
+        }
+        
+        private void ExportDialogueLines(int language)
+        {
+            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[language];
+            StringBuilder stringBuilder = new StringBuilder();
+            foreach (Conversation dialogueInteraction in _conversations)
+            {
+                foreach (Node node in dialogueInteraction.nodes)
+                {
+                    switch (node)
+                    {
+                        case DialogueLineWithAlternatesNode dialogueLineWithAlternatesNode:
+                        {
+                            string mainText = dialogueLineWithAlternatesNode.Text;
+                            stringBuilder.AppendLine(mainText);
+                            foreach (DialogueLineMainContent content in dialogueLineWithAlternatesNode.AlternateContent)
+                            {
+                                stringBuilder.AppendLine(content.Text);
+                            }
+                            break;
+                        }
+                        case DialogueLineNode dialogueLineNode:
+                        {
+                            stringBuilder.AppendLine(dialogueLineNode.Text);
+                            break;
+                        }
+                    }
+                }
+            }
+            SaveSystem.SaveFile("Exports", "Dialogue Lines.txt", stringBuilder.ToString());
         }
     }
 }

@@ -3,7 +3,6 @@ using System.IO;
 using IronMountain.Conditions;
 using SpellBoundAR.DialogueSystem.Nodes;
 using IronMountain.ResourceUtilities;
-using SpellBoundAR.AssetManagement;
 using IronMountain.SaveSystem;
 using UnityEngine;
 using UnityEngine.Localization;
@@ -16,7 +15,7 @@ using UnityEditor.Localization;
 namespace SpellBoundAR.DialogueSystem
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Dialogue/Conversation")]
-    public class Conversation : NodeGraph, IIdentifiable
+    public class Conversation : NodeGraph
     {
         public static event Action<Conversation> OnAnyIsActiveChanged;
         public static event Action<Conversation> OnAnyPlaythroughsChanged;

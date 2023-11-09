@@ -2,7 +2,6 @@ using SpellBoundAR.DialogueSystem.Animation;
 using IronMountain.ResourceUtilities;
 using SpellBoundAR.DialogueSystem.Speakers;
 using SpellBoundAR.DialogueSystem.UI;
-using SpellBoundAR.VirtualCameraManagement;
 using UnityEngine;
 using UnityEngine.Localization;
 
@@ -24,7 +23,6 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 		[SerializeField] protected SpeakerPortraitCollection.PortraitType portrait;
 		[SerializeField] protected AnimationType animation;
 		[SerializeField] protected ResourceSprite sprite;
-		[SerializeField] protected VirtualCameraReference virtualCameraReference;
 
 		public SpeakerType SpeakerType => speakerType;
 
@@ -66,8 +64,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes
 				AudioClip,
 				portrait,
 				animation,
-				sprite ? sprite.Asset : null,
-				virtualCameraReference
+				sprite ? sprite.Asset : null
 			);
 		}
 

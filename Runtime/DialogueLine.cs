@@ -1,6 +1,5 @@
 using SpellBoundAR.DialogueSystem.Animation;
 using SpellBoundAR.DialogueSystem.Speakers;
-using SpellBoundAR.VirtualCameraManagement;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem
@@ -13,7 +12,6 @@ namespace SpellBoundAR.DialogueSystem
         public SpeakerPortraitCollection.PortraitType Portrait { get; }
         public AnimationType Animation { get; }
         public Sprite Sprite { get; }
-        public VirtualCameraReference VirtualCameraReference { get; }
 
         public DialogueLine(
             ISpeaker speaker,
@@ -21,8 +19,7 @@ namespace SpellBoundAR.DialogueSystem
             AudioClip audioClip,
             SpeakerPortraitCollection.PortraitType portrait,
             AnimationType animation,
-            Sprite sprite,
-            VirtualCameraReference virtualCameraReference)
+            Sprite sprite)
         {
             Speaker = speaker;
             Text = text;
@@ -30,7 +27,6 @@ namespace SpellBoundAR.DialogueSystem
             Portrait = portrait;
             Animation = animation;
             Sprite = sprite;
-            VirtualCameraReference = virtualCameraReference;
         }
     }
 }

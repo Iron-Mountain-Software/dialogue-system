@@ -25,8 +25,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes
                     AudioClip,
                     portrait,
                     animation,
-                    sprite ? sprite.Asset : null,
-                    virtualCameraReference
+                    sprite ? sprite.Asset : null
                 );
             }
             return new DialogueLine(
@@ -35,8 +34,7 @@ namespace SpellBoundAR.DialogueSystem.Nodes
                 alternateContent[random].AudioClip,
                 portrait,
                 animation,
-                sprite ? sprite.Asset : null,
-                virtualCameraReference
+                sprite ? sprite.Asset : null
             );
         }
         

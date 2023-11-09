@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
-using SpellBoundAR.AssetManagement;
 using UnityEngine;
 
 namespace SpellBoundAR.DialogueSystem.Speakers
 {
-    public interface ISpeaker : IIdentifiable
+    public interface ISpeaker
     {
         public event Action OnActiveConversationsChanged;
 
+        public string ID { get; }
         public string SpeakerName { get; }
         public Color Color { get; }
         public Conversation DefaultConversation { get; }
