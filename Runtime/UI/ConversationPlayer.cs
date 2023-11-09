@@ -8,6 +8,8 @@ namespace IronMountain.DialogueSystem.UI
 {
     public class ConversationPlayer : MonoBehaviour
     {
+        public static event Action<Conversation> OnAnyConversationStarted;
+        public static event Action<Conversation> OnAnyConversationEnded;
         public static event Action<Conversation, DialogueLine> OnAnyDialogueLinePlayed;
 
         public event Action OnDefaultSpeakerChanged;
@@ -49,7 +51,9 @@ namespace IronMountain.DialogueSystem.UI
             private set
             {
                 if (_currentConversation == value) return;
+                if (_currentConversation) OnAnyConversationEnded?.Invoke(_currentConversation);
                 _currentConversation = value;
+                if (_currentConversation) OnAnyConversationStarted?.Invoke(_currentConversation);
                 OnConversationChanged?.Invoke();
             }
         }
