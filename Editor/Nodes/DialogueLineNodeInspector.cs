@@ -61,7 +61,6 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
             NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("portrait"));
             NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("animation"));
             NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("sprite"));
-            NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("virtualCameraReference"));
 
             DrawAdditionalProperties();
             
