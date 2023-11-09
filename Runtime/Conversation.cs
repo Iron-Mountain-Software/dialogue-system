@@ -1,18 +1,19 @@
 using System;
 using System.IO;
 using IronMountain.Conditions;
-using SpellBoundAR.DialogueSystem.Nodes;
+using IronMountain.DialogueSystem.Nodes;
 using IronMountain.ResourceUtilities;
 using IronMountain.SaveSystem;
+using UnityEditor;
+using UnityEditor.Localization;
 using UnityEngine;
 using UnityEngine.Localization;
 using XNode;
 #if UNITY_EDITOR
-using UnityEditor;
-using UnityEditor.Localization;
+
 #endif
 
-namespace SpellBoundAR.DialogueSystem
+namespace IronMountain.DialogueSystem
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Dialogue/Conversation")]
     public class Conversation : NodeGraph

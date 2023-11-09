@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace SpellBoundAR.DialogueSystem.Speakers
+namespace IronMountain.DialogueSystem.Speakers
 {
     public class PlayConversationOnPointerClick : MonoBehaviour, IPointerClickHandler
     {

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SpellBoundAR.DialogueSystem.Speakers.UI
+namespace IronMountain.DialogueSystem.Speakers.UI
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Image))]

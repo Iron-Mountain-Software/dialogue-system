@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using SpellBoundAR.DialogueSystem.UI;
+using IronMountain.DialogueSystem.UI;
 using XNode;
 using Random = UnityEngine.Random;
 
-namespace SpellBoundAR.DialogueSystem.Nodes
+namespace IronMountain.DialogueSystem.Nodes
 {
     [NodeWidth(150)]
     [NodeTint("#656565")]

@@ -2,7 +2,7 @@ using System;
 using IronMountain.ResourceUtilities;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Speakers
+namespace IronMountain.DialogueSystem.Speakers
 {
     [Serializable]
     public class SpeakerPortraitCollection

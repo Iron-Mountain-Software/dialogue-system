@@ -1,10 +1,10 @@
 using System;
-using SpellBoundAR.DialogueSystem.Selection;
-using SpellBoundAR.DialogueSystem.Starters;
+using IronMountain.DialogueSystem.Selection;
+using IronMountain.DialogueSystem.Starters;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace SpellBoundAR.DialogueSystem.Speakers
+namespace IronMountain.DialogueSystem.Speakers
 {
     [DisallowMultipleComponent]
     public class SpeakerController : MonoBehaviour

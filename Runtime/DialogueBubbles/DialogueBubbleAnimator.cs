@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.DialogueBubbles
+namespace IronMountain.DialogueSystem.DialogueBubbles
 {
     [RequireComponent(typeof(DialogueBubble))]
     public class DialogueBubbleAnimator : MonoBehaviour

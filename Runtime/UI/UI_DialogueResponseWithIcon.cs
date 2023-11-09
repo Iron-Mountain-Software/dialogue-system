@@ -1,8 +1,8 @@
-using SpellBoundAR.DialogueSystem.Responses;
+using IronMountain.DialogueSystem.Responses;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SpellBoundAR.DialogueSystem.UI
+namespace IronMountain.DialogueSystem.UI
 {
     public class UI_DialogueResponseWithIcon : DialogueResponseButton
     {

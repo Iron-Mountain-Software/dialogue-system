@@ -1,11 +1,9 @@
-using System;
-using System.Collections.Generic;
-using SpellBoundAR.DialogueSystem.Selection;
-using SpellBoundAR.DialogueSystem.Speakers;
+using IronMountain.DialogueSystem.Selection;
+using IronMountain.DialogueSystem.Speakers;
 using TMPro;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.DialogueBubbles
+namespace IronMountain.DialogueSystem.DialogueBubbles
 {
     public class DialogueBubble : MonoBehaviour
     {

@@ -1,4 +1,4 @@
-namespace SpellBoundAR.DialogueSystem.Animation
+namespace IronMountain.DialogueSystem.Animation
 {
     public enum AnimationType
     {

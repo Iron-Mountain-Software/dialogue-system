@@ -1,8 +1,8 @@
-using SpellBoundAR.DialogueSystem.Animation;
-using SpellBoundAR.DialogueSystem.Speakers;
+using IronMountain.DialogueSystem.Animation;
+using IronMountain.DialogueSystem.Speakers;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem
+namespace IronMountain.DialogueSystem
 {
     public class DialogueLine
     {

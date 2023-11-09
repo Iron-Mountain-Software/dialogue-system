@@ -1,4 +1,4 @@
-namespace SpellBoundAR.DialogueSystem
+namespace IronMountain.DialogueSystem
 {
     public enum ConversationPreviewType
     {

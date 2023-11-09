@@ -1,8 +1,8 @@
-using SpellBoundAR.DialogueSystem.Speakers;
+using IronMountain.DialogueSystem.Speakers;
 using UnityEditor;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Editor
+namespace IronMountain.DialogueSystem.Editor
 {
     [CustomEditor(typeof(SpeakerController), true)]
     public class SpeakerControllerInspector : UnityEditor.Editor

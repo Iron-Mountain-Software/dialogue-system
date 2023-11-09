@@ -1,8 +1,7 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace SpellBoundAR.DialogueSystem.UI
+namespace IronMountain.DialogueSystem.UI
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Text))]

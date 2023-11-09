@@ -1,12 +1,9 @@
 using IronMountain.Conditions.Editor;
-using SpellBoundAR.DialogueSystem.Nodes;
-using SpellBoundAR.DialogueSystem.Nodes.Conditions;
-using SpellBoundAR.DialogueSystem.Speakers;
+using IronMountain.DialogueSystem.Nodes.Conditions;
 using UnityEditor;
-using UnityEngine;
 using XNodeEditor;
 
-namespace SpellBoundAR.DialogueSystem.Editor.Nodes
+namespace IronMountain.DialogueSystem.Editor.Nodes
 {
     [CustomNodeEditor(typeof(PassFailConditionFromReference))]
     public class PassFailConditionFromReferenceInspector : NodeEditor

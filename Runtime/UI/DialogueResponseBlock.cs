@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using SpellBoundAR.DialogueSystem.Nodes;
-using SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators;
-using SpellBoundAR.DialogueSystem.Responses;
+using IronMountain.DialogueSystem.Nodes;
+using IronMountain.DialogueSystem.Nodes.ResponseGenerators;
+using IronMountain.DialogueSystem.Responses;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace SpellBoundAR.DialogueSystem.UI
+namespace IronMountain.DialogueSystem.UI
 {
     public class DialogueResponseBlock : MonoBehaviour
     {

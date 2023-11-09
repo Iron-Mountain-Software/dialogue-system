@@ -1,8 +1,8 @@
-﻿using SpellBoundAR.DialogueSystem.Speakers;
+﻿using IronMountain.DialogueSystem.Speakers;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SpellBoundAR.DialogueSystem.UI.SpeechBubbleTail
+namespace IronMountain.DialogueSystem.UI.SpeechBubbleTail
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(CanvasRenderer))]

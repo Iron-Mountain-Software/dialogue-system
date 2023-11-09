@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SpellBoundAR.DialogueSystem.Speakers
+namespace IronMountain.DialogueSystem.Speakers
 {
     public static class SpeakerControllersManager
     {

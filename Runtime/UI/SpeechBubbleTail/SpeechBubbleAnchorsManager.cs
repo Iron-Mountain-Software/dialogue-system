@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using SpellBoundAR.DialogueSystem.Speakers;
+using IronMountain.DialogueSystem.Speakers;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.UI.SpeechBubbleTail
+namespace IronMountain.DialogueSystem.UI.SpeechBubbleTail
 {
     public static class SpeechBubbleAnchorsManager
     {

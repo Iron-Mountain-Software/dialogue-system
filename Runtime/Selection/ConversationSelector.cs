@@ -1,10 +1,10 @@
 using System;
-using SpellBoundAR.DialogueSystem.Speakers;
-using SpellBoundAR.DialogueSystem.UI;
+using IronMountain.DialogueSystem.Speakers;
+using IronMountain.DialogueSystem.UI;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace SpellBoundAR.DialogueSystem.Selection
+namespace IronMountain.DialogueSystem.Selection
 {
     public abstract class ConversationSelector : MonoBehaviour
     {

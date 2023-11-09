@@ -1,9 +1,8 @@
 ﻿using System.Collections;
-using SpellBoundAR.DialogueSystem.Speakers;
 using TMPro;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.UI
+namespace IronMountain.DialogueSystem.UI
 {
     [RequireComponent(typeof(TextMeshProUGUI))]
     public class DialogueLineTyperTMPro : DialogueLineTyper

@@ -1,9 +1,7 @@
-using System;
-using SpellBoundAR.DialogueSystem.Speakers;
-using SpellBoundAR.DialogueSystem.UI;
+using IronMountain.DialogueSystem.UI;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Narration
+namespace IronMountain.DialogueSystem.Narration
 {
     [ExecuteAlways]
     [DisallowMultipleComponent]

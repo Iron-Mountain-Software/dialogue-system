@@ -1,4 +1,4 @@
-namespace SpellBoundAR.DialogueSystem.Selection
+namespace IronMountain.DialogueSystem.Selection
 {
     public class PrioritizedConversationSelector : ConversationSelector
     {

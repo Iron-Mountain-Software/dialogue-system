@@ -1,9 +1,9 @@
 using System;
-using SpellBoundAR.DialogueSystem.Speakers;
-using SpellBoundAR.DialogueSystem.UI;
+using IronMountain.DialogueSystem.Speakers;
+using IronMountain.DialogueSystem.UI;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Starters
+namespace IronMountain.DialogueSystem.Starters
 {
     public class ConversationStarterFromResource : ConversationStarter
     {

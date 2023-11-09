@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem
+namespace IronMountain.DialogueSystem
 {
     public class ConversationsManager : MonoBehaviour
     {

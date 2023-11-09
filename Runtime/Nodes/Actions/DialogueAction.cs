@@ -1,7 +1,7 @@
-﻿using SpellBoundAR.DialogueSystem.UI;
+﻿using IronMountain.DialogueSystem.UI;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Nodes.Actions
+namespace IronMountain.DialogueSystem.Nodes.Actions
 {
     [NodeWidth(150)]
     [NodeTint("#FFCA3A")]

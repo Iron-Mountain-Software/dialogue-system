@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
-using SpellBoundAR.DialogueSystem.Nodes;
-using SpellBoundAR.DialogueSystem.Speakers;
+using IronMountain.DialogueSystem.Nodes;
+using IronMountain.DialogueSystem.Speakers;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.UI
+namespace IronMountain.DialogueSystem.UI
 {
     public class ConversationPlayer : MonoBehaviour
     {

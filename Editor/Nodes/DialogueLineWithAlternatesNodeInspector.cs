@@ -1,8 +1,7 @@
-using SpellBoundAR.DialogueSystem.Editor.Nodes;
-using SpellBoundAR.DialogueSystem.Nodes;
+using IronMountain.DialogueSystem.Nodes;
 using XNodeEditor;
 
-namespace SpellBoundAR.DialogueSystem.Editor
+namespace IronMountain.DialogueSystem.Editor.Nodes
 {
     [CustomNodeEditor(typeof(DialogueLineWithAlternatesNode))]
     public class DialogueLineWithAlternatesNodeInspector : DialogueLineNodeInspector

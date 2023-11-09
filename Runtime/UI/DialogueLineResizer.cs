@@ -1,8 +1,6 @@
-using System;
-using SpellBoundAR.DialogueSystem.Speakers;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.UI
+namespace IronMountain.DialogueSystem.UI
 {
     public class DialogueLineResizer : MonoBehaviour
     {

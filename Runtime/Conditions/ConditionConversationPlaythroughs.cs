@@ -1,7 +1,7 @@
 using IronMountain.Conditions;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Conditions
+namespace IronMountain.DialogueSystem.Conditions
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Gameplay/Dialogue/Conditions/Conversation Played")]
     public class ConditionConversationPlaythroughs : Condition

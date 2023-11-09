@@ -1,7 +1,7 @@
-using SpellBoundAR.DialogueSystem.Speakers;
-using SpellBoundAR.DialogueSystem.UI;
+using IronMountain.DialogueSystem.Speakers;
+using IronMountain.DialogueSystem.UI;
 
-namespace SpellBoundAR.DialogueSystem.Nodes.Conditions
+namespace IronMountain.DialogueSystem.Nodes.Conditions
 {
     public class PassFailConditionDialogueQueued : PassFailCondition
     {

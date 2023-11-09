@@ -1,4 +1,4 @@
-namespace SpellBoundAR.DialogueSystem.Speakers
+namespace IronMountain.DialogueSystem.Speakers
 {
     public enum SpeakerType
     {

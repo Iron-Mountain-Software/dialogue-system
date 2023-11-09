@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Narration
+namespace IronMountain.DialogueSystem.Narration
 {
     [ExecuteAlways]
     [RequireComponent(typeof(DialogueNarration))]

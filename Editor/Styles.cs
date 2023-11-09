@@ -1,6 +1,4 @@
-using UnityEngine;
-
-namespace SpellBoundAR.DialogueSystem.Editor
+namespace IronMountain.DialogueSystem.Editor
 {
     public static class Styles
     {

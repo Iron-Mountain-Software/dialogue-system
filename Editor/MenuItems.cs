@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace SpellBoundAR.DialogueSystem.Editor
+namespace IronMountain.DialogueSystem.Editor
 {
     public static class MenuItems
     {

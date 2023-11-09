@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using SpellBoundAR.DialogueSystem.Speakers;
-using SpellBoundAR.DialogueSystem.UI;
+using IronMountain.DialogueSystem.Speakers;
+using IronMountain.DialogueSystem.UI;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Animation
+namespace IronMountain.DialogueSystem.Animation
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(SpeakerController))]

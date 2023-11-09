@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Editor
+namespace IronMountain.DialogueSystem.Editor
 {
     public class Textures : MonoBehaviour
     {

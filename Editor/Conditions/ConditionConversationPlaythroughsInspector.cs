@@ -1,9 +1,9 @@
 using IronMountain.Conditions.Editor;
-using SpellBoundAR.DialogueSystem.Conditions;
+using IronMountain.DialogueSystem.Conditions;
 using UnityEditor;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Editor.Conditions
+namespace IronMountain.DialogueSystem.Editor.Conditions
 {
     [CustomEditor(typeof(ConditionConversationPlaythroughs))]
     public class ConditionConversationPlaythroughsInspector : ConditionInspector

@@ -3,7 +3,7 @@ using IronMountain.Conditions.Editor;
 using UnityEditor;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Editor
+namespace IronMountain.DialogueSystem.Editor
 {
     [CustomEditor(typeof(Conversation), true)]
     public class ConversationInspector : UnityEditor.Editor

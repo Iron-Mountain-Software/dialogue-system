@@ -1,8 +1,8 @@
-using SpellBoundAR.DialogueSystem.Animation;
+using IronMountain.DialogueSystem.Animation;
 using UnityEditor;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Editor
+namespace IronMountain.DialogueSystem.Editor
 {
     [CustomEditor(typeof(DialogueAnimationController), true)]
     public class DialogueAnimationControllerInspector : UnityEditor.Editor

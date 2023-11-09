@@ -1,9 +1,9 @@
 using System;
-using SpellBoundAR.DialogueSystem.Nodes;
-using SpellBoundAR.DialogueSystem.UI;
+using IronMountain.DialogueSystem.Nodes;
+using IronMountain.DialogueSystem.UI;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Responses
+namespace IronMountain.DialogueSystem.Responses
 {
     [Serializable]
     public class BasicResponse

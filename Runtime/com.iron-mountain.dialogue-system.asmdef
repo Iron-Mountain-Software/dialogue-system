@@ -1,6 +1,6 @@
 {
-    "name": "com.spellboundar.dialogue-system",
-    "rootNamespace": "SpellBoundAR.DialogueSystem",
+    "name": "com.iron-mountain.dialogue-system",
+    "rootNamespace": "IronMountain.DialogueSystem",
     "references": [
         "GUID:b8e24fd1eb19b4226afebb2810e3c19b",
         "GUID:eec0964c48f6f4e40bc3ec2257ccf8c5",

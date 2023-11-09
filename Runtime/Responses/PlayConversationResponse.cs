@@ -1,9 +1,9 @@
-using SpellBoundAR.DialogueSystem.Nodes;
-using SpellBoundAR.DialogueSystem.Speakers;
-using SpellBoundAR.DialogueSystem.UI;
+using IronMountain.DialogueSystem.Nodes;
+using IronMountain.DialogueSystem.Speakers;
+using IronMountain.DialogueSystem.UI;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Responses
+namespace IronMountain.DialogueSystem.Responses
 {
     public class PlayConversationResponse : BasicResponse
     {

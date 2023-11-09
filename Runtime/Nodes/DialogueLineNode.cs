@@ -1,11 +1,11 @@
-using SpellBoundAR.DialogueSystem.Animation;
+using IronMountain.DialogueSystem.Animation;
+using IronMountain.DialogueSystem.Speakers;
+using IronMountain.DialogueSystem.UI;
 using IronMountain.ResourceUtilities;
-using SpellBoundAR.DialogueSystem.Speakers;
-using SpellBoundAR.DialogueSystem.UI;
 using UnityEngine;
 using UnityEngine.Localization;
 
-namespace SpellBoundAR.DialogueSystem.Nodes
+namespace IronMountain.DialogueSystem.Nodes
 {
     [NodeWidth(300)]
     [NodeTint("#989898")]

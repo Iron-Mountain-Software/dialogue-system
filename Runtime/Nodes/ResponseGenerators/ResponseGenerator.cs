@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using SpellBoundAR.DialogueSystem.Nodes.Conditions;
-using SpellBoundAR.DialogueSystem.Responses;
-using SpellBoundAR.DialogueSystem.UI;
+using IronMountain.DialogueSystem.Nodes.Conditions;
+using IronMountain.DialogueSystem.Responses;
+using IronMountain.DialogueSystem.UI;
 using UnityEngine;
 using XNode;
 
-namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
+namespace IronMountain.DialogueSystem.Nodes.ResponseGenerators
 {
     [NodeWidth(200)]
     [NodeTint("#996515")]

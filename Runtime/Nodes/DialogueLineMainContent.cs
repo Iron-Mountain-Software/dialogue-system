@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Localization;
 
-namespace SpellBoundAR.DialogueSystem.Nodes
+namespace IronMountain.DialogueSystem.Nodes
 {
     [System.Serializable]
     public class DialogueLineMainContent

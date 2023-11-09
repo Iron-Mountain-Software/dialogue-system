@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using SpellBoundAR.DialogueSystem.Responses;
+using IronMountain.DialogueSystem.Responses;
+using IronMountain.DialogueSystem.UI;
 using IronMountain.ResourceUtilities;
-using SpellBoundAR.DialogueSystem.UI;
 using UnityEngine;
 using UnityEngine.Localization;
 
-namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
+namespace IronMountain.DialogueSystem.Nodes.ResponseGenerators
 {
     public class ResponseGeneratorText : ResponseGenerator
     {

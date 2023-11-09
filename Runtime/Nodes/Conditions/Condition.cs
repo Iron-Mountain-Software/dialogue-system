@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Nodes.Conditions
+namespace IronMountain.DialogueSystem.Nodes.Conditions
 {
     public abstract class Condition : DialogueNode
     {

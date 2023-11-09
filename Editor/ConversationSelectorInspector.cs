@@ -1,8 +1,8 @@
-using SpellBoundAR.DialogueSystem.Selection;
+using IronMountain.DialogueSystem.Selection;
 using UnityEditor;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Editor
+namespace IronMountain.DialogueSystem.Editor
 {
     [CustomEditor(typeof(ConversationSelector), true)]
     public class ConversationSelectorInspector : UnityEditor.Editor

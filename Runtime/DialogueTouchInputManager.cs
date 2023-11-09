@@ -1,8 +1,7 @@
-using System;
-using SpellBoundAR.DialogueSystem.UI;
+using IronMountain.DialogueSystem.UI;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem
+namespace IronMountain.DialogueSystem
 {
     public class DialogueTouchInputManager : MonoBehaviour
     {

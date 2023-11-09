@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Speakers
+namespace IronMountain.DialogueSystem.Speakers
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Dialogue/Speaker")]
     public class Speaker : ScriptableObject, ISpeaker

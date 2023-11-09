@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SpellBoundAR.DialogueSystem.UI
+namespace IronMountain.DialogueSystem.UI
 {
     public static class ConversationPlayersManager
     {

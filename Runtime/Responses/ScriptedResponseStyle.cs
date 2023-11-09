@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Responses
+namespace IronMountain.DialogueSystem.Responses
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Dialogue/Response Style")]
     public class ScriptedResponseStyle : ScriptableObject, IResponseStyle

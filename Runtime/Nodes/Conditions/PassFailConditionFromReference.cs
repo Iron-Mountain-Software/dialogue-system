@@ -1,7 +1,7 @@
-using SpellBoundAR.DialogueSystem.UI;
+using IronMountain.DialogueSystem.UI;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Nodes.Conditions
+namespace IronMountain.DialogueSystem.Nodes.Conditions
 {
     [NodeWidth(500)]
     public class PassFailConditionFromReference : PassFailCondition

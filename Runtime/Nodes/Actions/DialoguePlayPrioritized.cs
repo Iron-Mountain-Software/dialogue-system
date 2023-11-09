@@ -1,7 +1,7 @@
-using SpellBoundAR.DialogueSystem.Speakers;
-using SpellBoundAR.DialogueSystem.UI;
+using IronMountain.DialogueSystem.Speakers;
+using IronMountain.DialogueSystem.UI;
 
-namespace SpellBoundAR.DialogueSystem.Nodes.Actions
+namespace IronMountain.DialogueSystem.Nodes.Actions
 {
     [NodeWidth(200)]
     [NodeTint("#FFCA3A")]

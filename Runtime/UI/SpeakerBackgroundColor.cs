@@ -1,10 +1,9 @@
-using System;
 using System.Collections;
-using SpellBoundAR.DialogueSystem.Speakers;
+using IronMountain.DialogueSystem.Speakers;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SpellBoundAR.DialogueSystem.UI
+namespace IronMountain.DialogueSystem.UI
 {
     [RequireComponent(typeof(Graphic))]
     public class SpeakerBackgroundColor : MonoBehaviour

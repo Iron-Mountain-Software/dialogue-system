@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using SpellBoundAR.DialogueSystem.Responses;
-using SpellBoundAR.DialogueSystem.Speakers;
-using SpellBoundAR.DialogueSystem.UI;
+using IronMountain.DialogueSystem.Responses;
+using IronMountain.DialogueSystem.Speakers;
+using IronMountain.DialogueSystem.UI;
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Nodes.ResponseGenerators
+namespace IronMountain.DialogueSystem.Nodes.ResponseGenerators
 {
     [NodeWidth(200)]
     [NodeTint("#80461B")]

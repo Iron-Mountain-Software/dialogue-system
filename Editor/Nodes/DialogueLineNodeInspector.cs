@@ -1,10 +1,10 @@
-using SpellBoundAR.DialogueSystem.Nodes;
-using SpellBoundAR.DialogueSystem.Speakers;
+using IronMountain.DialogueSystem.Nodes;
+using IronMountain.DialogueSystem.Speakers;
 using UnityEditor;
 using UnityEngine;
 using XNodeEditor;
 
-namespace SpellBoundAR.DialogueSystem.Editor.Nodes
+namespace IronMountain.DialogueSystem.Editor.Nodes
 {
     [CustomNodeEditor(typeof(DialogueLineNode))]
     public class DialogueLineNodeInspector : NodeEditor

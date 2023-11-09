@@ -1,8 +1,8 @@
-﻿using SpellBoundAR.DialogueSystem.UI;
+﻿using IronMountain.DialogueSystem.UI;
 using UnityEngine;
 using XNode;
 
-namespace SpellBoundAR.DialogueSystem.Nodes
+namespace IronMountain.DialogueSystem.Nodes
 {
     public abstract class DialogueNode : Node
     {

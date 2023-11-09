@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SpellBoundAR.DialogueSystem.Responses
+namespace IronMountain.DialogueSystem.Responses
 {
     public interface IResponseStyle
     {
