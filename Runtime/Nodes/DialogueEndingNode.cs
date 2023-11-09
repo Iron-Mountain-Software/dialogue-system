@@ -1,5 +1,4 @@
-﻿using System;
-using IronMountain.DialogueSystem.UI;
+﻿using IronMountain.DialogueSystem.UI;
 
 namespace IronMountain.DialogueSystem.Nodes
 {
@@ -7,8 +6,6 @@ namespace IronMountain.DialogueSystem.Nodes
     [NodeTint("#D7263D")]
     public class DialogueEndingNode : DialogueNode
     {
-        public static Action<DialogueEndingNode> OnDialogueEndingExited;
-    
         [Input] public Connection input;
         public override string Name => graph ? "[out] " + graph.name : "[out]";
 
@@ -24,12 +21,6 @@ namespace IronMountain.DialogueSystem.Nodes
             conversationUI.Close();
         }
 
-        public override void OnNodeExit(ConversationPlayer conversationUI)
-        {
-            base.OnNodeExit(conversationUI);
-            OnDialogueEndingExited?.Invoke(this);
-        }
-        
 #if UNITY_EDITOR
 
         protected override bool ExtensionHasWarnings()

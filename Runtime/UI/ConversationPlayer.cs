@@ -105,8 +105,12 @@ namespace IronMountain.DialogueSystem.UI
 
         public void Close()
         {
-            Destroy(gameObject, destructionDelay);
             OnClosed?.Invoke();
+            if (destructionDelay > 0)
+            {
+                Destroy(gameObject, destructionDelay);
+            }
+            else Destroy(gameObject);
         }
 
         public void PlayDialogueLine(DialogueLine dialogueLine)
