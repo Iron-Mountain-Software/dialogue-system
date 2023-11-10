@@ -1,5 +1,5 @@
 # Dialogue System
-*Version: 2.1.2*
+*Version: 2.1.4*
 ## Description: 
 A system for writing and playing branching dialogue.
 ## Dependencies: 
@@ -99,7 +99,6 @@ A system for writing and playing branching dialogue.
    * Methods: 
       * public override DialogueNode ***GetNextNode***(ConversationPlayer conversationUI)
       * public override void ***OnNodeEnter***(ConversationPlayer conversationUI)
-      * public override void ***OnNodeExit***(ConversationPlayer conversationUI)
 1. public class **DialogueLineMainContent**
    * Properties: 
       * public LocalizedString ***TextData***  { get; }

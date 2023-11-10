@@ -4,13 +4,13 @@ using IronMountain.Conditions;
 using IronMountain.DialogueSystem.Nodes;
 using IronMountain.ResourceUtilities;
 using IronMountain.SaveSystem;
-using UnityEditor;
-using UnityEditor.Localization;
 using UnityEngine;
 using UnityEngine.Localization;
 using XNode;
-#if UNITY_EDITOR
 
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEditor.Localization;
 #endif
 
 namespace IronMountain.DialogueSystem
