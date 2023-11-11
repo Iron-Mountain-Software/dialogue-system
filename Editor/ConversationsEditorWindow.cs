@@ -91,7 +91,17 @@ namespace IronMountain.DialogueSystem.Editor
         private void DrawSidebar()
         {
             EditorGUILayout.BeginVertical(GUILayout.ExpandWidth(true));
-            if (GUILayout.Button("Refresh")) RefreshConversationsList();
+            
+            if (GUILayout.Button("Refresh"))
+            {
+                RefreshConversationsList();
+            }
+            
+            if (GUILayout.Button("Create New"))
+            {
+                AddConversationMenu.Open();
+                RefreshConversationsList();
+            }
 
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Export Dialogue Lines (EN)")) ExportDialogueLines(0);
