@@ -82,9 +82,6 @@ namespace IronMountain.DialogueSystem.Editor
             base.OnGUI();
             _panOffset = panOffset;
             _zoom = zoom;
-            wantsMouseMove = false;
-            wantsLessLayoutEvents = false;
-            wantsMouseEnterLeaveWindow = false;
             onLateGUI += OnLateGUI;
         }
 
@@ -132,7 +129,6 @@ namespace IronMountain.DialogueSystem.Editor
             GUILayout.BeginArea(_sideBarSection, _box);
             if (_sideBarSection.Contains(Event.current.mousePosition))
             {
-                wantsMouseMove = false;
                 panOffset = _panOffset;
                 zoom = _zoom;
             }
