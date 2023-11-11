@@ -48,8 +48,7 @@ namespace IronMountain.DialogueSystem.Editor
 
         public override void OnInspectorGUI()
         {
-            //if (GUILayout.Button("Log Dialogue Interaction Content", GUILayout.MinHeight(30)))
-                //Debug.Log(DialogueInteractionPrinter.PrintDialogueInteraction((Conversation)target));
+            DrawEditorActionButtons();
             EditorGUILayout.Space();
             DrawGeneralSection();
             DrawPrioritySection();
@@ -58,15 +57,25 @@ namespace IronMountain.DialogueSystem.Editor
             DrawPlaybackSection();
             DrawOtherProperties();
             DrawStateSections();
-            GUILayout.Space(10);
-            DrawSelectThisButton();
             serializedObject.ApplyModifiedProperties();
         }
 
-        protected virtual void DrawSelectThisButton()
+        protected virtual void DrawEditorActionButtons()
         {
-            if (GUILayout.Button("Select this conversation", GUILayout.MinHeight(30)))
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Open", GUILayout.Height(30)))
+            {
+                ConversationEditorWindow.Open(_conversation);
+            }
+            if (GUILayout.Button("Select", GUILayout.MinHeight(30)))
+            {
                 UnityEditor.Selection.activeObject = target;
+            }
+            //if (GUILayout.Button("Log & Copy", GUILayout.MinHeight(30)))
+            //{
+                //Debug.Log(DialogueInteractionPrinter.PrintDialogueInteraction((Conversation)target));
+            //}
+            EditorGUILayout.EndHorizontal();
         }
 
         protected virtual void DrawGeneralSection()
@@ -138,6 +147,7 @@ namespace IronMountain.DialogueSystem.Editor
                 if (!condition || string.IsNullOrEmpty(AssetDatabase.GetAssetPath(condition))) return;
                 AssetDatabase.RemoveObjectFromAsset(condition);
                 conversation.Condition = null;
+                serializedObject.Update();
                 DestroyImmediate(condition);
                 AssetDatabase.SaveAssets();
             }
@@ -146,6 +156,7 @@ namespace IronMountain.DialogueSystem.Editor
                 AddConditionMenu.Open(conversation, "Condition", newCondition =>
                 {
                     conversation.Condition = newCondition;
+                    serializedObject.Update();
                 });
             }
             EditorGUILayout.EndVertical();
