@@ -52,6 +52,7 @@ namespace IronMountain.DialogueSystem.Editor
             EditorGUILayout.Space();
             DrawGeneralSection();
             DrawPrioritySection();
+            DrawInvokingLineSection();
             DrawPreviewSection();
             DrawConditionSection(_conversation);
             DrawPlaybackSection();
@@ -95,28 +96,35 @@ namespace IronMountain.DialogueSystem.Editor
         protected virtual void DrawPrioritySection()
         {
             GUILayout.Space(10);
-            EditorGUILayout.BeginVertical(_conversation.PrioritySectionHasErrors ? _invalidContainer : _validContainer, GUILayout.MinHeight(75));
+            EditorGUILayout.BeginVertical(_validContainer);
             GUILayout.Label("Priority", _header, GUILayout.ExpandWidth(true));
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Prioritize");
             EditorGUILayout.PropertyField(serializedObject.FindProperty("prioritizeOverDefault"), GUIContent.none,
                 GUILayout.MaxWidth(75));
             EditorGUILayout.EndHorizontal();
-            if (serializedObject.FindProperty("prioritizeOverDefault").boolValue)
-            {
-                EditorGUILayout.BeginHorizontal();
-                SerializedProperty priority = serializedObject.FindProperty("priority");
-                GUILayout.Label("Priority");
-                if (GUILayout.Button("←", GUILayout.MaxWidth(20))) priority.intValue--;
-                EditorGUILayout.PropertyField(priority, GUIContent.none, GUILayout.MaxWidth(50));
-                if (GUILayout.Button("→", GUILayout.MaxWidth(20))) priority.intValue++;
-                EditorGUILayout.EndHorizontal();
-            }
-            else
-            {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("invokingLine"));
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("invokingIcon"), GUIContent.none);
-            }
+            
+            EditorGUILayout.BeginHorizontal();
+            SerializedProperty priority = serializedObject.FindProperty("priority");
+            GUILayout.Label("Priority");
+            if (GUILayout.Button("←", GUILayout.MaxWidth(20))) priority.intValue--;
+            EditorGUILayout.PropertyField(priority, GUIContent.none, GUILayout.MaxWidth(50));
+            if (GUILayout.Button("→", GUILayout.MaxWidth(20))) priority.intValue++;
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.EndVertical();
+        }
+        
+        protected virtual void DrawInvokingLineSection()
+        {
+            GUILayout.Space(10);
+            EditorGUILayout.BeginVertical(_validContainer);
+            GUILayout.Label("Invoking Line", _header, GUILayout.ExpandWidth(true));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("defaultInvokingLine"), GUIContent.none);
+            EditorGUI.indentLevel++;
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("localizedInvokingLine"), new GUIContent("Localization"));
+            EditorGUI.indentLevel--;
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("invokingIcon"), new GUIContent("Icon"));
             EditorGUILayout.EndVertical();
         }
 
@@ -192,7 +200,8 @@ namespace IronMountain.DialogueSystem.Editor
                 "id",
                 "prioritizeOverDefault",
                 "priority",
-                "invokingLine",
+                "defaultInvokingLine",
+                "localizedInvokingLine",
                 "invokingIcon",
                 "alertInConversationMenu",
                 "previewType",

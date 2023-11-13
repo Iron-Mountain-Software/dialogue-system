@@ -6,6 +6,7 @@ using IronMountain.ResourceUtilities;
 using IronMountain.SaveSystem;
 using UnityEngine;
 using UnityEngine.Localization;
+using UnityEngine.Serialization;
 using XNode;
 
 #if UNITY_EDITOR
@@ -38,7 +39,8 @@ namespace IronMountain.DialogueSystem
         [SerializeField] private int priority;
         
         // Invocation
-        [SerializeField] private LocalizedString invokingLine;
+        [SerializeField] private string defaultInvokingLine;
+        [SerializeField] [FormerlySerializedAs("invokingLine")] private LocalizedString localizedInvokingLine;
         [SerializeField] private ResourceSprite invokingIcon;
         [SerializeField] private bool alertInConversationMenu;
         
@@ -70,14 +72,14 @@ namespace IronMountain.DialogueSystem
             get
             {
                 if (Application.isPlaying)
-                    return invokingLine.IsEmpty ? string.Empty : invokingLine.GetLocalizedString();
+                    return localizedInvokingLine.IsEmpty ? defaultInvokingLine : localizedInvokingLine.GetLocalizedString();
 #if UNITY_EDITOR
-                if (invokingLine.IsEmpty || string.IsNullOrEmpty(invokingLine.TableReference)) return string.Empty;
-                var collection = LocalizationEditorSettings.GetStringTableCollection(invokingLine.TableReference);
-                var entry = collection.SharedData.GetEntryFromReference(invokingLine.TableEntryReference);
-                return entry != null ? entry.Key : string.Empty;
+                if (localizedInvokingLine.IsEmpty || string.IsNullOrEmpty(localizedInvokingLine.TableReference)) return defaultInvokingLine;
+                var collection = LocalizationEditorSettings.GetStringTableCollection(localizedInvokingLine.TableReference);
+                var entry = collection.SharedData.GetEntryFromReference(localizedInvokingLine.TableEntryReference);
+                return entry != null ? entry.Key : defaultInvokingLine;
 #else
-				return string.Empty;
+				return defaultInvokingLine;
 #endif
             }
         }
@@ -203,7 +205,6 @@ namespace IronMountain.DialogueSystem
         public bool HasErrors()
         {
             return GeneralSectionHasErrors
-                   || PrioritySectionHasErrors
                    || PreviewHasErrors
                    || ConditionHasErrors
                    || GraphHasErrors();
@@ -211,9 +212,6 @@ namespace IronMountain.DialogueSystem
 
         public bool GeneralSectionHasErrors => string.IsNullOrWhiteSpace(id);
         
-        public bool PrioritySectionHasErrors => !prioritizeOverDefault &&
-                                                (invokingLine.IsEmpty || string.IsNullOrEmpty(invokingLine.TableReference));
-
         public bool PreviewHasErrors => previewType != ConversationPreviewType.None &&
                                         (previewText.IsEmpty || string.IsNullOrEmpty(previewText.TableReference));
 
