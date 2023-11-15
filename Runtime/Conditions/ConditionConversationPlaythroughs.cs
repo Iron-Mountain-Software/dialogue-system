@@ -28,15 +28,10 @@ namespace IronMountain.DialogueSystem.Conditions
             return conversation && EvaluationUtilities.Compare(conversation.Playthroughs, playthroughs, comparison);
         }
 
-        public override string DefaultName => (conversation ? conversation.name : "Null") + " playthroughs is " + comparison + " " + playthroughs;
-        
-        public override string NegatedName => (conversation ? conversation.name : "Null") + " playthroughs is NOT " + comparison + " " + playthroughs;
-        
         public override Sprite Depiction => null;
         
-        public override bool HasErrors()
-        {
-            return !conversation;
-        }
+        public override bool HasErrors() => !conversation;
+
+        public override string ToString() => (conversation ? conversation.name : "Null") + " playthroughs is " + comparison + " " + playthroughs;
     }
 }

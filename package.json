@@ -1,6 +1,6 @@
 {
   "name": "com.iron-mountain.dialogue-system",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "displayName": "Dialogue System",
   "author": "Chris Monteferrante <ludachrismonte@gmail.com>",
   "unity": "2019.1",
@@ -27,7 +27,7 @@
     "com.unity.textmeshpro": "3.0.6",
     "com.github.siccity.xnode": "1.8.0",
     "com.iron-mountain.save-system": "1.0.4",
-    "com.iron-mountain.conditions": "1.4.0",
+    "com.iron-mountain.conditions": "1.5.0",
     "com.iron-mountain.resource-utilities": "1.1.2"
   }
 }

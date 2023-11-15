@@ -7,7 +7,8 @@ namespace IronMountain.DialogueSystem.Nodes.Conditions
     public class PassFailConditionFromReference : PassFailCondition
     {
         [SerializeField] public IronMountain.Conditions.Condition condition;
-        public override string Name => condition ? condition.DefaultName : "NULL CONDITION";
+        
+        public override string Name => condition ? condition.ToString() : "NULL CONDITION";
 
         protected override bool TestCondition(ConversationPlayer conversationUI)
         {
