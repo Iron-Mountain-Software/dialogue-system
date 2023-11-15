@@ -161,7 +161,7 @@ namespace IronMountain.DialogueSystem.Editor
             }
             else if (!conversation.Condition && GUILayout.Button("Add"))
             {
-                AddConditionMenu.Open(conversation, "Condition", newCondition =>
+                AddConditionMenu.Open(conversation, newCondition =>
                 {
                     conversation.Condition = newCondition;
                     serializedObject.Update();

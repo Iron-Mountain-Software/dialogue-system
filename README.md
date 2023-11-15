@@ -1,13 +1,13 @@
 # Dialogue System
-*Version: 2.1.6*
+*Version: 2.2.0*
 ## Description: 
 A system for writing and playing branching dialogue.
 ## Dependencies: 
 * com.unity.localization (1.3.2)
 * com.unity.textmeshpro (3.0.6)
 * com.github.siccity.xnode (1.8.0)
-* com.iron-mountain.save-system (1.0.2)
-* com.iron-mountain.conditions (1.2.5)
+* com.iron-mountain.save-system (1.0.4)
+* com.iron-mountain.conditions (1.4.0)
 * com.iron-mountain.resource-utilities (1.1.2)
 ---
 ## Key Scripts & Components: 
@@ -31,7 +31,6 @@ A system for writing and playing branching dialogue.
       * public Boolean ***IsActive***  { get; set; }
       * public Int32 ***Playthroughs***  { get; set; }
       * public Boolean ***GeneralSectionHasErrors***  { get; }
-      * public Boolean ***PrioritySectionHasErrors***  { get; }
       * public Boolean ***PreviewHasErrors***  { get; }
       * public Boolean ***ConditionHasErrors***  { get; }
    * Methods: 
