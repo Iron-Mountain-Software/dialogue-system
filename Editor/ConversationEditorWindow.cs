@@ -1,3 +1,4 @@
+using IronMountain.DialogueSystem.Editor.Nodes;
 using IronMountain.DialogueSystem.Nodes;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -21,8 +22,9 @@ namespace IronMountain.DialogueSystem.Editor
         private Conversation _conversation;
         private UnityEditor.Editor _selectedConversationEditor;
         private Vector2 _sidebarScroll = Vector2.zero;
-        private Vector2 _panOffset;
-        private float _zoom;
+        
+        private Vector2 _cachedPanOffset;
+        private float _cachedZoom;
 
         [OnOpenAsset(-1)]
         public static bool Open(int instanceID, int line)
@@ -80,8 +82,8 @@ namespace IronMountain.DialogueSystem.Editor
         protected override void OnGUI()
         {
             base.OnGUI();
-            _panOffset = panOffset;
-            _zoom = zoom;
+            _cachedPanOffset = panOffset;
+            _cachedZoom = zoom;
             onLateGUI += OnLateGUI;
         }
 
@@ -107,11 +109,15 @@ namespace IronMountain.DialogueSystem.Editor
             }
             if (GUILayout.Button("Line", GUILayout.Width(45)))
             {
-                graphEditor.CreateNode(typeof(DialogueLineNode), WindowToGridPosition(new Vector2(position.width / 2f, position.height / 2f)));
+                AddDialogueLineNodeMenu.Open(graphEditor, WindowToGridPosition(new Vector2(position.width / 2f, position.height / 2f)));
             }
-            if (GUILayout.Button("Line+", GUILayout.Width(45)))
+            if (GUILayout.Button("Action", GUILayout.Width(55)))
             {
-                graphEditor.CreateNode(typeof(DialogueLineWithAlternatesNode), WindowToGridPosition(new Vector2(position.width / 2f, position.height / 2f)));
+                AddDialogueActionNodeMenu.Open(graphEditor, WindowToGridPosition(new Vector2(position.width / 2f, position.height / 2f)));
+            }
+            if (GUILayout.Button("Condition", GUILayout.Width(70)))
+            {
+                AddDialogueConditionNodeMenu.Open(graphEditor, WindowToGridPosition(new Vector2(position.width / 2f, position.height / 2f)));
             }
             if (GUILayout.Button("Pass", GUILayout.Width(45)))
             {
@@ -129,8 +135,8 @@ namespace IronMountain.DialogueSystem.Editor
             GUILayout.BeginArea(_sideBarSection, _box);
             if (_sideBarSection.Contains(Event.current.mousePosition))
             {
-                panOffset = _panOffset;
-                zoom = _zoom;
+                panOffset = _cachedPanOffset;
+                zoom = _cachedZoom;
             }
             if (_conversation)
             {

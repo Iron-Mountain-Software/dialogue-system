@@ -1,7 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using IronMountain.DialogueSystem.Nodes;
 using IronMountain.DialogueSystem.Speakers;
 using UnityEditor;
 using UnityEngine;
+using XNode;
 using XNodeEditor;
 
 namespace IronMountain.DialogueSystem.Editor.Nodes
@@ -58,16 +62,33 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
             
             EditorGUILayout.Space(10);
             
-            NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("portrait"));
-            NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("animation"));
-            NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("sprite"));
-
-            DrawAdditionalProperties();
-            
-            // Iterate through dynamic ports and draw them in the order in which they are serialized
-            foreach (XNode.NodePort dynamicPort in target.DynamicPorts) {
-                if (NodeEditorGUILayout.IsDynamicPortListPort(dynamicPort)) continue;
-                NodeEditorGUILayout.PortField(dynamicPort);
+            string[] strArray = new string[12]
+            {
+                "m_Script",
+                "graph",
+                "position",
+                "ports",
+                "input",
+                "output",
+                "speakerType",
+                "customSpeaker",
+                "text",
+                "localizedAudio",
+                "simpleText",
+                "audioClip"
+            };
+            SerializedProperty iterator = serializedObject.GetIterator();
+            bool enterChildren = true;
+            while (iterator.NextVisible(enterChildren))
+            {
+                enterChildren = false;
+                if (!strArray.Contains(iterator.name))
+                    NodeEditorGUILayout.PropertyField(iterator, true, Array.Empty<GUILayoutOption>());
+            }
+            foreach (NodePort dynamicPort in target.DynamicPorts)
+            {
+                if (!NodeEditorGUILayout.IsDynamicPortListPort(dynamicPort))
+                    NodeEditorGUILayout.PortField(dynamicPort, Array.Empty<GUILayoutOption>());
             }
 
             serializedObject.ApplyModifiedProperties();

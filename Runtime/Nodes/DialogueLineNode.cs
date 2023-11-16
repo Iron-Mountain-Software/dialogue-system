@@ -16,7 +16,7 @@ namespace IronMountain.DialogueSystem.Nodes
 		
 		[SerializeField] private SpeakerType speakerType;
 		[SerializeField] private Speaker customSpeaker;
-		[SerializeField] private string simpleText;
+		[SerializeField] [TextArea] private string simpleText;
 		[SerializeField] private AudioClip audioClip;
 		[SerializeField] private LocalizedString text;
 		[SerializeField] private LocalizedAsset<AudioClip> localizedAudio;
