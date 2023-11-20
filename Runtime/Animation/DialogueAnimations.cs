@@ -37,6 +37,7 @@ namespace IronMountain.DialogueSystem.Animation
         [SerializeField] private AnimationData disappointedCurse;
         [SerializeField] private AnimationData disappointedHoldHead;
         [SerializeField] private AnimationData disappointedMope;
+        [SerializeField] private AnimationData disappointedPout;
         [SerializeField] private AnimationData pointForward;
         [SerializeField] private AnimationData pointBackward;
         [SerializeField] private AnimationData rubShoulder;
@@ -92,6 +93,8 @@ namespace IronMountain.DialogueSystem.Animation
                     return disappointedHoldHead;
                 case AnimationType.Disappointed_Mope:
                     return disappointedMope;
+                case AnimationType.Disappointed_Pout:
+                    return disappointedPout;
                 case AnimationType.Point_Forward:
                     return pointForward;
                 case AnimationType.Point_Backward:
