@@ -1,5 +1,5 @@
 # Dialogue System
-*Version: 2.2.0*
+*Version: 2.5.0*
 ## Description: 
 A system for writing and playing branching dialogue.
 ## Dependencies: 
@@ -7,7 +7,7 @@ A system for writing and playing branching dialogue.
 * com.unity.textmeshpro (3.0.6)
 * com.github.siccity.xnode (1.8.0)
 * com.iron-mountain.save-system (1.0.4)
-* com.iron-mountain.conditions (1.4.0)
+* com.iron-mountain.conditions (1.5.0)
 * com.iron-mountain.resource-utilities (1.1.2)
 ---
 ## Key Scripts & Components: 
@@ -61,12 +61,11 @@ A system for writing and playing branching dialogue.
 ### Conditions
 1. public class **ConditionConversationPlaythroughs** : Condition
    * Properties: 
-      * public String ***DefaultName***  { get; }
-      * public String ***NegatedName***  { get; }
       * public Sprite ***Depiction***  { get; }
    * Methods: 
       * public override Boolean ***Evaluate***()
       * public override Boolean ***HasErrors***()
+      * public override String ***ToString***()
 ### Dialogue Bubbles
 1. public class **DialogueBubble** : MonoBehaviour
 1. public class **DialogueBubbleAnimator** : MonoBehaviour

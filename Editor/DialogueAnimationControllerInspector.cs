@@ -20,10 +20,10 @@ namespace IronMountain.DialogueSystem.Editor
 
             GUILayout.Space(5);
 
-            DrawAnimationRow("Nod", "nod", AnimationType.Nod);
-            DrawAnimationRow("Exclamation", "exclamation", AnimationType.Exclamation);
-            DrawAnimationRow("Question", "question", AnimationType.Question);
-            DrawAnimationRow("Hunch", "hunch", AnimationType.Hunch);
+            DrawAnimationRow("Nod", "nod", AnimationType.Agree_Nod);
+            DrawAnimationRow("Exclamation", "exclamation", AnimationType.Talk_Surprised);
+            DrawAnimationRow("Question", "question", AnimationType.Talk_PonderQuestion);
+            DrawAnimationRow("Hunch", "hunch", AnimationType.Disappointed_Mope);
             
             GUILayout.Space(10);
             

@@ -24,10 +24,10 @@ namespace IronMountain.DialogueSystem.Animation
         private void Awake()
         {
             _speakerController = GetComponent<SpeakerController>();
-            _animations.Add(AnimationType.Exclamation, exclamation);
-            _animations.Add(AnimationType.Hunch, hunch);
-            _animations.Add(AnimationType.Nod, nod);
-            _animations.Add(AnimationType.Question, question);
+            _animations.Add(AnimationType.Talk_Surprised, exclamation);
+            _animations.Add(AnimationType.Disappointed_Mope, hunch);
+            _animations.Add(AnimationType.Agree_Nod, nod);
+            _animations.Add(AnimationType.Talk_PonderQuestion, question);
         }
 
         private void OnEnable() => ConversationPlayer.OnAnyDialogueLinePlayed += OnDialogueLinePlayed;
