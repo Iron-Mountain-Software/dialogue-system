@@ -1,5 +1,5 @@
 # Dialogue System
-*Version: 2.5.1*
+*Version: 2.5.2*
 ## Description: 
 A system for writing and playing branching dialogue.
 ## Dependencies: 

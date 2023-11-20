@@ -8,7 +8,7 @@ namespace IronMountain.DialogueSystem.Animation
     public class DialogueAnimations
     {
         [Serializable]
-        public struct AnimationData
+        public class AnimationData
         {
             public AnimationClip clip;
             public string Name => clip ? clip.name : string.Empty;
@@ -47,12 +47,16 @@ namespace IronMountain.DialogueSystem.Animation
 
         public string GetAnimationName(AnimationType type)
         {
-            return _standardAnimations.ContainsKey(type) ? _standardAnimations[type].Name : string.Empty;
+            return _standardAnimations.ContainsKey(type) && _standardAnimations[type] != null
+                ? _standardAnimations[type].Name 
+                : string.Empty;
         }
         
         public float GetAnimationLength(AnimationType type)
         {
-            return _standardAnimations.ContainsKey(type) ? _standardAnimations[type].Length : 0f;
+            return _standardAnimations.ContainsKey(type) && _standardAnimations[type] != null
+                ? _standardAnimations[type].Length
+                : 0f;
         }
 
         DialogueAnimations()
