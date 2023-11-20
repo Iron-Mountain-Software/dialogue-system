@@ -15,8 +15,8 @@ namespace IronMountain.DialogueSystem.Animation
             public float Length => clip ? clip.length : 0f;
         }
 
-        private Dictionary<AnimationType, AnimationData> StandardAnimations = new ();
-
+        private Dictionary<AnimationType, AnimationData> _standardAnimations;
+        
         [SerializeField] private AnimationData talk1;
         [SerializeField] private AnimationData talk2;
         [SerializeField] private AnimationData talkCocky;
@@ -47,17 +47,17 @@ namespace IronMountain.DialogueSystem.Animation
 
         public string GetAnimationName(AnimationType type)
         {
-            return StandardAnimations.ContainsKey(type) ? StandardAnimations[type].Name : string.Empty;
+            return _standardAnimations.ContainsKey(type) ? _standardAnimations[type].Name : string.Empty;
         }
         
         public float GetAnimationLength(AnimationType type)
         {
-            return StandardAnimations.ContainsKey(type) ? StandardAnimations[type].Length : 0f;
+            return _standardAnimations.ContainsKey(type) ? _standardAnimations[type].Length : 0f;
         }
 
         DialogueAnimations()
         {
-            StandardAnimations = new Dictionary<AnimationType, AnimationData>()
+            _standardAnimations = new Dictionary<AnimationType, AnimationData>()
             {
                 { AnimationType.Talk_1, talk1 },
                 { AnimationType.Talk_2, talk2 },

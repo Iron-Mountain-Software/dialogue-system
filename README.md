@@ -1,5 +1,5 @@
 # Dialogue System
-*Version: 2.5.0*
+*Version: 2.5.1*
 ## Description: 
 A system for writing and playing branching dialogue.
 ## Dependencies: 
@@ -58,6 +58,10 @@ A system for writing and playing branching dialogue.
 1. public class **DialogueAnimationController** : MonoBehaviour
    * Methods: 
       * public void ***PlayAnimation***(AnimationType animationType)
+1. public class **DialogueAnimations**
+   * Methods: 
+      * public String ***GetAnimationName***(AnimationType type)
+      * public float ***GetAnimationLength***(AnimationType type)
 ### Conditions
 1. public class **ConditionConversationPlaythroughs** : Condition
    * Properties: 
