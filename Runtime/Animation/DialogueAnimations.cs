@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace IronMountain.DialogueSystem.Animation
@@ -14,8 +13,6 @@ namespace IronMountain.DialogueSystem.Animation
             public string Name => clip ? clip.name : string.Empty;
             public float Length => clip ? clip.length : 0f;
         }
-
-        private Dictionary<AnimationType, AnimationData> _standardAnimations;
         
         [SerializeField] private AnimationData talk1;
         [SerializeField] private AnimationData talk2;
@@ -45,52 +42,79 @@ namespace IronMountain.DialogueSystem.Animation
         [SerializeField] private AnimationData rubShoulder;
         [SerializeField] private AnimationData wave;
 
+        public AnimationData GetAnimation(AnimationType type)
+        {
+            switch (type)
+            {
+                case AnimationType.Talk_1:
+                    return talk1;
+                case AnimationType.Talk_2:
+                    return talk2;
+                case AnimationType.Talk_Cocky:
+                    return talkCocky;
+                case AnimationType.Talk_Dismiss:
+                    return talkDismiss;
+                case AnimationType.Talk_Shrug:
+                    return talkShrug;
+                case AnimationType.Talk_Laugh:
+                    return talkLaugh;
+                case AnimationType.Talk_PonderQuestion:
+                    return talkPonderQuestion;
+                case AnimationType.Talk_Surprised:
+                    return talkSurprised;
+                case AnimationType.Talk_SighOfRelief:
+                    return talkSighOfRelief;
+                case AnimationType.Talk_HandsForward:
+                    return talkHandsForward;
+                case AnimationType.Agree_Nod:
+                    return agreeNod;
+                case AnimationType.Agree_Concede:
+                    return agreeConcede;
+                case AnimationType.Disagree:
+                    return disagree;
+                case AnimationType.Disagree_Annoyed:
+                    return disagreeAnnoyed;
+                case AnimationType.Celebrate_Clap:
+                    return celebrateClap;
+                case AnimationType.Celebrate_FistPump:
+                    return celebrateFistPump;
+                case AnimationType.Rage_Flex:
+                    return rageFlex;
+                case AnimationType.Rage_ShakeFist:
+                    return rageShakeFist;
+                case AnimationType.Rage_Yell1:
+                    return rageYell1;
+                case AnimationType.Rage_Yell2:
+                    return rageYell2;
+                case AnimationType.Disappointed_Curse:
+                    return disappointedCurse;
+                case AnimationType.Disappointed_HoldHead:
+                    return disappointedHoldHead;
+                case AnimationType.Disappointed_Mope:
+                    return disappointedMope;
+                case AnimationType.Point_Forward:
+                    return pointForward;
+                case AnimationType.Point_Backward:
+                    return pointBackward;
+                case AnimationType.RubShoulder:
+                    return rubShoulder;
+                case AnimationType.Wave:
+                    return wave;
+                default:
+                    return null;
+            }
+        }
+        
         public string GetAnimationName(AnimationType type)
         {
-            return _standardAnimations.ContainsKey(type) && _standardAnimations[type] != null
-                ? _standardAnimations[type].Name 
-                : string.Empty;
+            AnimationData animation = GetAnimation(type);
+            return animation != null ? animation.Name : string.Empty;
         }
         
         public float GetAnimationLength(AnimationType type)
         {
-            return _standardAnimations.ContainsKey(type) && _standardAnimations[type] != null
-                ? _standardAnimations[type].Length
-                : 0f;
-        }
-
-        DialogueAnimations()
-        {
-            _standardAnimations = new Dictionary<AnimationType, AnimationData>()
-            {
-                { AnimationType.Talk_1, talk1 },
-                { AnimationType.Talk_2, talk2 },
-                { AnimationType.Talk_Cocky, talkCocky },
-                { AnimationType.Talk_Dismiss, talkDismiss },
-                { AnimationType.Talk_Shrug, talkShrug },
-                { AnimationType.Talk_Laugh, talkLaugh },
-                { AnimationType.Talk_PonderQuestion, talkPonderQuestion },
-                { AnimationType.Talk_Surprised, talkSurprised },
-                { AnimationType.Talk_SighOfRelief, talkSighOfRelief },
-                { AnimationType.Talk_HandsForward, talkHandsForward },
-                { AnimationType.Agree_Nod, agreeNod },
-                { AnimationType.Agree_Concede, agreeConcede },
-                { AnimationType.Disagree, disagree },
-                { AnimationType.Disagree_Annoyed, disagreeAnnoyed },
-                { AnimationType.Celebrate_Clap, celebrateClap },
-                { AnimationType.Celebrate_FistPump, celebrateFistPump },
-                { AnimationType.Rage_Flex, rageFlex },
-                { AnimationType.Rage_ShakeFist, rageShakeFist },
-                { AnimationType.Rage_Yell1, rageYell1 },
-                { AnimationType.Rage_Yell2, rageYell2 },
-                { AnimationType.Disappointed_Curse, disappointedCurse },
-                { AnimationType.Disappointed_HoldHead, disappointedHoldHead },
-                { AnimationType.Disappointed_Mope, disappointedMope },
-                { AnimationType.Point_Forward, pointForward },
-                { AnimationType.Point_Backward, pointBackward },
-                { AnimationType.RubShoulder, rubShoulder },
-                { AnimationType.Wave, wave },
-            };
+            AnimationData animation = GetAnimation(type);
+            return animation?.Length ?? 0f;
         }
     }
 }
