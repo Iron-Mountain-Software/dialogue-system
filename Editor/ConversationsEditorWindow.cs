@@ -119,31 +119,49 @@ namespace IronMountain.DialogueSystem.Editor
         {
             LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[language];
             StringBuilder stringBuilder = new StringBuilder();
-            foreach (Conversation dialogueInteraction in _conversations)
+            foreach (Conversation conversation in _conversations)
             {
-                foreach (Node node in dialogueInteraction.nodes)
+                if (!conversation) continue;
+                stringBuilder.Append("CONVERSATION: " + conversation.Name + "<br>");
+                foreach (Node node in conversation.nodes)
                 {
+                    if (!node) continue;
                     switch (node)
                     {
                         case DialogueLineWithAlternatesNode dialogueLineWithAlternatesNode:
                         {
+                            string speaker = dialogueLineWithAlternatesNode.CustomSpeaker
+                                ? dialogueLineWithAlternatesNode.CustomSpeaker.SpeakerName
+                                : "Default";
+                            Color color = dialogueLineWithAlternatesNode.CustomSpeaker
+                                ? dialogueLineWithAlternatesNode.CustomSpeaker.Color
+                                : Color.black;
+                            string speakerFormatted = "<span style='color:" + ColorUtility.ToHtmlStringRGB(color) + "'><b>" + speaker + "</b></span>: ";
                             string mainText = dialogueLineWithAlternatesNode.Text;
-                            stringBuilder.AppendLine(mainText);
+                            stringBuilder.Append(speakerFormatted + mainText + "<br>");
                             foreach (DialogueLineMainContent content in dialogueLineWithAlternatesNode.AlternateContent)
                             {
-                                stringBuilder.AppendLine(content.Text);
+                                stringBuilder.Append(speakerFormatted + content.Text + "<br>");
                             }
                             break;
                         }
                         case DialogueLineNode dialogueLineNode:
                         {
-                            stringBuilder.AppendLine(dialogueLineNode.Text);
+                            string speaker = dialogueLineNode.CustomSpeaker
+                                ? dialogueLineNode.CustomSpeaker.SpeakerName
+                                : "Default";
+                            Color color = dialogueLineNode.CustomSpeaker
+                                ? dialogueLineNode.CustomSpeaker.Color
+                                : Color.black;
+                            string speakerFormatted = "<span style='color:" + ColorUtility.ToHtmlStringRGB(color) + "'><b>" + speaker + "</b></span>: ";
+                            stringBuilder.Append(speakerFormatted + dialogueLineNode.Text + "<br>");
                             break;
                         }
                     }
                 }
+                stringBuilder.AppendLine("<br>");
             }
-            SaveSystem.SaveSystem.SaveFile("Exports", "Dialogue Lines.txt", stringBuilder.ToString());
+            SaveSystem.SaveSystem.SaveFile("Exports", "Dialogue Lines.html", stringBuilder.ToString());
         }
     }
 }
