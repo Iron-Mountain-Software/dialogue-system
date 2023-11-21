@@ -128,10 +128,10 @@ namespace IronMountain.DialogueSystem.Editor
             {
                 if (!conversation) continue;
                 stringBuilder.Append("CONVERSATION: " + conversation.Name + "<br>");
+                conversation.nodes.Sort(CompareDialogueNodes);
                 foreach (Node node in conversation.nodes)
                 {
                     if (!node) continue;
-                    conversation.nodes.Sort(CompareDialogueNodes);
                     switch (node)
                     {
                         case DialogueLineWithAlternatesNode dialogueLineWithAlternatesNode:
