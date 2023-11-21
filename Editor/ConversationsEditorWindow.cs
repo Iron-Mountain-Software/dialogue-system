@@ -104,8 +104,7 @@ namespace IronMountain.DialogueSystem.Editor
             }
 
             EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Export Dialogue Lines (EN)")) ExportDialogueLines(0);
-            if (GUILayout.Button("Export Dialogue Lines (ES)")) ExportDialogueLines(1);
+            if (GUILayout.Button("Export Dialogue Lines")) ExportDialogueLines();
             EditorGUILayout.EndHorizontal();
 
             _sidebarScroll.x = 0;
@@ -114,8 +113,15 @@ namespace IronMountain.DialogueSystem.Editor
             GUILayout.EndScrollView();
             EditorGUILayout.EndVertical();
         }
-        
-        private void ExportDialogueLines(int language)
+
+        private int CompareDialogueNodes(Node a, Node b)
+        {
+            if (!a) return -1;
+            if (!b) return 1;
+            return a.position.x.CompareTo(b.position.x);
+        }
+
+        private void ExportDialogueLines()
         {
             StringBuilder stringBuilder = new StringBuilder();
             foreach (Conversation conversation in _conversations)
@@ -125,6 +131,7 @@ namespace IronMountain.DialogueSystem.Editor
                 foreach (Node node in conversation.nodes)
                 {
                     if (!node) continue;
+                    conversation.nodes.Sort(CompareDialogueNodes);
                     switch (node)
                     {
                         case DialogueLineWithAlternatesNode dialogueLineWithAlternatesNode:
