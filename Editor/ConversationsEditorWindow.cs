@@ -117,7 +117,6 @@ namespace IronMountain.DialogueSystem.Editor
         
         private void ExportDialogueLines(int language)
         {
-            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[language];
             StringBuilder stringBuilder = new StringBuilder();
             foreach (Conversation conversation in _conversations)
             {
