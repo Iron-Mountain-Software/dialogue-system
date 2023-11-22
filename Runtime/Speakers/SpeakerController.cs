@@ -64,6 +64,12 @@ namespace IronMountain.DialogueSystem.Speakers
             OnDisabled?.Invoke();
         }
 
+        public virtual void StartConversation(Conversation conversation)
+        {
+            if (!enabled || !ConversationStarter || Speaker == null || !conversation) return;
+            ConversationStarter.StartConversation(Speaker, conversation);
+        }
+        
         public virtual void StartConversation()
         {
             if (!enabled || !ConversationStarter || Speaker == null || !NextConversation) return;
