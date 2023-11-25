@@ -1,5 +1,5 @@
 # Dialogue System
-*Version: 2.5.3*
+*Version: 2.6.0*
 ## Description: 
 A system for writing and playing branching dialogue.
 ## Dependencies: 
@@ -302,6 +302,7 @@ A system for writing and playing branching dialogue.
       * public ConversationStarter ***ConversationStarter***  { get; }
       * public Conversation ***NextConversation***  { get; }
    * Methods: 
+      * public virtual void ***StartConversation***(Conversation conversation)
       * public virtual void ***StartConversation***()
 1. public static class **SpeakerControllersManager**
 1. public class **SpeakerPortraitCollection**
@@ -350,17 +351,10 @@ A system for writing and playing branching dialogue.
       * public Boolean ***IsAnimating***  { get; }
    * Methods: 
       * public abstract void ***ForceFinishAnimating***()
-      * public void ***Animate***()
-      * public void ***AnimateByLetterRate***(float letterRate)
-      * public void ***AnimateByTotalTime***(float totalTime, Int32 charactersLength)
 1. public class **DialogueLineTyperTMPro** : DialogueLineTyper
-   * Properties: 
-      * public Boolean ***IsAnimating***  { get; }
    * Methods: 
       * public override void ***ForceFinishAnimating***()
 1. public class **DialogueLineTyperText** : DialogueLineTyper
-   * Properties: 
-      * public Boolean ***IsAnimating***  { get; }
    * Methods: 
       * public override void ***ForceFinishAnimating***()
 1. public class **DialogueResponseBlock** : MonoBehaviour

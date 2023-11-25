@@ -1,22 +1,15 @@
 using System.Collections;
+using IronMountain.DialogueSystem.Speakers;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace IronMountain.DialogueSystem.UI
 {
-    [DisallowMultipleComponent]
     [RequireComponent(typeof(Text))]
     public class DialogueLineTyperText : DialogueLineTyper
     {
         [SerializeField] private Text text;
-
-        [Header("Cache")]
-        private string _speaker;
-        private string _dialogueLine;
-        private int _currentIndex;
-
-        public override bool IsAnimating => _currentIndex <= _dialogueLine.Length;
-
+        
         private Text Text
         {
             get
@@ -29,50 +22,42 @@ namespace IronMountain.DialogueSystem.UI
 
         protected override void Reset()
         {
-            StopAllCoroutines();
+            base.Reset();
             Text.text = string.Empty;
-            _dialogueLine = string.Empty;
-            _currentIndex = 0;
         }
 
-        protected override void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)
+        protected override string FormatSpeakerWithColor(ISpeaker speaker)
         {
-            StopAllCoroutines();
-            _dialogueLine = dialogueLine != null ? dialogueLine.Text : string.Empty;
-            if (PrependSpeakerName && dialogueLine is {Speaker: { }})
+            if (speaker == null) return SpeakerNameSeparator;
+            return "<color=#" + ColorUtility.ToHtmlStringRGBA(speaker.Color) + ">"
+                   + speaker.SpeakerName
+                   + SpeakerNameSeparator
+                   + "</color>";
+        }
+
+        protected override IEnumerator Animate(float seconds) 
+        {
+            IsAnimating = true;
+            for (float timer = 0; timer < seconds; timer += Time.deltaTime)
             {
-                if (UseSpeakerColor)
-                {
-                    _speaker = "<color=#" + ColorUtility.ToHtmlStringRGBA(dialogueLine.Speaker.Color) + ">"
-                               + dialogueLine.Speaker.SpeakerName
-                               + SpeakerNameSeparator
-                               + "</color>";
-                }
-                else _speaker = dialogueLine.Speaker.SpeakerName
-                                + SpeakerNameSeparator;
+                float progress = timer / seconds;
+                int index = Mathf.RoundToInt(progress * DialogueLineContent.Length);
+                Text.text = SpeakerContent 
+                            + DialogueLineContent[..index] 
+                            + "<color=#00000000>"
+                            + DialogueLineContent[index..]
+                            + "</color>";
+                yield return null;
             }
-            else _speaker = string.Empty;
-            Text.text = _dialogueLine;
-            _currentIndex = _dialogueLine.Length + 1;
-            AnimateByLetterRate(DefaultLetterRate);
-        }
-
-        protected override IEnumerator AnimateRunner(float letterRate) 
-        {
-            Text.text = string.Empty;
-            _currentIndex = 1;
-            while (IsAnimating) {
-                Text.text = _speaker + _dialogueLine[.._currentIndex];
-                if (letterRate > 0) { yield return new WaitForSeconds(letterRate); }
-                _currentIndex++;
-            }
+            Text.text = SpeakerContent + DialogueLineContent;
+            IsAnimating = false;
         }
 
         public override void ForceFinishAnimating() 
         {
             StopAllCoroutines();
-            Text.text = _dialogueLine;
-            _currentIndex = _dialogueLine.Length + 1;
+            Text.text = SpeakerContent + DialogueLineContent;
+            IsAnimating = false;
         }
     }
 }

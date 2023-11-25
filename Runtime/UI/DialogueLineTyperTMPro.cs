@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using IronMountain.DialogueSystem.Speakers;
 using TMPro;
 using UnityEngine;
 
@@ -7,65 +8,54 @@ namespace IronMountain.DialogueSystem.UI
     [RequireComponent(typeof(TextMeshProUGUI))]
     public class DialogueLineTyperTMPro : DialogueLineTyper
     {
-        [Header("Cache")]
-        private TextMeshProUGUI _text;
-
-        public override bool IsAnimating => _text.maxVisibleCharacters < _text.text.Length;
-
+        [SerializeField] private TextMeshProUGUI text;
+        
         private TextMeshProUGUI Text
         {
             get
             {
-                if (!_text) _text = GetComponent<TextMeshProUGUI>();
-                return _text;
+                if (!text) text = GetComponent<TextMeshProUGUI>();
+                return text;
             }
         }
         
         protected override void Reset()
         {
-            StopAllCoroutines();
+            base.Reset();
             Text.text = string.Empty;
             Text.maxVisibleCharacters = Text.text.Length;
         }
-
-        protected override void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)
+        
+        protected override string FormatSpeakerWithColor(ISpeaker speaker)
         {
-            StopAllCoroutines();
-            string text = dialogueLine != null ? dialogueLine.Text : string.Empty;
-
-            if (PrependSpeakerName && dialogueLine is {Speaker: { }})
-            {
-                if (UseSpeakerColor)
-                {
-                    text = "<#" + ColorUtility.ToHtmlStringRGBA(dialogueLine.Speaker.Color) + ">"
-                           + dialogueLine.Speaker.SpeakerName 
-                           + SpeakerNameSeparator
-                           + "</color>" 
-                           + text;
-                }
-                else text = dialogueLine.Speaker.SpeakerName 
-                            + SpeakerNameSeparator 
-                            + text;
-            }
-            
-            Text.text = text;
-            Text.maxVisibleCharacters = Text.text.Length;
-            AnimateByLetterRate(DefaultLetterRate);
+            if (speaker == null) return SpeakerNameSeparator;
+            return "<#" + ColorUtility.ToHtmlStringRGBA(speaker.Color) + ">"
+                   + speaker.SpeakerName
+                   + SpeakerNameSeparator
+                   + "</color>";
         }
 
-        protected override IEnumerator AnimateRunner(float letterRate) 
+        protected override IEnumerator Animate(float seconds) 
         {
-            Text.maxVisibleCharacters = 0;
-            while (IsAnimating) {
-                Text.maxVisibleCharacters++;
-                if (letterRate > 0) { yield return new WaitForSeconds(letterRate); }
+            IsAnimating = true;
+            Text.text = SpeakerContent + DialogueLineContent;
+            Text.maxVisibleCharacters = SpeakerContent.Length;
+            for (float timer = 0; timer < seconds; timer += Time.deltaTime)
+            {
+                float progress = timer / seconds;
+                int index = Mathf.RoundToInt(progress * DialogueLineContent.Length);
+                Text.maxVisibleCharacters = SpeakerContent.Length + index;
+                yield return null;
             }
+            Text.maxVisibleCharacters = Text.text.Length;
+            IsAnimating = false;
         }
 
         public override void ForceFinishAnimating() 
         {
             StopAllCoroutines();
             Text.maxVisibleCharacters = Text.text.Length;
+            IsAnimating = false;
         }
     }
 }
