@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using IronMountain.DialogueSystem.Nodes;
 using IronMountain.DialogueSystem.Speakers;
@@ -14,7 +15,8 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
     public class DialogueLineNodeInspector : NodeEditor
     {
         private bool _localize = false;
-        
+        private DialogueLineNode _dialogueLineNode;
+
         public override void OnCreate()
         {
             base.OnCreate();
@@ -26,6 +28,7 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
         public override void OnBodyGUI()
         {
             serializedObject.Update();
+            if (!_dialogueLineNode) _dialogueLineNode = (DialogueLineNode) target;
 
             EditorGUILayout.BeginHorizontal();
             NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("input"));
@@ -57,7 +60,33 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
             else
             {
                 NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("simpleText"), new GUIContent("Text"));
-                NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("audioClip"), new GUIContent("Narration"));
+                
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("Narration", GUILayout.Width(55));
+                NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("audioClip"), GUIContent.none);
+                EditorGUI.BeginDisabledGroup(!_dialogueLineNode.AudioClip);
+                if (GUILayout.Button("Rename", GUILayout.Width(60)))
+                {
+                    string newName = _dialogueLineNode.Text;
+                    newName = newName.Replace("/", "");
+                    newName = newName.Replace("?", "");
+                    newName = newName.Replace("<", "");
+                    newName = newName.Replace(">", "");
+                    newName = newName.Replace("\\", "");
+                    newName = newName.Replace(":", "");
+                    newName = newName.Replace("*", "");
+                    newName = newName.Replace("|", "");
+                    newName = newName.Replace("\"", "");
+                    if (string.IsNullOrWhiteSpace(newName)) return;
+                    _dialogueLineNode.AudioClip.name = newName;
+                    string path = AssetDatabase.GetAssetPath(_dialogueLineNode.AudioClip);
+                    AssetDatabase.RenameAsset(path, newName);
+                    EditorUtility.SetDirty(_dialogueLineNode.AudioClip);
+                    AssetDatabase.SaveAssets();
+                    AssetDatabase.Refresh();
+                }
+                EditorGUI.EndDisabledGroup();
+                EditorGUILayout.EndHorizontal();
             }
             
             EditorGUILayout.Space(10);
