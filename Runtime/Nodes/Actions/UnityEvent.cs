@@ -4,7 +4,6 @@ using UnityEngine;
 namespace IronMountain.DialogueSystem.Nodes.Actions
 {
     [NodeWidth(300)]
-    [NodeTint("#FFCA3A")]
     public class UnityEvent : DialogueAction
     {
         [SerializeField] private UnityEngine.Events.UnityEvent action;

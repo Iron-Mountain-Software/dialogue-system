@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Serialization;
 using XNode;
+using Object = UnityEngine.Object;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -208,6 +209,27 @@ namespace IronMountain.DialogueSystem
                    || PreviewHasErrors
                    || ConditionHasErrors
                    || GraphHasErrors();
+        }
+        
+        [MenuItem("Iron Mountain/Align Selected Nodes %#-")]
+        public static void AlignSelectedNodes()
+        {
+            float averageY = 0;
+            int nodeCount = 0;
+            foreach (Object selection in UnityEditor.Selection.objects)
+            {
+                if (selection is not Node node) continue;
+                averageY += node.position.y;
+                nodeCount++;
+            }
+            if (nodeCount <= 0) return;
+            averageY /= nodeCount;
+            foreach (Object selection in UnityEditor.Selection.objects)
+            {
+                if (selection is not Node node) continue;
+                node.position.y = averageY;
+            }
+            UnityEditor.Selection.activeObject = null;
         }
 
         public bool GeneralSectionHasErrors => string.IsNullOrWhiteSpace(id);

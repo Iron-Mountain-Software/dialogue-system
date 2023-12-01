@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngineInternal;
+using XNode;
 using XNodeEditor;
 
 namespace IronMountain.DialogueSystem.Editor
@@ -86,7 +87,7 @@ namespace IronMountain.DialogueSystem.Editor
             _cachedZoom = zoom;
             onLateGUI += OnLateGUI;
         }
-
+        
         private void OnLateGUI()
         {
             CalculateLayout();

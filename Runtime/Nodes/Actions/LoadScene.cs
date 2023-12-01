@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 namespace IronMountain.DialogueSystem.Nodes.Actions
 {
     [NodeWidth(300)]
-    [NodeTint("#FFCA3A")]
     public class LoadScene : DialogueAction
     {
         [SerializeField] private string sceneName;

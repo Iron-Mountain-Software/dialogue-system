@@ -17,9 +17,7 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
             _passFailConditionFromReference = (PassFailConditionFromReference) target;
             _conditionEditor = new ConditionEditor("Condition", _passFailConditionFromReference.graph, newCondition => _passFailConditionFromReference.condition = newCondition);
         }
-
-        public virtual void DrawAdditionalProperties() { }
-
+        
         public override void OnBodyGUI()
         {
             serializedObject.Update();

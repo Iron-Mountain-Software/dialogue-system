@@ -4,7 +4,7 @@ using UnityEngine;
 namespace IronMountain.DialogueSystem.Nodes.Actions
 {
     [NodeWidth(150)]
-    [NodeTint("#FFCA3A")]
+    [NodeTint("#FF9229")]
     public abstract class DialogueAction : DialogueNode
     {
         [Input] public Connection input;

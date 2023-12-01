@@ -4,7 +4,6 @@ using IronMountain.DialogueSystem.UI;
 namespace IronMountain.DialogueSystem.Nodes.Actions
 {
     [NodeWidth(200)]
-    [NodeTint("#FFCA3A")]
     public class DialoguePlayPrioritized : DialogueAction
     {
         protected override void HandleAction(ConversationPlayer conversationUI)

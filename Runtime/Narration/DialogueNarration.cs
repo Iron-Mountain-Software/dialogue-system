@@ -1,3 +1,4 @@
+using IronMountain.DialogueSystem.Speakers;
 using IronMountain.DialogueSystem.UI;
 using UnityEngine;
 
@@ -8,30 +9,32 @@ namespace IronMountain.DialogueSystem.Narration
     [RequireComponent(typeof(AudioSource))]
     public class DialogueNarration : MonoBehaviour
     {
-        [SerializeField] private ConversationPlayer conversationPlayer;
+        public enum Type
+        {
+            Global,
+            Speaker
+        }
+        
+        [SerializeField] private Type type;
+        [SerializeField] private Object speaker;
         [SerializeField] private AudioSource audioSource;
     
+        public ISpeaker Speaker => speaker as ISpeaker;
+
         private void Awake()
         {
             InitializeAudioSource();
-            if (!conversationPlayer) conversationPlayer = GetComponentInParent<ConversationPlayer>();
-        }
-
-        private void OnValidate()
-        {
-            InitializeAudioSource();
-            if (!conversationPlayer) conversationPlayer = GetComponentInParent<ConversationPlayer>();
         }
 
         private void OnEnable()
         {
             RefreshRequirements();
-            if (conversationPlayer) conversationPlayer.OnDialogueLinePlayed += OnDialogueLinePlayed;
+            ConversationPlayer.OnAnyDialogueLinePlayed += OnAnyDialogueLinePlayed;
         }
 
         private void OnDisable()
         {
-            if (conversationPlayer) conversationPlayer.OnDialogueLinePlayed -= OnDialogueLinePlayed;
+            ConversationPlayer.OnAnyDialogueLinePlayed -= OnAnyDialogueLinePlayed;
         }
 
         public void RefreshRequirements()
@@ -49,7 +52,7 @@ namespace IronMountain.DialogueSystem.Narration
 
         private void InitializeAudioSource()
         {
-            audioSource = GetComponent<AudioSource>();
+            if (!audioSource) audioSource = GetComponent<AudioSource>();
             if (!audioSource) audioSource = gameObject.AddComponent<AudioSource>();
             audioSource.clip = null;
             audioSource.mute = false;
@@ -57,15 +60,56 @@ namespace IronMountain.DialogueSystem.Narration
             audioSource.playOnAwake = false;
         }
 
-        private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)
+        private void OnAnyDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)
         {
-            if (!audioSource) InitializeAudioSource();
-            if (audioSource.isPlaying) audioSource.Stop();
-            if (dialogueLine.AudioClip)
+            if (dialogueLine == null) return;
+            switch (type)
             {
-                audioSource.clip = dialogueLine.AudioClip;
-                audioSource.Play();
+                case Type.Global:
+                    Play(dialogueLine.AudioClip);
+                    break;
+                case Type.Speaker:
+                    if (Speaker == null || dialogueLine.Speaker == null) return;
+                    if (!string.Equals(Speaker.ID, dialogueLine.Speaker.ID)) return;
+                    Play(dialogueLine.AudioClip);
+                    break;
             }
         }
+
+        private void Play(AudioClip audioClip)
+        {
+            if (!audioClip) return;
+            if (!audioSource) InitializeAudioSource();
+            if (!audioSource) return;
+            if (audioSource.isPlaying) audioSource.Stop();
+            audioSource.clip = audioClip;
+            audioSource.Play();
+        }
+
+#if UNITY_EDITOR
+        
+        private void OnValidate()
+        {
+            InitializeAudioSource();
+            ValidateSpeaker();
+        }
+
+        private void ValidateSpeaker()
+        {
+            switch (type)
+            {
+                case Type.Global:
+                    speaker = null;
+                    break;
+                case Type.Speaker:
+                    if (speaker is GameObject speakerObject) speaker = speakerObject.GetComponent<ISpeaker>() as Object;
+                    if (speaker is not ISpeaker) speaker = gameObject.GetComponent<ISpeaker>() as Object;
+                    if (!speaker) Debug.LogWarning("Warning: SpeakerController is missing a Speaker!", this);
+                    break;
+            }
+        }
+
+#endif
+        
     }
 }
