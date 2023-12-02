@@ -29,11 +29,13 @@ namespace IronMountain.DialogueSystem.Narration
         private void OnEnable()
         {
             RefreshRequirements();
+            DialogueNarrationManager.DialogueNarrations.Add(this);
             ConversationPlayer.OnAnyDialogueLinePlayed += OnAnyDialogueLinePlayed;
         }
 
         private void OnDisable()
         {
+            DialogueNarrationManager.DialogueNarrations.Remove(this);
             ConversationPlayer.OnAnyDialogueLinePlayed -= OnAnyDialogueLinePlayed;
         }
 

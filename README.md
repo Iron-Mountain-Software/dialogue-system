@@ -1,5 +1,5 @@
 # Dialogue System
-*Version: 2.6.1*
+*Version: 2.6.3*
 ## Description: 
 A system for writing and playing branching dialogue.
 ## Dependencies: 
@@ -9,6 +9,7 @@ A system for writing and playing branching dialogue.
 * com.iron-mountain.save-system (1.0.4)
 * com.iron-mountain.conditions (1.5.0)
 * com.iron-mountain.resource-utilities (1.1.2)
+* com.iron-mountain.scriptable-actions (1.0.5)
 ---
 ## Key Scripts & Components: 
 1. public class **Conversation** : NodeGraph
@@ -53,6 +54,12 @@ A system for writing and playing branching dialogue.
       * public AnimationType ***Animation***  { get; }
       * public Sprite ***Sprite***  { get; }
 1. public class **DialogueTouchInputManager** : MonoBehaviour
+### Actions
+1. public class **SetConversationPlaythroughsAction** : ScriptableAction
+   * Methods: 
+      * public override void ***Invoke***()
+      * public override String ***ToString***()
+      * public override Boolean ***HasErrors***()
 ### Animation
 1. public enum **AnimationType** : Enum
 1. public class **DialogueAnimationController** : MonoBehaviour
@@ -83,8 +90,11 @@ A system for writing and playing branching dialogue.
       * public void ***ScaleDownImmediate***()
 ### Narration
 1. public class **DialogueNarration** : MonoBehaviour
+   * Properties: 
+      * public ISpeaker ***Speaker***  { get; }
    * Methods: 
       * public void ***RefreshRequirements***()
+1. public static class **DialogueNarrationManager**
 1. public abstract class **DialogueNarrationRequirement** : MonoBehaviour
    * Methods: 
       * public abstract Boolean ***IsSatisfied***()
@@ -162,6 +172,9 @@ A system for writing and playing branching dialogue.
    * Properties: 
       * public String ***Name***  { get; }
 1. public class **LoadScene** : DialogueAction
+   * Properties: 
+      * public String ***Name***  { get; }
+1. public class **ScriptableActionNode** : DialogueAction
    * Properties: 
       * public String ***Name***  { get; }
 1. public class **UnityEvent** : DialogueAction
