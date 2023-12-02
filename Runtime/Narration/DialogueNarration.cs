@@ -20,6 +20,7 @@ namespace IronMountain.DialogueSystem.Narration
         [SerializeField] private AudioSource audioSource;
     
         public ISpeaker Speaker => speaker as ISpeaker;
+        public AudioSource AudioSource => audioSource;
 
         private void Awake()
         {
