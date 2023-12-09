@@ -1,5 +1,5 @@
 # Dialogue System
-*Version: 2.6.3*
+*Version: 2.6.5*
 ## Description: 
 A system for writing and playing branching dialogue.
 ## Dependencies: 
@@ -90,8 +90,14 @@ A system for writing and playing branching dialogue.
       * public void ***ScaleDownImmediate***()
 ### Narration
 1. public class **DialogueNarration** : MonoBehaviour
+   * Actions: 
+      * public event Action ***OnIsPlayingChanged*** 
+      * public event Action ***OnIsMutedChanged*** 
    * Properties: 
       * public ISpeaker ***Speaker***  { get; }
+      * public AudioSource ***AudioSource***  { get; }
+      * public Boolean ***IsPlaying***  { get; set; }
+      * public Boolean ***IsMuted***  { get; set; }
    * Methods: 
       * public void ***RefreshRequirements***()
 1. public static class **DialogueNarrationManager**

@@ -1,6 +1,8 @@
+using System;
 using IronMountain.DialogueSystem.Speakers;
 using IronMountain.DialogueSystem.UI;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace IronMountain.DialogueSystem.Narration
 {
@@ -9,6 +11,9 @@ namespace IronMountain.DialogueSystem.Narration
     [RequireComponent(typeof(AudioSource))]
     public class DialogueNarration : MonoBehaviour
     {
+        public event Action OnIsPlayingChanged;
+        public event Action OnIsMutedChanged;
+    
         public enum Type
         {
             Global,
@@ -18,9 +23,34 @@ namespace IronMountain.DialogueSystem.Narration
         [SerializeField] private Type type;
         [SerializeField] private Object speaker;
         [SerializeField] private AudioSource audioSource;
+        
+        private bool _isPlaying;
+        private bool _isMuted;
     
         public ISpeaker Speaker => speaker as ISpeaker;
         public AudioSource AudioSource => audioSource;
+
+        public bool IsPlaying
+        {
+            get => _isPlaying;
+            set
+            {
+                if (_isPlaying == value) return;
+                _isPlaying = value;
+                OnIsPlayingChanged?.Invoke();
+            }
+        }
+        
+        public bool IsMuted
+        {
+            get => _isMuted;
+            set
+            {
+                if (_isMuted == value) return;
+                _isMuted = value;
+                OnIsMutedChanged?.Invoke();
+            }
+        }
 
         private void Awake()
         {
@@ -87,6 +117,20 @@ namespace IronMountain.DialogueSystem.Narration
             if (audioSource.isPlaying) audioSource.Stop();
             audioSource.clip = audioClip;
             audioSource.Play();
+        }
+
+        private void Update()
+        {
+            if (audioSource)
+            {
+                IsPlaying = audioSource.isPlaying;
+                IsMuted = audioSource.mute;
+            }
+            else
+            {
+                IsPlaying = false;
+                IsMuted = false;
+            }
         }
 
 #if UNITY_EDITOR
