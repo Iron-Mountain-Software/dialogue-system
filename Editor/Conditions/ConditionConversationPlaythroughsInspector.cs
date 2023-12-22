@@ -12,7 +12,7 @@ namespace IronMountain.DialogueSystem.Editor.Conditions
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PropertyField(serializedObject.FindProperty("conversation"), GUIContent.none);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("comparison"), GUIContent.none, GUILayout.Width(145));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("comparison"), GUIContent.none, GUILayout.Width(38));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("playthroughs"), GUIContent.none, GUILayout.Width(20));
             EditorGUILayout.LabelField("PLAYS", GUILayout.Width(45));
             EditorGUILayout.EndHorizontal();
