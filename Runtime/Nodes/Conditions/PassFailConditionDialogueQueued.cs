@@ -10,7 +10,7 @@ namespace IronMountain.DialogueSystem.Nodes.Conditions
         protected override bool TestCondition(ConversationPlayer conversationUI)
         {
             ISpeaker thisSpeaker = conversationUI.DefaultSpeaker;
-            Conversation thisConversation = conversationUI.CurrentConversation;
+            Conversation thisConversation = conversationUI.Conversation;
             foreach (Conversation testConversation in thisSpeaker.Conversations)
             {
                 if (testConversation

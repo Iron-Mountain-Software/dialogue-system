@@ -16,7 +16,7 @@ namespace IronMountain.DialogueSystem.Nodes.ResponseGenerators
         {
             List<BasicResponse> dialogueResponses = new List<BasicResponse>();
             ISpeaker thisSpeaker = conversationPlayer.DefaultSpeaker;
-            Conversation thisConversation = conversationPlayer.CurrentConversation;
+            Conversation thisConversation = conversationPlayer.Conversation;
             IResponseStyle style = ScriptedResponseStyle
                 ? ScriptedResponseStyle
                 : new ResponseStyle(

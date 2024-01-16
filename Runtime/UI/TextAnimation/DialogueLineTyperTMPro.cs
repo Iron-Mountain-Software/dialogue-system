@@ -3,7 +3,7 @@ using IronMountain.DialogueSystem.Speakers;
 using TMPro;
 using UnityEngine;
 
-namespace IronMountain.DialogueSystem.UI
+namespace IronMountain.DialogueSystem.UI.TextAnimation
 {
     [RequireComponent(typeof(TextMeshProUGUI))]
     public class DialogueLineTyperTMPro : DialogueLineTyper

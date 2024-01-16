@@ -2,7 +2,7 @@ using System.Collections;
 using IronMountain.DialogueSystem.Speakers;
 using UnityEngine;
 
-namespace IronMountain.DialogueSystem.UI
+namespace IronMountain.DialogueSystem.UI.TextAnimation
 {
     [DisallowMultipleComponent]
     public abstract class DialogueLineTyper : MonoBehaviour

@@ -18,15 +18,16 @@ namespace IronMountain.DialogueSystem.UI
 
         public event Action OnClosed;
         
-        [Header("Settings")]
+        [SerializeField] private Conversation conversation;
+        [SerializeField] private bool playOnStart = true;
         [SerializeField] private bool continueAfterNarration = false;
+        [SerializeField] private bool selfDestruct = true;
         [SerializeField] private float destructionDelay = .5f;
         [SerializeField] private Transform responseBlockParent;
         [SerializeField] private DialogueResponseBlock responseBlockPrefab;
         
         [Header("Cache")]
         private ISpeaker _defaultSpeaker;
-        private Conversation _currentConversation;
         private DialogueNode _currentNode;
         private DialogueLine _currentDialogueLine;
         private DialogueResponseBlock _currentResponseBlock;
@@ -45,15 +46,15 @@ namespace IronMountain.DialogueSystem.UI
             }
         }
         
-        public Conversation CurrentConversation
+        public Conversation Conversation
         {
-            get => _currentConversation;
+            get => conversation;
             private set
             {
-                if (_currentConversation == value) return;
-                if (_currentConversation) OnAnyConversationEnded?.Invoke(_currentConversation);
-                _currentConversation = value;
-                if (_currentConversation) OnAnyConversationStarted?.Invoke(_currentConversation);
+                if (conversation == value) return;
+                if (conversation) OnAnyConversationEnded?.Invoke(conversation);
+                conversation = value;
+                if (conversation) OnAnyConversationStarted?.Invoke(conversation);
                 OnConversationChanged?.Invoke();
             }
         }
@@ -81,8 +82,8 @@ namespace IronMountain.DialogueSystem.UI
                 _currentDialogueLine = value;
                 if (_currentDialogueLine != null)
                 {
-                    OnDialogueLinePlayed?.Invoke(_currentConversation, _currentDialogueLine);
-                    OnAnyDialogueLinePlayed?.Invoke(_currentConversation, _currentDialogueLine);
+                    OnDialogueLinePlayed?.Invoke(conversation, _currentDialogueLine);
+                    OnAnyDialogueLinePlayed?.Invoke(conversation, _currentDialogueLine);
                 }
             }
         }
@@ -93,24 +94,33 @@ namespace IronMountain.DialogueSystem.UI
         public ConversationPlayer Initialize(ISpeaker speaker, Conversation conversation)
         {
             _defaultSpeaker = null;
-            _currentConversation = null;
+            this.conversation = null;
             _currentNode = null;
             _currentDialogueLine = null;
             DefaultSpeaker = speaker;
-            CurrentConversation = conversation;
-            CurrentNode = (DialogueBeginningNode) conversation.nodes.Find(node => node is DialogueBeginningNode);
-            CurrentConversation.OnConversationStarted();
+            Conversation = conversation;
+            Play();
             return this;
+        }
+
+        private void Start()
+        {
+            if (playOnStart && !CurrentNode) Play();
+        }
+
+        private void Play()
+        {
+            CurrentNode = Conversation && Conversation.nodes != null 
+                ? (DialogueBeginningNode) conversation.nodes.Find(node => node is DialogueBeginningNode) 
+                : null;
+            if (!Conversation || !CurrentNode) return;
+            Conversation.OnConversationStarted();
         }
 
         public void Close()
         {
             OnClosed?.Invoke();
-            if (destructionDelay > 0)
-            {
-                Destroy(gameObject, destructionDelay);
-            }
-            else Destroy(gameObject);
+            if (selfDestruct) Destroy(gameObject, destructionDelay);
         }
 
         public void PlayDialogueLine(DialogueLine dialogueLine)
@@ -155,9 +165,9 @@ namespace IronMountain.DialogueSystem.UI
 
         public void CompleteConversation()
         {
-            if (CurrentConversation) CurrentConversation.Playthroughs++;
+            if (Conversation) Conversation.Playthroughs++;
             CurrentNode = null;
-            CurrentConversation = null;
+            Conversation = null;
             CurrentDialogueLine = null;
         }
 
@@ -166,6 +176,7 @@ namespace IronMountain.DialogueSystem.UI
         private void OnValidate()
         {
             if (!responseBlockParent) responseBlockParent = transform;
+            if (destructionDelay < 0) destructionDelay = 0;
         }
         
 #endif

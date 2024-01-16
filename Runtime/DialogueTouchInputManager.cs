@@ -1,4 +1,5 @@
 using IronMountain.DialogueSystem.UI;
+using IronMountain.DialogueSystem.UI.TextAnimation;
 using UnityEngine;
 
 namespace IronMountain.DialogueSystem
@@ -21,7 +22,7 @@ namespace IronMountain.DialogueSystem
         private void Update()
         {
             if (conversationUI
-                && conversationUI.CurrentConversation
+                && conversationUI.Conversation
                 && conversationUI.FrameOfLastProgression != Time.frameCount
                 && Input.GetMouseButtonUp(0))
             {
