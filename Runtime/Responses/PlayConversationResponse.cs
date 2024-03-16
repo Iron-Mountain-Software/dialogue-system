@@ -10,14 +10,14 @@ namespace IronMountain.DialogueSystem.Responses
         private readonly ISpeaker _speaker;
         private readonly Conversation _conversation;
         
-        public override void ExecuteResponse()
+        public override void Execute()
         {
             if (ConversationPlayer && _speaker != null && _conversation)
             {
                 ConversationPlayer.CompleteConversation();
                 ConversationPlayer.Initialize(_speaker, _conversation);
             }
-            else base.ExecuteResponse();
+            else base.Execute();
         }
         
         public PlayConversationResponse(ConversationPlayer conversationPlayer, DialogueNode sourceNode, string text, Sprite icon, int row, int column, IResponseStyle style, ISpeaker speaker, Conversation conversation)

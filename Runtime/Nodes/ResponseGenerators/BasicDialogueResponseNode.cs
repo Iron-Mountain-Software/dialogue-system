@@ -7,7 +7,7 @@ using UnityEngine.Localization;
 
 namespace IronMountain.DialogueSystem.Nodes.ResponseGenerators
 {
-    public class ResponseGeneratorText : ResponseGenerator
+    public class BasicDialogueResponseNode : DialogueResponseNode
     {
         [SerializeField] protected string stringText;
         [SerializeField] protected LocalizedString text;
@@ -47,6 +47,8 @@ namespace IronMountain.DialogueSystem.Nodes.ResponseGenerators
 #endif
             }
         }
+        
+        public LocalizedString LocalizedText => text;
 
         private Sprite Sprite => sprite ? sprite.Asset : null;
     

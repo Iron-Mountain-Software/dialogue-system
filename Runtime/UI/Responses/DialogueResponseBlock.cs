@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using IronMountain.DialogueSystem.Nodes;
-using IronMountain.DialogueSystem.Nodes.ResponseGenerators;
 using IronMountain.DialogueSystem.Responses;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace IronMountain.DialogueSystem.UI
+namespace IronMountain.DialogueSystem.UI.Responses
 {
     public class DialogueResponseBlock : MonoBehaviour
     {
@@ -17,41 +16,44 @@ namespace IronMountain.DialogueSystem.UI
         [Space]
         [SerializeField] private Transform rowParent;
         [SerializeField] private GameObject rowPrefab;
-        [SerializeField] private GameObject dialogueResponsePrefab;
-        [SerializeField] private GameObject dialogueResponseWithIconPrefab;
+        [SerializeField] private DialogueResponseButton dialogueResponsePrefab;
+        [Space]
         [SerializeField] private UnityEvent onDestroy;
+
+        private bool _submitted;
         
         private Transform RowParent => rowParent ? rowParent : transform;
 
         public void Initialize(DialogueResponseBlockNode dialogueResponseBlock, ConversationPlayer conversationUI)
         {
-            List<ResponseGenerator> responseGenerators = dialogueResponseBlock.GetResponseGenerators();
-            List<BasicResponse> dialogueResponses = new List<BasicResponse>();
-            foreach (ResponseGenerator responseGenerator in responseGenerators)
-            {
-                dialogueResponses.AddRange(responseGenerator.GetDialogueResponses(conversationUI));
-            }
-            dialogueResponses.Sort((responseX, responseY) => responseY.Row == responseX.Row ? responseX.Column - responseY.Column : responseX.Row - responseY.Row);
+            List<BasicResponse> responses = dialogueResponseBlock.GetResponses(conversationUI);
+            responses.Sort((responseX, responseY) => responseY.Row == responseX.Row ? responseX.Column - responseY.Column : responseX.Row - responseY.Row);
             int currentRowIndex = int.MinValue;
             float cumulativeRowHeight = 0f;
             RectTransform currentRow = null;
-            foreach (BasicResponse dialogueResponse in dialogueResponses)
+            foreach (BasicResponse response in responses)
             {
-                if (!currentRow || dialogueResponse.Row != currentRowIndex)
+                if (response == null) continue;
+                if (!currentRow || response.Row != currentRowIndex)
                 {
                     GameObject instantiatedRow = Instantiate(rowPrefab, RowParent);
                     currentRow = instantiatedRow.GetComponent<RectTransform>();
                     currentRow.anchorMin = new Vector2(xPadding, yPadding + (currentRow.GetSiblingIndex() * spacing) + cumulativeRowHeight);
-                    currentRow.anchorMax = new Vector2(1 - xPadding, yPadding + (currentRow.GetSiblingIndex() * spacing) + cumulativeRowHeight + dialogueResponse.Style.Height);
+                    currentRow.anchorMax = new Vector2(1 - xPadding, yPadding + (currentRow.GetSiblingIndex() * spacing) + cumulativeRowHeight + response.Style.Height);
                     currentRow.offsetMin = Vector2.zero;
                     currentRow.offsetMax = Vector2.zero;
-                    currentRowIndex = dialogueResponse.Row;
-                    cumulativeRowHeight += dialogueResponse.Style.Height;
+                    currentRowIndex = response.Row;
+                    cumulativeRowHeight += response.Style.Height;
                 }
-                GameObject instantiated = Instantiate(dialogueResponse.Icon ? dialogueResponseWithIconPrefab : dialogueResponsePrefab, currentRow);
-                DialogueResponseButton responseButton = instantiated.GetComponent<DialogueResponseButton>();
-                responseButton.Initialize(dialogueResponse, conversationUI);
+                Instantiate(dialogueResponsePrefab, currentRow).Initialize(this, response);
             }
+        }
+
+        public void Submit(BasicResponse response)
+        {
+            if (_submitted) return;
+            response?.Execute();
+            _submitted = true;
         }
 
         public void Destroy()

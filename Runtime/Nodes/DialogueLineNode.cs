@@ -14,7 +14,6 @@ namespace IronMountain.DialogueSystem.Nodes
 		[Input] public Connection input;
 		[Output] public Connection output;
 		
-		[SerializeField] private SpeakerType speakerType;
 		[SerializeField] private Speaker customSpeaker;
 		[SerializeField] [TextArea] private string simpleText;
 		[SerializeField] private AudioClip audioClip;
@@ -23,10 +22,18 @@ namespace IronMountain.DialogueSystem.Nodes
 		[SerializeField] protected SpeakerPortraitCollection.PortraitType portrait;
 		[SerializeField] protected AnimationType animation;
 		[SerializeField] protected ResourceSprite sprite;
+		
+		public Speaker CustomSpeaker
+		{
+			get => customSpeaker;
+			set => customSpeaker = value;
+		}
 
-		public SpeakerType SpeakerType => speakerType;
-
-		public Speaker CustomSpeaker => customSpeaker;
+		public string SimpleText
+		{
+			get => simpleText;
+			set => simpleText = value;
+		}
 
 		public string Text
 		{
@@ -55,11 +62,8 @@ namespace IronMountain.DialogueSystem.Nodes
 
 		protected virtual DialogueLine GetDialogueLine(ConversationPlayer conversationUI)
 		{
-			ISpeaker speaker = speakerType == SpeakerType.Default
-				? conversationUI.DefaultSpeaker
-				: customSpeaker;
 			return new (
-				speaker,
+				customSpeaker ? customSpeaker : conversationUI.DefaultSpeaker,
 				Text,
 				AudioClip,
 				portrait,
@@ -91,7 +95,7 @@ namespace IronMountain.DialogueSystem.Nodes
 		{
 			base.OnNodeEnter(conversationUI);
 			DialogueLine dialogueLine = GetDialogueLine(conversationUI);
-			conversationUI.PlayDialogueLine(dialogueLine);
+			conversationUI.HandleDialogueLine(dialogueLine);
 			DialogueNode nextHaltingNode = GetNextHaltingNode(conversationUI);
 			if (nextHaltingNode is DialogueResponseBlockNode) conversationUI.CurrentNode = GetNextNode(conversationUI);
 		}

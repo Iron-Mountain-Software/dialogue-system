@@ -1,5 +1,6 @@
 using IronMountain.Conditions;
 using IronMountain.Conditions.Editor;
+using IronMountain.DialogueSystem.Editor.Windows;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,9 +17,9 @@ namespace IronMountain.DialogueSystem.Editor
         private GUIStyle _invalidContainer;
         private GUIStyle _header;
         
-        private void OnEnable()
+        public void OnEnable()
         {
-            _conversation = (Conversation) target;
+            _conversation = target ? (Conversation) target : null;
             
             Texture2D validContainerTexture = new Texture2D(1, 1);
             validContainerTexture.SetPixel(0,0, new Color(0.2f, 0.2f, 0.2f));

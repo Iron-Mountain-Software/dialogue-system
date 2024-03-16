@@ -8,7 +8,7 @@ namespace IronMountain.DialogueSystem.Nodes.ResponseGenerators
 {
     [NodeWidth(200)]
     [NodeTint("#80461B")]
-    public class ResponseGeneratorActiveDialogue : ResponseGenerator
+    public class DialogueResponseNodeActiveDialogue : DialogueResponseNode
     {
         public override string Name => "ACTIVE CONVERSATIONS";
     

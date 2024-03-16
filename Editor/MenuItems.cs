@@ -1,3 +1,4 @@
+using IronMountain.DialogueSystem.Editor.Windows;
 using UnityEditor;
 
 namespace IronMountain.DialogueSystem.Editor
@@ -7,7 +8,7 @@ namespace IronMountain.DialogueSystem.Editor
         [MenuItem("Iron Mountain/Conversations Window", priority = 2)]
         static void OpenEditorWindow()
         {
-            ConversationsEditorWindow.Open();
+            ConversationsWindow.Open();
         }
     }
 }

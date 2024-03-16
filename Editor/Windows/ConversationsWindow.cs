@@ -1,16 +1,16 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using IronMountain.DialogueSystem.Nodes;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Localization.Settings;
 using XNode;
 
-namespace IronMountain.DialogueSystem.Editor
+namespace IronMountain.DialogueSystem.Editor.Windows
 {
-    public class ConversationsEditorWindow : EditorWindow
+    public class ConversationsWindow : EditorWindow
     {
-        private static ConversationsEditorWindow Current { get; set; }
+        private static ConversationsWindow Current { get; set; }
 
         private ConversationListEditor _conversationListEditor;
         private UnityEditor.Editor _selectedConversationEditor;
@@ -27,7 +27,7 @@ namespace IronMountain.DialogueSystem.Editor
 
         public static void Open()
         {
-            Current = GetWindow<ConversationsEditorWindow>("Conversations", true);
+            Current = GetWindow<ConversationsWindow>("Conversations", true);
             Current.minSize = new Vector2(800, 700);
             Current.RefreshConversationsList();
         }
@@ -91,15 +91,14 @@ namespace IronMountain.DialogueSystem.Editor
         private void DrawSidebar()
         {
             EditorGUILayout.BeginVertical(GUILayout.ExpandWidth(true));
-            
-            if (GUILayout.Button("Refresh"))
+
+            if (GUILayout.Button("New Conversation"))
             {
-                RefreshConversationsList();
+                NewConversationWindow.Open();
             }
             
-            if (GUILayout.Button("Create New"))
+            if (!GUILayout.Button("Refresh"))
             {
-                AddConversationMenu.Open();
                 RefreshConversationsList();
             }
 

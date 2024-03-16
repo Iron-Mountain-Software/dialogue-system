@@ -7,9 +7,9 @@ using XNode;
 
 namespace IronMountain.DialogueSystem.Nodes.ResponseGenerators
 {
-    [NodeWidth(200)]
+    [NodeWidth(300)]
     [NodeTint("#996515")]
-    public abstract class ResponseGenerator : DialogueNode
+    public abstract class DialogueResponseNode : DialogueNode
     {
         [Input] public Connection input;
         [Output] public Connection output;

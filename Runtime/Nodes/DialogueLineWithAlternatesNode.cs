@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using IronMountain.DialogueSystem.Speakers;
 using IronMountain.DialogueSystem.UI;
 using UnityEngine;
 
@@ -13,14 +12,11 @@ namespace IronMountain.DialogueSystem.Nodes
         
         protected override DialogueLine GetDialogueLine(ConversationPlayer conversationUI)
         {
-            ISpeaker speaker = SpeakerType == SpeakerType.Default
-                ? conversationUI.DefaultSpeaker
-                : CustomSpeaker;
             int random = Random.Range(-1, alternateContent.Count);
             if (random == -1)
             {
                 return new DialogueLine(
-                    speaker,
+                    CustomSpeaker ? CustomSpeaker : conversationUI.DefaultSpeaker,
                     Text,
                     AudioClip,
                     portrait,
@@ -29,7 +25,7 @@ namespace IronMountain.DialogueSystem.Nodes
                 );
             }
             return new DialogueLine(
-                speaker,
+                CustomSpeaker ? CustomSpeaker : conversationUI.DefaultSpeaker,
                 alternateContent[random].Text,
                 alternateContent[random].AudioClip,
                 portrait,

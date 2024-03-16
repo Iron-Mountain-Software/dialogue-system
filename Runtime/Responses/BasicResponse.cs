@@ -18,7 +18,7 @@ namespace IronMountain.DialogueSystem.Responses
 
         public IResponseStyle Style { get; protected set; }
 
-        public virtual void ExecuteResponse()
+        public virtual void Execute()
         {
             if (ConversationPlayer) ConversationPlayer.CurrentNode = SourceNode;
         }

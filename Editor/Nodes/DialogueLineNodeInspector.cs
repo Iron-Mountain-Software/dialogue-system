@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using IronMountain.DialogueSystem.Nodes;
-using IronMountain.DialogueSystem.Speakers;
 using UnityEditor;
 using UnityEngine;
 using XNode;
@@ -35,12 +32,8 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
             NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("output"));
             EditorGUILayout.EndHorizontal();
 
-            NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("speakerType"));
-            if (((DialogueLineNode) target).SpeakerType == SpeakerType.Custom)
-            {
-                NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("customSpeaker"));
-            }
-            
+            NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("customSpeaker"));
+
             EditorGUILayout.Space(10);
             
             EditorGUILayout.BeginHorizontal();
@@ -59,7 +52,7 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
             }
             else
             {
-                NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("simpleText"), new GUIContent("Text"));
+                NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("simpleText"));
                 
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label("Narration", GUILayout.Width(55));

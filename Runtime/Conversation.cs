@@ -68,6 +68,12 @@ namespace IronMountain.DialogueSystem
         public bool PrioritizeOverDefault => prioritizeOverDefault;
         public int Priority => priority;
 
+        public string DefaultInvokingLine
+        {
+            get => defaultInvokingLine;
+            set => defaultInvokingLine = value;
+        }
+
         public string InvokingLine
         {
             get

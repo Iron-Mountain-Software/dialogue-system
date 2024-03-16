@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace IronMountain.DialogueSystem.UI
+namespace IronMountain.DialogueSystem.UI.Responses
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Outline))]
@@ -19,20 +19,20 @@ namespace IronMountain.DialogueSystem.UI
 
         private void OnEnable()
         {
-            if (_dialogueResponseButton) _dialogueResponseButton.OnBasicResponseChanged += Refresh;
+            if (_dialogueResponseButton) _dialogueResponseButton.OnResponseChanged += Refresh;
             Refresh();
         }
 
         private void OnDisable()
         {
-            if (_dialogueResponseButton) _dialogueResponseButton.OnBasicResponseChanged -= Refresh;
+            if (_dialogueResponseButton) _dialogueResponseButton.OnResponseChanged -= Refresh;
         }
 
         private void Refresh()
         {
             if (!_outline) return;
-            _outline.effectColor = _dialogueResponseButton && _dialogueResponseButton.BasicResponse is {Style: { }}
-                ? _dialogueResponseButton.BasicResponse.Style.ButtonColorSecondary
+            _outline.effectColor = _dialogueResponseButton && _dialogueResponseButton.Response is {Style: { }}
+                ? _dialogueResponseButton.Response.Style.ButtonColorSecondary
                 : Color.clear;
         }
     }

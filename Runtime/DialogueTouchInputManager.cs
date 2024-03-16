@@ -9,10 +9,7 @@ namespace IronMountain.DialogueSystem
         [SerializeField] private ConversationPlayer conversationUI;
         [SerializeField] private DialogueLineTyper dialogueLineTyper;
 
-        private void Awake()
-        {
-            if (!conversationUI) conversationUI = GetComponentInParent<ConversationPlayer>();
-        }
+        private void Awake() => OnValidate();
 
         private void OnValidate()
         {
@@ -30,7 +27,7 @@ namespace IronMountain.DialogueSystem
                 {
                     dialogueLineTyper.ForceFinishAnimating();
                 }
-                else conversationUI.PlayNextDialogueNode();
+                else conversationUI.PlayNextNode();
             }
         }
     }

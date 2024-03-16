@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using IronMountain.DialogueSystem.Nodes;
+using IronMountain.DialogueSystem.Nodes.ResponseGenerators;
 using IronMountain.DialogueSystem.Speakers;
+using IronMountain.DialogueSystem.UI.Responses;
 using UnityEngine;
 
 namespace IronMountain.DialogueSystem.UI
@@ -11,10 +13,12 @@ namespace IronMountain.DialogueSystem.UI
         public static event Action<Conversation> OnAnyConversationStarted;
         public static event Action<Conversation> OnAnyConversationEnded;
         public static event Action<Conversation, DialogueLine> OnAnyDialogueLinePlayed;
+        public static event Action<Conversation, DialogueResponseBlockNode> OnAnyDialogueResponseBlockEntered;
 
         public event Action OnDefaultSpeakerChanged;
         public event Action OnConversationChanged;
         public event Action<Conversation, DialogueLine> OnDialogueLinePlayed;
+        public event Action<Conversation, DialogueResponseBlockNode> OnDialogueResponseBlockEntered;
 
         public event Action OnClosed;
         
@@ -23,6 +27,7 @@ namespace IronMountain.DialogueSystem.UI
         [SerializeField] private bool continueAfterNarration = false;
         [SerializeField] private bool selfDestruct = true;
         [SerializeField] private float destructionDelay = .5f;
+        [Space]
         [SerializeField] private Transform responseBlockParent;
         [SerializeField] private DialogueResponseBlock responseBlockPrefab;
         
@@ -30,6 +35,7 @@ namespace IronMountain.DialogueSystem.UI
         private ISpeaker _defaultSpeaker;
         private DialogueNode _currentNode;
         private DialogueLine _currentDialogueLine;
+        private DialogueResponseBlockNode _currentResponseBlockNode;
         private DialogueResponseBlock _currentResponseBlock;
 
         public int FrameOfLastProgression { get; private set; }
@@ -87,7 +93,22 @@ namespace IronMountain.DialogueSystem.UI
                 }
             }
         }
-
+        
+        public DialogueResponseBlockNode CurrentDialogueResponseBlockNode
+        {
+            get => _currentResponseBlockNode;
+            set
+            {
+                if (_currentResponseBlockNode == value) return;
+                _currentResponseBlockNode = value;
+                if (_currentResponseBlockNode != null)
+                {
+                    OnDialogueResponseBlockEntered?.Invoke(conversation, _currentResponseBlockNode);
+                    OnAnyDialogueResponseBlockEntered?.Invoke(conversation, _currentResponseBlockNode);
+                }
+            }
+        }
+        
         private void OnEnable() => ConversationPlayersManager.Register(this);
         private void OnDisable() => ConversationPlayersManager.Unregister(this);
         
@@ -123,7 +144,7 @@ namespace IronMountain.DialogueSystem.UI
             if (selfDestruct) Destroy(gameObject, destructionDelay);
         }
 
-        public void PlayDialogueLine(DialogueLine dialogueLine)
+        public void HandleDialogueLine(DialogueLine dialogueLine)
         {
             StopAllCoroutines();
             CurrentDialogueLine = dialogueLine;
@@ -132,34 +153,53 @@ namespace IronMountain.DialogueSystem.UI
                 float seconds = dialogueLine != null && dialogueLine.AudioClip 
                     ? dialogueLine.AudioClip.length 
                     : 2f;
-                StartCoroutine(WaitToContinue(seconds));
+                StartCoroutine(WaitToContinue(seconds, PlayNextNode));
+            }
+        }
+        
+        public void EnterDialogueResponseBlockNode(DialogueResponseBlockNode dialogueResponseBlockNode)
+        {
+            StopAllCoroutines();
+            CurrentDialogueResponseBlockNode = dialogueResponseBlockNode;
+            CloseCurrentResponseBlock();
+            SpawnCurrentResponseBlock();
+            if (CurrentDialogueResponseBlockNode && CurrentDialogueResponseBlockNode.IsTimed)
+            {
+                StartCoroutine(WaitToContinue(CurrentDialogueResponseBlockNode.Seconds, PlayDefaultResponseNode));
             }
         }
 
-        private IEnumerator WaitToContinue(float seconds)
-        {
-            yield return new WaitForSeconds(seconds);
-            PlayNextDialogueNode();
-        }
-
-        public void GenerateResponseBlock(DialogueResponseBlockNode dialogueResponseBlockNode)
-        {
-            if (_currentResponseBlock || !responseBlockPrefab) return;
-            Transform parent = responseBlockParent ? responseBlockParent : transform;
-            _currentResponseBlock = Instantiate(responseBlockPrefab, parent);
-            _currentResponseBlock.Initialize(dialogueResponseBlockNode, this);
-        }
-
-        public void DestroyResponseBlock()
+        public void CloseCurrentResponseBlock()
         {
             if (_currentResponseBlock) _currentResponseBlock.Destroy();
             _currentResponseBlock = null;
         }
 
-        public void PlayNextDialogueNode()
+        private void SpawnCurrentResponseBlock()
+        {
+            if (!CurrentDialogueResponseBlockNode || !responseBlockPrefab) return;
+            Transform parent = responseBlockParent ? responseBlockParent : transform;
+            _currentResponseBlock = Instantiate(responseBlockPrefab, parent);
+            _currentResponseBlock.Initialize(CurrentDialogueResponseBlockNode, this);
+        }
+
+        private IEnumerator WaitToContinue(float seconds, Action onComplete)
+        {
+            yield return new WaitForSeconds(seconds);
+            onComplete?.Invoke();
+        }
+
+        public void PlayNextNode()
         {
             if (!CurrentNode) return;
             DialogueNode nextNode = CurrentNode.GetNextNode(this);
+            if (nextNode) CurrentNode = nextNode;
+        }
+        
+        public void PlayDefaultResponseNode()
+        {
+            if (!CurrentDialogueResponseBlockNode) return;
+            DialogueNode nextNode = CurrentDialogueResponseBlockNode.GetDefaultResponseNode();
             if (nextNode) CurrentNode = nextNode;
         }
 
@@ -169,6 +209,7 @@ namespace IronMountain.DialogueSystem.UI
             CurrentNode = null;
             Conversation = null;
             CurrentDialogueLine = null;
+            CurrentDialogueResponseBlockNode = null;
         }
 
 #if UNITY_EDITOR

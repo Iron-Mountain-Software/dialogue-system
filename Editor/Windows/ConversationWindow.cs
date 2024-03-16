@@ -1,13 +1,13 @@
-using IronMountain.DialogueSystem.Editor.Nodes;
+using System;
+using System.Collections.Generic;
 using IronMountain.DialogueSystem.Nodes;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
-using UnityEngineInternal;
-using XNode;
 using XNodeEditor;
+using Object = UnityEngine.Object;
 
-namespace IronMountain.DialogueSystem.Editor
+namespace IronMountain.DialogueSystem.Editor.Windows
 {
     public class ConversationEditorWindow : NodeEditorWindow
     {
@@ -23,10 +23,12 @@ namespace IronMountain.DialogueSystem.Editor
         private Conversation _conversation;
         private UnityEditor.Editor _selectedConversationEditor;
         private Vector2 _sidebarScroll = Vector2.zero;
-        
+
         private Vector2 _cachedPanOffset;
         private float _cachedZoom;
 
+        public Vector2 GridCenterPosition => WindowToGridPosition(new Vector2(position.width / 2f, position.height / 2f));
+        
         [OnOpenAsset(-1)]
         public static bool Open(int instanceID, int line)
         {
@@ -36,15 +38,17 @@ namespace IronMountain.DialogueSystem.Editor
             return true;
         }
         
-        public static void Open(Conversation conversation)
+        public static ConversationEditorWindow Open(Conversation conversation)
         {
-            if (!conversation) return;
-            ConversationEditorWindow window = GetWindow(typeof(ConversationEditorWindow), false, "Conversation Editor", true) as ConversationEditorWindow;
+            if (!conversation) return null;
+            ConversationEditorWindow window = GetWindow<ConversationEditorWindow>("Conversation", true, typeof(NewConversationWindow));
             window.minSize = new Vector2(500, 400);
             window.wantsMouseMove = true;
             window.graph = conversation;
             window._conversation = conversation;
             window.Initialize();
+            window.OnGUI();
+            return window;
         }
 
         private void Initialize()
@@ -102,32 +106,55 @@ namespace IronMountain.DialogueSystem.Editor
             GUILayout.Label("CREATE:", _h1, GUILayout.Width(90));
             if (GUILayout.Button("Start", GUILayout.Width(45)))
             {
-                graphEditor.CreateNode(typeof(DialogueBeginningNode), WindowToGridPosition(new Vector2(position.width / 2f, position.height / 2f)));
+                graphEditor.CreateNode(typeof(DialogueBeginningNode), GridCenterPosition);
             }
             if (GUILayout.Button("End", GUILayout.Width(45)))
             {
-                graphEditor.CreateNode(typeof(DialogueEndingNode), WindowToGridPosition(new Vector2(position.width / 2f, position.height / 2f)));
+                graphEditor.CreateNode(typeof(DialogueEndingNode), GridCenterPosition);
             }
             if (GUILayout.Button("Line", GUILayout.Width(45)))
             {
-                AddDialogueLineNodeMenu.Open(graphEditor, WindowToGridPosition(new Vector2(position.width / 2f, position.height / 2f)));
+                RenderCreateMenu(TypeIndex.DialogueActionNodeTypes);
+                if (TypeIndex.DialogueLineNodeTypes.Count > 1)
+                {
+                    RenderCreateMenu(TypeIndex.DialogueLineNodeTypes);
+                }
+                else graphEditor.CreateNode(typeof(DialogueLineNode), GridCenterPosition);
+            }
+            if (GUILayout.Button("Lines", GUILayout.Width(45)))
+            {
+                DialogueLinesCreatorWindow.Open(this);
             }
             if (GUILayout.Button("Action", GUILayout.Width(55)))
             {
-                AddDialogueActionNodeMenu.Open(graphEditor, WindowToGridPosition(new Vector2(position.width / 2f, position.height / 2f)));
+                RenderCreateMenu(TypeIndex.DialogueActionNodeTypes);
             }
             if (GUILayout.Button("Condition", GUILayout.Width(70)))
             {
-                AddDialogueConditionNodeMenu.Open(graphEditor, WindowToGridPosition(new Vector2(position.width / 2f, position.height / 2f)));
+                RenderCreateMenu(TypeIndex.DialogueConditionNodeTypes);
             }
             if (GUILayout.Button("Pass", GUILayout.Width(45)))
             {
-                graphEditor.CreateNode(typeof(DialoguePassNode), WindowToGridPosition(new Vector2(position.width / 2f, position.height / 2f)));
+                graphEditor.CreateNode(typeof(DialoguePassNode), GridCenterPosition);
             }
             GUILayout.EndHorizontal();
             GUILayout.EndArea();
 
             if (_showDetails) DrawInformation();
+        }
+        
+        private void RenderCreateMenu(List<Type> types)
+        {
+            if (types == null || types.Count == 0) return;
+            GenericMenu menu = new GenericMenu();
+            foreach (Type derivedType in types)
+            {
+                menu.AddItem(new GUIContent(
+                        "Add " + derivedType.Name),
+                    false,
+                    () => graphEditor.CreateNode(derivedType, GridCenterPosition));
+            }
+            menu.ShowAsContext();
         }
 
         private void DrawInformation()

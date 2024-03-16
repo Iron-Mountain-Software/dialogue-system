@@ -7,7 +7,7 @@ namespace IronMountain.DialogueSystem.Nodes
     public abstract class DialogueNode : Node
     {
         [SerializeField] [HideInInspector] private string id;
-
+        
         public abstract string Name { get; }
         public abstract DialogueNode GetNextNode(ConversationPlayer conversationUI);
 

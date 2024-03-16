@@ -11,6 +11,7 @@ namespace IronMountain.DialogueSystem.Speakers
 
         [SerializeField] private string id;
         [SerializeField] private string speakerName;
+        [SerializeField] private List<string> aliases;
         [SerializeField] private Color color;
         [SerializeField] private Conversation defaultConversation;
         [SerializeField] private List<Conversation> conversations = new ();
@@ -19,6 +20,7 @@ namespace IronMountain.DialogueSystem.Speakers
         
         public string ID => id;
         public string SpeakerName => speakerName;
+        public List<string> Aliases => aliases;
         public Color Color => color;
         public Conversation DefaultConversation => defaultConversation;
         public List<Conversation> Conversations => conversations;

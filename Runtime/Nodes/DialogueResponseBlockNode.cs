@@ -2,61 +2,75 @@ using System;
 using System.Collections.Generic;
 using IronMountain.DialogueSystem.Nodes.Conditions;
 using IronMountain.DialogueSystem.Nodes.ResponseGenerators;
+using IronMountain.DialogueSystem.Responses;
 using IronMountain.DialogueSystem.UI;
 using UnityEngine;
 using XNode;
 
 namespace IronMountain.DialogueSystem.Nodes
 {
-    [NodeWidth(160)]
+    [NodeWidth(235)]
     [NodeTint("#0061CC")]
     public class DialogueResponseBlockNode : DialogueNode
     {
         public static event Action<DialogueResponseBlockNode, ConversationPlayer> OnDialogueResponseBlockEntered;
         public static event Action<DialogueResponseBlockNode, ConversationPlayer> OnDialogueResponseBlockExited;
-	
+        
         [Input] public Connection input;
-        [Output] public Connection output;
+        [Output] public Connection responses;
+        [Output] public Connection defaultResponse;
 
-        public override string Name => "Response Generators";
+        [SerializeField] private bool isTimed;
+        [SerializeField] private float seconds = 15;
+
+        public override string Name => "Responses";
+        
+        public bool IsTimed => isTimed;
+        public float Seconds => isTimed ? seconds : Mathf.Infinity;
 
         public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
         {
             return null;
         }
         
-        public List<ResponseGenerator> GetResponseGenerators()
+        public DialogueNode GetDefaultResponseNode()
         {
-            NodePort outputPort = GetOutputPort("output");
+            return GetOutputPort("defaultResponse")?.Connection?.node as DialogueNode;
+        }
+        
+        public List<BasicResponse> GetResponses(ConversationPlayer conversationUI)
+        {
+            List<BasicResponse> responses = new List<BasicResponse>();
+            NodePort outputPort = GetOutputPort("responses");
             List<NodePort> connectionPorts = outputPort?.GetConnections();
-            List<ResponseGenerator> responseGenerators = new List<ResponseGenerator>();
+            if (connectionPorts == null || connectionPorts.Count == 0) return responses;
             foreach (NodePort connectionPort in connectionPorts)
             {
-                if (connectionPort.node is ResponseGenerator responseGenerator)
+                if (connectionPort is {node: DialogueResponseNode responseGenerator})
                 {
-                    responseGenerators.Add(responseGenerator);
+                    responses.AddRange(responseGenerator.GetDialogueResponses(conversationUI));
                 }
             }
-            return responseGenerators;
+            return responses;
         }
-
+        
         public override void OnNodeEnter(ConversationPlayer conversationUI)
         {
             base.OnNodeEnter(conversationUI);
-            conversationUI.GenerateResponseBlock(this);
+            conversationUI.EnterDialogueResponseBlockNode(this);
         }
 
         public override void OnNodeExit(ConversationPlayer conversationUI)
         {
             base.OnNodeExit(conversationUI);
-            conversationUI.DestroyResponseBlock();
+            conversationUI.CloseCurrentResponseBlock();
         }
         
         public override void OnCreateConnection(NodePort @from, NodePort to)
         {
             NodePort myInputPort = GetInputPort("input");
             NodePort myOutputPort = GetOutputPort("output");
-            if (from == myOutputPort && !(to.node is ResponseGenerator || to.node is Condition))
+            if (from == myOutputPort && !(to.node is DialogueResponseNode || to.node is Condition))
             {
                 from.Disconnect(to);
                 Debug.LogError("Node_DialogueResponseBlock can only output to ResponseGenerator.");
