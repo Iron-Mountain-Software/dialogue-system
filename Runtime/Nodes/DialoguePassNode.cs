@@ -2,14 +2,14 @@ using IronMountain.DialogueSystem.UI;
 
 namespace IronMountain.DialogueSystem.Nodes
 {
-    [NodeWidth(100)]
+    [NodeWidth(120)]
     [NodeTint("#656565")]
     public class DialoguePassNode : DialogueNode
     {
         [Input] public Connection input;
         [Output] public Connection output;
 
-        public override string Name => "PASS";
+        public override string Name => "Pass";
 
         public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
         {

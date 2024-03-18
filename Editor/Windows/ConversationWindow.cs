@@ -9,8 +9,10 @@ using Object = UnityEngine.Object;
 
 namespace IronMountain.DialogueSystem.Editor.Windows
 {
-    public class ConversationEditorWindow : NodeEditorWindow
+    public class ConversationEditor : NodeEditorWindow
     {
+        private static readonly Vector2 MinSize = new (500, 400);
+
         private static readonly Color SideBarColor = new Color(0f, 0f, 0f, 0.85f);
         private Texture2D _sideBarTexture;
         private GUIStyle _h1;
@@ -38,16 +40,23 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             return true;
         }
         
-        public static ConversationEditorWindow Open(Conversation conversation)
+        public static ConversationEditor Open()
         {
-            if (!conversation) return null;
-            ConversationEditorWindow window = GetWindow<ConversationEditorWindow>("Conversation", true, typeof(NewConversationWindow));
-            window.minSize = new Vector2(500, 400);
+            ConversationEditor window = GetWindow<ConversationEditor>(
+                "Conversation", true, 
+                typeof(ConversationIndex));
+            window.minSize = MinSize;
             window.wantsMouseMove = true;
-            window.graph = conversation;
-            window._conversation = conversation;
             window.Initialize();
             window.OnGUI();
+            return window;
+        }
+        
+        public static ConversationEditor Open(Conversation conversation)
+        {
+            ConversationEditor window = Open();
+            window.graph = conversation;
+            window._conversation = conversation;
             return window;
         }
 
@@ -104,28 +113,15 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             }
             GUILayout.Label(" " + _conversation.name, _h1);
             GUILayout.Label("CREATE:", _h1, GUILayout.Width(90));
-            if (GUILayout.Button("Start", GUILayout.Width(45)))
-            {
-                graphEditor.CreateNode(typeof(DialogueBeginningNode), GridCenterPosition);
-            }
-            if (GUILayout.Button("End", GUILayout.Width(45)))
-            {
-                graphEditor.CreateNode(typeof(DialogueEndingNode), GridCenterPosition);
-            }
-            if (GUILayout.Button("Line", GUILayout.Width(45)))
-            {
-                RenderCreateMenu(TypeIndex.DialogueActionNodeTypes);
-                if (TypeIndex.DialogueLineNodeTypes.Count > 1)
-                {
-                    RenderCreateMenu(TypeIndex.DialogueLineNodeTypes);
-                }
-                else graphEditor.CreateNode(typeof(DialogueLineNode), GridCenterPosition);
-            }
             if (GUILayout.Button("Lines", GUILayout.Width(45)))
             {
                 DialogueLinesCreatorWindow.Open(this);
             }
-            if (GUILayout.Button("Action", GUILayout.Width(55)))
+            if (GUILayout.Button("Responses", GUILayout.Width(75)))
+            {
+                graphEditor.CreateNode(typeof(DialogueResponseBlockNode), GridCenterPosition);
+            }
+            if (GUILayout.Button("Actions", GUILayout.Width(60)))
             {
                 RenderCreateMenu(TypeIndex.DialogueActionNodeTypes);
             }
@@ -133,9 +129,15 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             {
                 RenderCreateMenu(TypeIndex.DialogueConditionNodeTypes);
             }
-            if (GUILayout.Button("Pass", GUILayout.Width(45)))
+            if (GUILayout.Button("Other", GUILayout.Width(45)))
             {
-                graphEditor.CreateNode(typeof(DialoguePassNode), GridCenterPosition);
+                RenderCreateMenu(new List<Type>()
+                {
+                    typeof(DialogueBeginningNode),
+                    typeof(DialogueEndingNode),
+                    typeof(DialoguePassNode),
+                    typeof(DialogueRandomSelectorNode),
+                });
             }
             GUILayout.EndHorizontal();
             GUILayout.EndArea();

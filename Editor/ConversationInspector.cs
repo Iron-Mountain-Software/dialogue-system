@@ -67,7 +67,7 @@ namespace IronMountain.DialogueSystem.Editor
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Open", GUILayout.Height(30)))
             {
-                ConversationEditorWindow.Open(_conversation);
+                ConversationEditor.Open(_conversation);
             }
             if (GUILayout.Button("Select", GUILayout.MinHeight(30)))
             {

@@ -24,7 +24,9 @@ namespace IronMountain.DialogueSystem.UI
         
         [SerializeField] private Conversation conversation;
         [SerializeField] private bool playOnStart = true;
-        [SerializeField] private bool continueAfterNarration = false;
+        [SerializeField] private bool autoAdvance = false;
+        [SerializeField] private float autoAdvanceSeconds = 3f;
+        [Space]
         [SerializeField] private bool selfDestruct = true;
         [SerializeField] private float destructionDelay = .5f;
         [Space]
@@ -101,14 +103,17 @@ namespace IronMountain.DialogueSystem.UI
             {
                 if (_currentResponseBlockNode == value) return;
                 _currentResponseBlockNode = value;
-                if (_currentResponseBlockNode != null)
+                if (_currentResponseBlockNode)
                 {
                     OnDialogueResponseBlockEntered?.Invoke(conversation, _currentResponseBlockNode);
                     OnAnyDialogueResponseBlockEntered?.Invoke(conversation, _currentResponseBlockNode);
                 }
             }
         }
-        
+
+        public float TotalSecondsToRespond => _currentResponseBlockNode ? _currentResponseBlockNode.Seconds : Mathf.Infinity;
+        public float SecondsRemainingToRespond { get; set; }
+
         private void OnEnable() => ConversationPlayersManager.Register(this);
         private void OnDisable() => ConversationPlayersManager.Unregister(this);
         
@@ -138,6 +143,17 @@ namespace IronMountain.DialogueSystem.UI
             Conversation.OnConversationStarted();
         }
 
+        private void Update()
+        {
+            if (CurrentDialogueResponseBlockNode && CurrentDialogueResponseBlockNode.IsTimed)
+            {
+                SecondsRemainingToRespond -= Time.deltaTime;
+                if (SecondsRemainingToRespond > 0) return;
+                DialogueNode nextNode = CurrentDialogueResponseBlockNode.GetDefaultResponseNode();
+                if (nextNode) CurrentNode = nextNode;
+            }
+        }
+
         public void Close()
         {
             OnClosed?.Invoke();
@@ -148,11 +164,11 @@ namespace IronMountain.DialogueSystem.UI
         {
             StopAllCoroutines();
             CurrentDialogueLine = dialogueLine;
-            if (continueAfterNarration)
+            if (autoAdvance)
             {
                 float seconds = dialogueLine != null && dialogueLine.AudioClip 
                     ? dialogueLine.AudioClip.length 
-                    : 2f;
+                    : autoAdvanceSeconds;
                 StartCoroutine(WaitToContinue(seconds, PlayNextNode));
             }
         }
@@ -161,12 +177,9 @@ namespace IronMountain.DialogueSystem.UI
         {
             StopAllCoroutines();
             CurrentDialogueResponseBlockNode = dialogueResponseBlockNode;
+            SecondsRemainingToRespond = TotalSecondsToRespond;
             CloseCurrentResponseBlock();
             SpawnCurrentResponseBlock();
-            if (CurrentDialogueResponseBlockNode && CurrentDialogueResponseBlockNode.IsTimed)
-            {
-                StartCoroutine(WaitToContinue(CurrentDialogueResponseBlockNode.Seconds, PlayDefaultResponseNode));
-            }
         }
 
         public void CloseCurrentResponseBlock()
@@ -193,13 +206,6 @@ namespace IronMountain.DialogueSystem.UI
         {
             if (!CurrentNode) return;
             DialogueNode nextNode = CurrentNode.GetNextNode(this);
-            if (nextNode) CurrentNode = nextNode;
-        }
-        
-        public void PlayDefaultResponseNode()
-        {
-            if (!CurrentDialogueResponseBlockNode) return;
-            DialogueNode nextNode = CurrentDialogueResponseBlockNode.GetDefaultResponseNode();
             if (nextNode) CurrentNode = nextNode;
         }
 

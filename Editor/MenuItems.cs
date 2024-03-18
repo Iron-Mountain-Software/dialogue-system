@@ -1,14 +1,16 @@
 using IronMountain.DialogueSystem.Editor.Windows;
 using UnityEditor;
+using UnityEngine;
+using XNodeEditor;
 
 namespace IronMountain.DialogueSystem.Editor
 {
     public static class MenuItems
     {
-        [MenuItem("Iron Mountain/Conversations Window", priority = 2)]
-        static void OpenEditorWindow()
+        [MenuItem("Iron Mountain/Dialogue System", priority = 2)]
+        public static void OpenIndex()
         {
-            ConversationsWindow.Open();
+            ConversationIndex.Open();
         }
     }
 }

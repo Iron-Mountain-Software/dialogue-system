@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 using IronMountain.DialogueSystem.Nodes;
@@ -8,31 +7,34 @@ using XNode;
 
 namespace IronMountain.DialogueSystem.Editor.Windows
 {
-    public class ConversationsWindow : EditorWindow
+    public class ConversationIndex : EditorWindow
     {
-        private static ConversationsWindow Current { get; set; }
+        private static readonly Vector2 MinSize = new (800, 300);
 
         private ConversationListEditor _conversationListEditor;
         private UnityEditor.Editor _selectedConversationEditor;
-        
-        private int _sidebarWidth = 450;
-        
-        private Rect _sidebarSection;
-        private Rect _bodySection;
-        
+
         private Vector2 _sidebarScroll = Vector2.zero;
-        private Vector2 _contentScroll = Vector2.zero;
         
         private readonly List<Conversation> _conversations = new();
 
-        public static void Open()
+        public static ConversationIndex Open()
         {
-            Current = GetWindow<ConversationsWindow>("Conversations", true);
-            Current.minSize = new Vector2(800, 700);
-            Current.RefreshConversationsList();
+            ConversationIndex window = GetWindow<ConversationIndex>(
+                "Conversations", true, 
+                typeof(NewConversationWindow), 
+                typeof(ConversationIndex));
+            window.minSize = MinSize;
+            return window;
+        }
+
+        private void OnEnable()
+        {
+            _conversationListEditor = new ConversationListEditor();
+            RefreshIndex();
         }
         
-        private void RefreshConversationsList()
+        private void RefreshIndex()
         {
             _conversations.Clear();
             AssetDatabase.Refresh();
@@ -45,65 +47,14 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             }
         }
 
-        private void OnEnable()
-        {
-            _conversationListEditor = new ConversationListEditor();
-        }
-
         private void OnGUI()
-        {
-            Current = this;
-            DrawLayouts();
-            
-            GUILayout.BeginArea(_sidebarSection);
-            DrawSidebar();
-            GUILayout.EndArea();
-            
-            GUILayout.BeginArea(_bodySection);
-            if (_conversationListEditor.SelectedConversation)
-            {
-                _contentScroll = GUILayout.BeginScrollView(_contentScroll);
-                UnityEditor.Editor.CreateCachedEditor(_conversationListEditor.SelectedConversation, null, ref _selectedConversationEditor);
-                _selectedConversationEditor.OnInspectorGUI();
-                GUILayout.EndScrollView();
-            }
-            else
-            {
-                GUILayout.Label("No conversation selected.");
-                _selectedConversationEditor = null;
-            }
-            GUILayout.EndArea();
-        }
-        
-        private void DrawLayouts()
-        {
-            _sidebarSection.x = 0;
-            _sidebarSection.y = 0;
-            _sidebarSection.width = _sidebarWidth;
-            _sidebarSection.height = Current.position.height;
-            
-            _bodySection.x = _sidebarWidth;
-            _bodySection.y = 0;
-            _bodySection.width = Current.position.width - _sidebarWidth;
-            _bodySection.height = Current.position.height;
-        }
-        
-        private void DrawSidebar()
         {
             EditorGUILayout.BeginVertical(GUILayout.ExpandWidth(true));
 
-            if (GUILayout.Button("New Conversation"))
-            {
-                NewConversationWindow.Open();
-            }
-            
-            if (!GUILayout.Button("Refresh"))
-            {
-                RefreshConversationsList();
-            }
-
             EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Export Dialogue Lines")) ExportDialogueLines();
+            if (GUILayout.Button("New Conversation")) NewConversationWindow.Open();
+            if (!GUILayout.Button("Refresh")) RefreshIndex();
+            if (GUILayout.Button("Export")) ExportDialogueLines();
             EditorGUILayout.EndHorizontal();
 
             _sidebarScroll.x = 0;

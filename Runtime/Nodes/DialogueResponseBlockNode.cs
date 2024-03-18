@@ -69,7 +69,7 @@ namespace IronMountain.DialogueSystem.Nodes
         public override void OnCreateConnection(NodePort @from, NodePort to)
         {
             NodePort myInputPort = GetInputPort("input");
-            NodePort myOutputPort = GetOutputPort("output");
+            NodePort myOutputPort = GetOutputPort("responses");
             if (from == myOutputPort && !(to.node is DialogueResponseNode || to.node is Condition))
             {
                 from.Disconnect(to);
@@ -87,7 +87,7 @@ namespace IronMountain.DialogueSystem.Nodes
         protected override bool ExtensionHasErrors()
         {
             return GetInputPort("input").ConnectionCount == 0
-                   || GetOutputPort("output").ConnectionCount < 1;
+                   || GetOutputPort("responses").ConnectionCount < 1;
         }
 		
 #endif

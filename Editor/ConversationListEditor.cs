@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using IronMountain.DialogueSystem.Editor.Windows;
 using UnityEditor;
 using UnityEngine;
 
@@ -106,6 +107,7 @@ namespace IronMountain.DialogueSystem.Editor
             EditorGUI.BeginDisabledGroup(conversation == SelectedConversation);
             if (GUILayout.Button(conversation.name))
             {
+                ConversationEditor.Open(conversation);
                 SelectedConversation = conversation;
             }
             EditorGUI.EndDisabledGroup();

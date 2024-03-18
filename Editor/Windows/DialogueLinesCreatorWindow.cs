@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using IronMountain.DialogueSystem.Editor.Indexers;
 using IronMountain.DialogueSystem.Nodes;
-using IronMountain.DialogueSystem.Speakers;
 using UnityEditor;
 using UnityEngine;
 using XNode;
@@ -15,33 +14,17 @@ namespace IronMountain.DialogueSystem.Editor.Windows
         private static string _speakerSeparator = ":";
         private static int _dialogueLineTypeIndex = 0;
 
-        private ConversationEditorWindow _conversationEditor;
+        private ConversationEditor _conversationEditor;
 
-        private string _lines;
+        private string _lines = string.Empty;
         private float _spacing = 40f;
         
-        private readonly List<Speaker> _speakers = new();
-
-        public static void Open(ConversationEditorWindow conversationEditor)
+        public static void Open(ConversationEditor conversationEditor)
         {
             DialogueLinesCreatorWindow window = GetWindow(typeof(DialogueLinesCreatorWindow), false, "Add Lines", true) as DialogueLinesCreatorWindow;
             window.minSize = new Vector2(500, 400);
             window.wantsMouseMove = true;
             window._conversationEditor = conversationEditor;
-            window.GetAllSpeakers();
-        }
-        
-        private void GetAllSpeakers()
-        {
-            _speakers.Clear();
-            AssetDatabase.Refresh();
-            string[] guids = AssetDatabase.FindAssets($"t:{typeof(Speaker)}");
-            for( int i = 0; i < guids.Length; i++ )
-            {
-                string assetPath = AssetDatabase.GUIDToAssetPath( guids[i] );
-                Speaker speaker = AssetDatabase.LoadAssetAtPath<Speaker>( assetPath );
-                if (speaker) _speakers.Add(speaker);
-            }
         }
         
         protected void OnGUI()
@@ -71,7 +54,7 @@ namespace IronMountain.DialogueSystem.Editor.Windows
                 {
                     if (segments.Length > 1)
                     {
-                        dialogueLineNode.CustomSpeaker = GetSpeaker(segments[0].Trim());
+                        dialogueLineNode.CustomSpeaker = SpeakersIndexer.Find(segments[0].Trim());
                     }
                     dialogueLineNode.SimpleText = segments[^1].Trim();
                 }
@@ -84,11 +67,6 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             }
             
             Close();
-        }
-
-        private Speaker GetSpeaker(string query)
-        {
-            return _speakers.FirstOrDefault(speaker => speaker && ((ISpeaker) speaker).UsesNameOrAlias(query));
         }
     }
 }

@@ -5,14 +5,14 @@ using Random = UnityEngine.Random;
 
 namespace IronMountain.DialogueSystem.Nodes
 {
-    [NodeWidth(150)]
+    [NodeWidth(120)]
     [NodeTint("#656565")]
     public class DialogueRandomSelectorNode : DialogueNode
     {
         [Input] public Connection input;
         [Output] public Connection output;
 
-        public override string Name => "Random Selector";
+        public override string Name => "Random";
 
         public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
         {

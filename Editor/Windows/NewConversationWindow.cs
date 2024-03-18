@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using IronMountain.DialogueSystem.Editor.Indexers;
 using IronMountain.DialogueSystem.Nodes;
-using IronMountain.DialogueSystem.Speakers;
 using UnityEditor;
 using UnityEngine;
 using XNode;
@@ -19,36 +18,20 @@ namespace IronMountain.DialogueSystem.Editor.Windows
         
         private string _folder = Path.Join("Scriptable Objects", "Conversations");
         private string _name = "New Conversation";
-        private string _defaultInvokingLine;
-        private string _lines;
+        private string _defaultInvokingLine = string.Empty;
+        private string _lines = string.Empty;
         private float _spacing = 40f;
 
         private Conversation _conversation;
-        private ConversationEditorWindow _conversationEditor;
-
-        private readonly List<Speaker> _speakers = new();
-
+        private ConversationEditor _conversationEditor;
+        
         public static void Open()
         {
             NewConversationWindow window = GetWindow(typeof(NewConversationWindow), false, "Create Conversation", true) as NewConversationWindow;
             window.minSize = new Vector2(500, 400);
             window.wantsMouseMove = true;
-            window.GetAllSpeakers();
         }
-        
-        private void GetAllSpeakers()
-        {
-            _speakers.Clear();
-            AssetDatabase.Refresh();
-            string[] guids = AssetDatabase.FindAssets($"t:{typeof(Speaker)}");
-            for( int i = 0; i < guids.Length; i++ )
-            {
-                string assetPath = AssetDatabase.GUIDToAssetPath( guids[i] );
-                Speaker speaker = AssetDatabase.LoadAssetAtPath<Speaker>( assetPath );
-                if (speaker) _speakers.Add(speaker);
-            }
-        }
-        
+
         protected void OnGUI()
         {
             EditorGUILayout.Space(10);
@@ -72,8 +55,7 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             
             EditorGUILayout.Space(10);
             
-            if (GUILayout.Button("Create!", GUILayout.Height(35))) CreateConversation();
-
+            if (GUILayout.Button("Create Conversation", GUILayout.Height(35))) CreateConversation();
         }
 
         private void CreateConversation()
@@ -88,11 +70,12 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             EditorUtility.SetDirty(_conversation);
             AssetDatabase.SaveAssets();
 
-            _conversationEditor = ConversationEditorWindow.Open(_conversation);
+            _conversationEditor = ConversationEditor.Open(_conversation);
             
             AssetDatabase.Refresh();
             EditorUtility.FocusProjectWindow();
             AddNodes();
+            Close();
         }
 
         private void CreateFolders()
@@ -114,8 +97,6 @@ namespace IronMountain.DialogueSystem.Editor.Windows
                 Debug.Log("NULL conversation");
                 return;
             }
-
-            //_conversation.AddNode<DialogueBeginningNode>();
             
             Vector2 lastSpawnedPosition = _conversationEditor.GridCenterPosition;
             Node lastSpawnedNode = AddNode(typeof(DialogueBeginningNode), ref lastSpawnedPosition);
@@ -132,7 +113,7 @@ namespace IronMountain.DialogueSystem.Editor.Windows
                 {
                     if (segments.Length > 1)
                     {
-                        dialogueLineNode.CustomSpeaker = GetSpeaker(segments[0].Trim());
+                        dialogueLineNode.CustomSpeaker = SpeakersIndexer.Find(segments[0].Trim());
                     }
                     dialogueLineNode.SimpleText = segments[^1].Trim();
                 }
@@ -146,17 +127,16 @@ namespace IronMountain.DialogueSystem.Editor.Windows
 
         private Node AddNode(Type type, ref Vector2 spawnPosition)
         {
-            Node node = _conversationEditor.graphEditor.CreateNode(type, spawnPosition);
+            Node node = _conversationEditor && _conversationEditor.graphEditor != null 
+                ? _conversationEditor.graphEditor.CreateNode(type, spawnPosition)
+                : _conversation.AddNode(type);
+            node.position = spawnPosition;
+
             if (type.GetCustomAttributes(typeof(Node.NodeWidthAttribute), true ).FirstOrDefault() is Node.NodeWidthAttribute widthAttribute)
             {
                 spawnPosition.x += widthAttribute.width + _spacing;
             }
             return node;
-        }
-
-        private Speaker GetSpeaker(string query)
-        {
-            return _speakers.FirstOrDefault(speaker => speaker && ((ISpeaker) speaker).UsesNameOrAlias(query));
         }
     }
 }
