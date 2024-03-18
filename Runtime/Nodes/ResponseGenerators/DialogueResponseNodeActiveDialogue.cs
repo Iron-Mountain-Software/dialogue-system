@@ -33,16 +33,15 @@ namespace IronMountain.DialogueSystem.Nodes.ResponseGenerators
                     && conversation != thisConversation
                     && !conversation.PrioritizeOverDefault)
                 {
-                    dialogueResponses.Add(new PlayConversationResponse(
+                    dialogueResponses.Add(new SwapConversationResponse(
                         conversationPlayer,
-                        this,
+                        thisSpeaker,
+                        conversation,
                         conversation.InvokingLine,
                         conversation.InvokingIcon,
                         row + rowOffset,
                         column,
-                        style,
-                        thisSpeaker,
-                        conversation));
+                        style));
                     rowOffset++;
                 }
             }

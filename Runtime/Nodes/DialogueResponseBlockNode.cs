@@ -40,18 +40,18 @@ namespace IronMountain.DialogueSystem.Nodes
         
         public List<BasicResponse> GetResponses(ConversationPlayer conversationUI)
         {
-            List<BasicResponse> responses = new List<BasicResponse>();
+            List<BasicResponse> responsePaths = new List<BasicResponse>();
             NodePort outputPort = GetOutputPort("responses");
             List<NodePort> connectionPorts = outputPort?.GetConnections();
-            if (connectionPorts == null || connectionPorts.Count == 0) return responses;
+            if (connectionPorts == null || connectionPorts.Count == 0) return responsePaths;
             foreach (NodePort connectionPort in connectionPorts)
             {
                 if (connectionPort is {node: DialogueResponseNode responseGenerator})
                 {
-                    responses.AddRange(responseGenerator.GetDialogueResponses(conversationUI));
+                    responsePaths.AddRange(responseGenerator.GetDialogueResponses(conversationUI));
                 }
             }
-            return responses;
+            return responsePaths;
         }
         
         public override void OnNodeEnter(ConversationPlayer conversationUI)

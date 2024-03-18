@@ -64,7 +64,7 @@ namespace IronMountain.DialogueSystem.Nodes.ResponseGenerators
                 );
             List<BasicResponse> dialogueResponses = new List<BasicResponse>
             {
-                new (conversationPlayer, this, Text, Sprite, row, column, style)
+                new BranchConversationResponse(conversationPlayer, this, Text, Sprite, row, column, style)
             };
             return dialogueResponses;
         }
