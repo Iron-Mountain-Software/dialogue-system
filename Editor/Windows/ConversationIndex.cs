@@ -9,7 +9,7 @@ namespace IronMountain.DialogueSystem.Editor.Windows
 {
     public class ConversationIndex : EditorWindow
     {
-        private static readonly Vector2 MinSize = new (800, 300);
+        private static readonly Vector2 MinSize = new (300, 500);
 
         private ConversationListEditor _conversationListEditor;
         private UnityEditor.Editor _selectedConversationEditor;
@@ -50,18 +50,26 @@ namespace IronMountain.DialogueSystem.Editor.Windows
         private void OnGUI()
         {
             EditorGUILayout.BeginVertical(GUILayout.ExpandWidth(true));
+            DrawButtonMenu();
+            DrawConversationList();
+            EditorGUILayout.EndVertical();
+        }
 
-            EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("New Conversation")) NewConversationWindow.Open();
-            if (!GUILayout.Button("Refresh")) RefreshIndex();
-            if (GUILayout.Button("Export")) ExportDialogueLines();
+        private void DrawButtonMenu()
+        {
+            EditorGUILayout.BeginHorizontal(GUILayout.Height(40));
+            if (GUILayout.Button("Create", GUILayout.ExpandHeight(true))) NewConversationWindow.Open();
+            if (GUILayout.Button("Refresh", GUILayout.ExpandHeight(true))) RefreshIndex();
+            if (GUILayout.Button("Export", GUILayout.ExpandHeight(true))) ExportDialogueLines();
             EditorGUILayout.EndHorizontal();
+        }
 
+        private void DrawConversationList()
+        {
             _sidebarScroll.x = 0;
             _sidebarScroll = GUILayout.BeginScrollView(_sidebarScroll, false, false);
             _conversationListEditor.Draw(_conversations);
             GUILayout.EndScrollView();
-            EditorGUILayout.EndVertical();
         }
 
         private int CompareDialogueNodes(Node a, Node b)

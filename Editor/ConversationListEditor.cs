@@ -87,7 +87,7 @@ namespace IronMountain.DialogueSystem.Editor
         private void DrawEntry(Conversation conversation)
         {
             if (!conversation) return;
-            
+
             if (conversation.HasErrors())
             {
                 EditorGUILayout.BeginHorizontal(_redBox, GUILayout.MaxHeight(25), GUILayout.ExpandHeight(false));
@@ -141,7 +141,7 @@ namespace IronMountain.DialogueSystem.Editor
             
             bool active = conversation.IsActive;
             GUILayout.Label(active ? "Active" : "Inactive", active ? _greenBox : _grayBox, GUILayout.Width(70), GUILayout.ExpandHeight(true));
-            
+
             EditorGUILayout.EndHorizontal();
         }
     }

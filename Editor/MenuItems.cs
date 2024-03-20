@@ -1,7 +1,5 @@
 using IronMountain.DialogueSystem.Editor.Windows;
 using UnityEditor;
-using UnityEngine;
-using XNodeEditor;
 
 namespace IronMountain.DialogueSystem.Editor
 {
