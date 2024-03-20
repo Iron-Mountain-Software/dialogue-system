@@ -113,6 +113,14 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             }
             GUILayout.Label(" " + _conversation.name, _h1);
             GUILayout.Label("CREATE:", _h1, GUILayout.Width(90));
+            if (GUILayout.Button("Start", GUILayout.Width(40)))
+            {
+                graphEditor.CreateNode(typeof(DialogueBeginningNode), GridCenterPosition);
+            }
+            if (GUILayout.Button("End", GUILayout.Width(35)))
+            {
+                graphEditor.CreateNode(typeof(DialogueEndingNode), GridCenterPosition);
+            }
             if (GUILayout.Button("Lines", GUILayout.Width(45)))
             {
                 DialogueLinesCreatorWindow.Open(this);
@@ -133,8 +141,6 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             {
                 RenderCreateMenu(new List<Type>()
                 {
-                    typeof(DialogueBeginningNode),
-                    typeof(DialogueEndingNode),
                     typeof(DialoguePassNode),
                     typeof(DialogueRandomSelectorNode),
                 });

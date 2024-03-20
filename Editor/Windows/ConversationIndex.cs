@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using IronMountain.DialogueSystem.Nodes;
@@ -31,19 +32,36 @@ namespace IronMountain.DialogueSystem.Editor.Windows
         private void OnEnable()
         {
             _conversationListEditor = new ConversationListEditor();
-            RefreshIndex();
+            ConversationsManager.OnConversationsChanged += OnConversationsChanged;
         }
-        
+
+        private void OnFocus() => RefreshIndex();
+
+        private void OnDisable()
+        {
+            ConversationsManager.OnConversationsChanged -= OnConversationsChanged;
+        }
+
+        private void OnConversationsChanged()
+        {
+            foreach (Conversation conversation in ConversationsManager.AllConversations)
+            {
+                if (!conversation || _conversations.Contains(conversation)) continue;
+                _conversations.Add(conversation);
+            }
+        }
+
         private void RefreshIndex()
         {
             _conversations.Clear();
             AssetDatabase.Refresh();
             string[] guids = AssetDatabase.FindAssets($"t:{typeof(Conversation)}");
-            for( int i = 0; i < guids.Length; i++ )
+            for ( int i = 0; i < guids.Length; i++ )
             {
-                string assetPath = AssetDatabase.GUIDToAssetPath( guids[i] );
+                string assetPath = AssetDatabase.GUIDToAssetPath(guids[i]);
                 Conversation conversation = AssetDatabase.LoadAssetAtPath<Conversation>( assetPath );
-                if (conversation) _conversations.Add(conversation);
+                if (!conversation || _conversations.Contains(conversation)) continue;
+                _conversations.Add(conversation);
             }
         }
 
@@ -59,7 +77,6 @@ namespace IronMountain.DialogueSystem.Editor.Windows
         {
             EditorGUILayout.BeginHorizontal(GUILayout.Height(40));
             if (GUILayout.Button("Create", GUILayout.ExpandHeight(true))) NewConversationWindow.Open();
-            if (GUILayout.Button("Refresh", GUILayout.ExpandHeight(true))) RefreshIndex();
             if (GUILayout.Button("Export", GUILayout.ExpandHeight(true))) ExportDialogueLines();
             EditorGUILayout.EndHorizontal();
         }

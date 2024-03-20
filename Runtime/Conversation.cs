@@ -150,7 +150,7 @@ namespace IronMountain.DialogueSystem
             BroadcastSavedData();
             if (condition) condition.OnConditionStateChanged += RefreshActiveState;
             OnPlaythroughsChanged += RefreshActiveState;
-            ConversationsManager.AllConversations.Add(this);
+            ConversationsManager.Register(this);
             RefreshActiveState();
         }
 
@@ -158,7 +158,7 @@ namespace IronMountain.DialogueSystem
         {
             if (condition) condition.OnConditionStateChanged -= RefreshActiveState;
             OnPlaythroughsChanged -= RefreshActiveState;
-            ConversationsManager.AllConversations.Remove(this);
+            ConversationsManager.Unregister(this);
         }
 
         protected void LoadSavedData()
