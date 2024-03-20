@@ -1,11 +1,7 @@
 using System;
 using System.IO;
-using System.Linq;
-using IronMountain.DialogueSystem.Editor.Indexers;
-using IronMountain.DialogueSystem.Nodes;
 using UnityEditor;
 using UnityEngine;
-using XNode;
 
 namespace IronMountain.DialogueSystem.Editor.Windows
 {

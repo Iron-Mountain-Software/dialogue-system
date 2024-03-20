@@ -64,26 +64,22 @@ namespace IronMountain.DialogueSystem.Editor
 
         protected virtual void DrawEditorActionButtons()
         {
-            EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Open", GUILayout.Height(30)))
+            EditorGUILayout.BeginHorizontal(GUILayout.Height(30));
+            if (GUILayout.Button("Open", GUILayout.ExpandHeight(true)))
             {
                 ConversationEditor.Open(_conversation);
             }
-            if (GUILayout.Button("Select", GUILayout.MinHeight(30)))
+            if (GUILayout.Button("Select", GUILayout.ExpandHeight(true)))
             {
                 UnityEditor.Selection.activeObject = target;
             }
-            //if (GUILayout.Button("Log & Copy", GUILayout.MinHeight(30)))
-            //{
-                //Debug.Log(DialogueInteractionPrinter.PrintDialogueInteraction((Conversation)target));
-            //}
             EditorGUILayout.EndHorizontal();
         }
 
         protected virtual void DrawGeneralSection()
         {
             GUILayout.Space(10);
-            EditorGUILayout.BeginVertical(_conversation.GeneralSectionHasErrors ? _invalidContainer : _validContainer, GUILayout.MinHeight(75));
+            EditorGUILayout.BeginVertical(_conversation.GeneralSectionHasErrors ? _invalidContainer : _validContainer, GUILayout.Height(60));
             GUILayout.Label("General", _header, GUILayout.ExpandWidth(true));
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("ID", GUILayout.MaxWidth(100));

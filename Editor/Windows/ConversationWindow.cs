@@ -11,9 +11,11 @@ namespace IronMountain.DialogueSystem.Editor.Windows
 {
     public class ConversationEditor : NodeEditorWindow
     {
-        private static readonly Vector2 MinSize = new (500, 400);
+        public static ConversationEditor Current { get; private set; }
 
+        private static readonly Vector2 MinSize = new (500, 400);
         private static readonly Color SideBarColor = new Color(0f, 0f, 0f, 0.85f);
+        
         private Texture2D _sideBarTexture;
         private GUIStyle _h1;
         private GUIStyle _box;
@@ -48,7 +50,6 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             window.minSize = MinSize;
             window.wantsMouseMove = true;
             window.Initialize();
-            window.OnGUI();
             return window;
         }
         
@@ -57,7 +58,24 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             ConversationEditor window = Open();
             window.graph = conversation;
             window._conversation = conversation;
+            window.CenterNodes();
             return window;
+        }
+
+        private void CenterNodes()
+        {
+            if (!graph || graph.nodes.Count == 0) return;
+            Vector2 center = Vector2.zero;
+            foreach (var node in graph.nodes)
+            {
+                center += node ? node.position : Vector2.zero;
+            }
+            center /= graph.nodes.Count;
+            foreach (var node in graph.nodes)
+            {
+                if (!node) continue;
+                node.position -= center;
+            }
         }
 
         private void Initialize()
@@ -96,6 +114,7 @@ namespace IronMountain.DialogueSystem.Editor.Windows
         protected override void OnGUI()
         {
             base.OnGUI();
+            Current = this;
             _cachedPanOffset = panOffset;
             _cachedZoom = zoom;
             onLateGUI += OnLateGUI;
@@ -123,7 +142,7 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             }
             if (GUILayout.Button("Lines", GUILayout.Width(45)))
             {
-                DialogueLinesCreatorWindow.Open(this);
+                DialogueLinesCreatorWindow.Open(this, null);
             }
             if (GUILayout.Button("Responses", GUILayout.Width(75)))
             {

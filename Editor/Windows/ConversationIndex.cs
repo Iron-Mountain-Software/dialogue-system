@@ -10,7 +10,8 @@ namespace IronMountain.DialogueSystem.Editor.Windows
 {
     public class ConversationIndex : EditorWindow
     {
-        private static readonly Vector2 MinSize = new (300, 500);
+        private static readonly Vector2 MinSize = new (400, 400);
+        private static readonly Vector2 MaxSize = new (600, 1200);
 
         private ConversationListEditor _conversationListEditor;
         private UnityEditor.Editor _selectedConversationEditor;
@@ -26,6 +27,7 @@ namespace IronMountain.DialogueSystem.Editor.Windows
                 typeof(NewConversationWindow), 
                 typeof(ConversationIndex));
             window.minSize = MinSize;
+            window.maxSize = MaxSize;
             return window;
         }
 

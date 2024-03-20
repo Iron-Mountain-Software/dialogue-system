@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
+using IronMountain.DialogueSystem.Editor.Windows;
 using IronMountain.DialogueSystem.Nodes;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 using XNode;
 using XNodeEditor;
 
@@ -113,7 +115,28 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
                     NodeEditorGUILayout.PortField(dynamicPort, Array.Empty<GUILayoutOption>());
             }
 
+            if (_dialogueLineNode.GetPort("output").ConnectionCount == 0)
+            {
+                EditorGUILayout.Space(8);
+                EditorGUILayout.BeginHorizontal(GUILayout.Height(25));
+                if (GUILayout.Button("Add Responses", GUILayout.ExpandHeight(true))) AddNode<DialogueResponseBlockNode>();
+                if (GUILayout.Button("Add Ending", GUILayout.ExpandHeight(true))) AddNode<DialogueEndingNode>();
+                EditorGUILayout.EndHorizontal();
+            }
+
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void AddNode<T>() where T : DialogueNode
+        {
+            if (!ConversationEditor.Current || ConversationEditor.Current.graphEditor == null) return;
+            Node node = ConversationEditor.Current.graphEditor.CreateNode(typeof(T), _dialogueLineNode.position);
+            _dialogueLineNode.GetPort("output").Connect(node.GetPort("input"));
+            if (_dialogueLineNode.GetType().GetCustomAttributes(typeof(Node.NodeWidthAttribute), true ).FirstOrDefault() 
+                is Node.NodeWidthAttribute widthAttribute)
+            {
+                node.position = _dialogueLineNode.position + Vector2.right * (widthAttribute.width + 40);
+            }
         }
     }
 }

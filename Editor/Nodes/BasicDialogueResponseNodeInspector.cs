@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using IronMountain.DialogueSystem.Editor.Windows;
 using IronMountain.DialogueSystem.Nodes;
 using IronMountain.DialogueSystem.Nodes.ResponseGenerators;
 using UnityEditor;
@@ -52,7 +53,7 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
             {
                 NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("stringText"));
             }
-            
+
             EditorGUILayout.Space(10);
             
             string[] strArray = new string[8]
@@ -78,6 +79,13 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
             {
                 if (!NodeEditorGUILayout.IsDynamicPortListPort(dynamicPort))
                     NodeEditorGUILayout.PortField(dynamicPort, Array.Empty<GUILayoutOption>());
+            }
+
+            if (_dialogueResponseNode.GetPort("output").ConnectionCount == 0
+                && GUILayout.Button("Add Lines", GUILayout.Height(25)))
+            {
+                EditorGUILayout.Space(8);
+                DialogueLinesCreatorWindow.Open(ConversationEditor.Current, _dialogueResponseNode.GetPort("output"));
             }
 
             serializedObject.ApplyModifiedProperties();

@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using IronMountain.DialogueSystem.Editor.Windows;
 using IronMountain.DialogueSystem.Nodes;
 using UnityEditor;
 using UnityEngine;
@@ -41,15 +43,29 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
                     NodeEditorGUILayout.PortField(dynamicPort, Array.Empty<GUILayoutOption>());
             }
             
-            if (GUILayout.Button("Add Response"))
+            EditorGUILayout.Space(8);
+
+            EditorGUILayout.BeginHorizontal(GUILayout.Height(25));
+
+            if (GUILayout.Button("Add Response", GUILayout.ExpandHeight(true)))
             {
-                RenderCreateMenu();
+                RenderCreateResponseMenu();
             }
+
+            if (serializedObject.FindProperty("isTimed").boolValue 
+                && GUILayout.Button("Add Default Route", GUILayout.ExpandHeight(true)))
+            {
+                DialogueLinesCreatorWindow.Open(ConversationEditor.Current,
+                    _dialogueResponseBlockNode.GetPort("defaultResponse"));
+            }
+
+            EditorGUILayout.EndHorizontal();
+
 
             serializedObject.ApplyModifiedProperties();
         }
         
-        private void RenderCreateMenu()
+        private void RenderCreateResponseMenu()
         {
             if (TypeIndex.DialogueResponseNodeTypes.Count <= 0) return;
             GenericMenu menu = new GenericMenu();
@@ -60,8 +76,14 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
                     false,
                     () =>
                     {
-                        Node node = _dialogueResponseBlockNode.graph.AddNode(derivedType);
-                        node.position = _dialogueResponseBlockNode.position;
+                        if (!ConversationEditor.Current || ConversationEditor.Current.graphEditor == null) return;
+                        Node node = ConversationEditor.Current.graphEditor.CreateNode(derivedType, _dialogueResponseBlockNode.position);
+                        _dialogueResponseBlockNode.GetPort("responses").Connect(node.GetPort("input"));
+                        if (_dialogueResponseBlockNode.GetType().GetCustomAttributes(typeof(Node.NodeWidthAttribute), true ).FirstOrDefault() 
+                                is Node.NodeWidthAttribute widthAttribute)
+                        {
+                            node.position = _dialogueResponseBlockNode.position + Vector2.right * (widthAttribute.width + 40);
+                        }
                     });
             }
             menu.ShowAsContext();
