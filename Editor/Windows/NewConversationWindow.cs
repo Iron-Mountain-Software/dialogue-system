@@ -33,7 +33,12 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             _folder = EditorGUILayout.TextField("Folder: ", _folder);
             if (GUILayout.Button("Current", GUILayout.Width(60))) _folder = GetCurrentFolder();
             EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
             _name = EditorGUILayout.TextField("Name", _name);
+            if (GUILayout.Button("Current", GUILayout.Width(60))) _name = GetCurrentName();
+            EditorGUILayout.EndHorizontal();
+
             _conversationTypeIndex = EditorGUILayout.Popup("Type", _conversationTypeIndex, TypeIndex.ConversationTypeNames);
             _defaultInvokingLine = EditorGUILayout.TextField("Invoking Line", _defaultInvokingLine);
             
@@ -49,6 +54,12 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             return getActiveFolderPath is not null 
                 ? getActiveFolderPath.Invoke(null, new object[0]).ToString()
                 : string.Empty;
+        }
+        
+        private string GetCurrentName()
+        {
+            string[] subfolders = _folder.Split(Path.DirectorySeparatorChar);
+            return subfolders.Length > 0 ? subfolders[^1] : string.Empty;
         }
 
         private void CreateConversation()
