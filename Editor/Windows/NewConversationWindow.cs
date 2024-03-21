@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace IronMountain.DialogueSystem.Editor.Windows
     {
         private static int _conversationTypeIndex = 0;
 
-        private string _folder = Path.Join("Scriptable Objects", "Conversations");
+        private string _folder = Path.Join("Assets", "Scriptable Objects", "Conversations");
         private string _name = "New Conversation";
         private string _defaultInvokingLine = string.Empty;
         
@@ -19,8 +20,8 @@ namespace IronMountain.DialogueSystem.Editor.Windows
         public static void Open()
         {
             NewConversationWindow window = GetWindow(typeof(NewConversationWindow), false, "Create Conversation", true) as NewConversationWindow;
-            window.minSize = new Vector2(400, 250);
-            window.maxSize = new Vector2(400, 250);
+            window.minSize = new Vector2(520, 160);
+            window.maxSize = new Vector2(520, 160);
             window.wantsMouseMove = true;
         }
 
@@ -29,8 +30,8 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             EditorGUILayout.Space(10);
             
             EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Folder:  Assets" + Path.DirectorySeparatorChar, GUILayout.Width(90));
-            _folder = EditorGUILayout.TextField(_folder);
+            _folder = EditorGUILayout.TextField("Folder: ", _folder);
+            if (GUILayout.Button("Current", GUILayout.Width(60))) _folder = GetCurrentFolder();
             EditorGUILayout.EndHorizontal();
             _name = EditorGUILayout.TextField("Name", _name);
             _conversationTypeIndex = EditorGUILayout.Popup("Type", _conversationTypeIndex, TypeIndex.ConversationTypeNames);
@@ -41,12 +42,21 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             if (GUILayout.Button("Create Conversation", GUILayout.Height(35))) CreateConversation();
         }
 
+        private string GetCurrentFolder()
+        {
+            Type projectWindowUtilType = typeof(ProjectWindowUtil);
+            MethodInfo getActiveFolderPath = projectWindowUtilType.GetMethod("GetActiveFolderPath", BindingFlags.Static | BindingFlags.NonPublic);
+            return getActiveFolderPath is not null 
+                ? getActiveFolderPath.Invoke(null, new object[0]).ToString()
+                : string.Empty;
+        }
+
         private void CreateConversation()
         {
             Type conversationType = TypeIndex.ConversationTypes[_conversationTypeIndex];
             _conversation = CreateInstance(conversationType) as Conversation;
             CreateFolders();
-            string path = Path.Combine("Assets", _folder, _name + ".asset");
+            string path = Path.Combine(_folder, _name + ".asset");
             
             AssetDatabase.CreateAsset(_conversation, path);
             _conversation.DefaultInvokingLine = _defaultInvokingLine;
@@ -62,9 +72,11 @@ namespace IronMountain.DialogueSystem.Editor.Windows
         private void CreateFolders()
         {
             string[] subfolders = _folder.Split(Path.DirectorySeparatorChar);
-            string parent = "Assets";
-            foreach (var subfolder in subfolders)
+            if (subfolders.Length == 0) return;
+            string parent = subfolders[0];
+            for (int index = 1; index < subfolders.Length; index++)
             {
+                var subfolder = subfolders[index];
                 string child = Path.Join(parent, subfolder);
                 if (!AssetDatabase.IsValidFolder(child)) AssetDatabase.CreateFolder(parent, subfolder);
                 parent = child;
