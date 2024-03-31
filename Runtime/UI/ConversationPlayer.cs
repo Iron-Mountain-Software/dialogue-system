@@ -12,13 +12,13 @@ namespace IronMountain.DialogueSystem.UI
     {
         public static event Action<Conversation> OnAnyConversationStarted;
         public static event Action<Conversation> OnAnyConversationEnded;
+        public static event Action<Conversation, DialogueNode> OnAnyDialogueNodeChanged;
         public static event Action<Conversation, DialogueLine> OnAnyDialogueLinePlayed;
-        public static event Action<Conversation, DialogueResponseBlockNode> OnAnyDialogueResponseBlockEntered;
-
+        
         public event Action OnDefaultSpeakerChanged;
         public event Action OnConversationChanged;
+        public event Action<Conversation, DialogueNode> OnDialogueNodeChanged;
         public event Action<Conversation, DialogueLine> OnDialogueLinePlayed;
-        public event Action<Conversation, DialogueResponseBlockNode> OnDialogueResponseBlockEntered;
 
         public event Action OnClosed;
         
@@ -37,7 +37,6 @@ namespace IronMountain.DialogueSystem.UI
         private ISpeaker _defaultSpeaker;
         private DialogueNode _currentNode;
         private DialogueLine _currentDialogueLine;
-        private DialogueResponseBlockNode _currentResponseBlockNode;
         private DialogueResponseBlock _currentResponseBlock;
 
         public int FrameOfLastProgression { get; private set; }
@@ -78,6 +77,8 @@ namespace IronMountain.DialogueSystem.UI
                 FrameOfLastProgression = Time.frameCount;
                 TimeOfLastProgression = Time.time;
                 if (_currentNode) _currentNode.OnNodeEnter(this);
+                OnDialogueNodeChanged?.Invoke(conversation, _currentNode);
+                OnAnyDialogueNodeChanged?.Invoke(conversation, _currentNode);
             }
         }
         
@@ -96,22 +97,8 @@ namespace IronMountain.DialogueSystem.UI
             }
         }
         
-        public DialogueResponseBlockNode CurrentDialogueResponseBlockNode
-        {
-            get => _currentResponseBlockNode;
-            set
-            {
-                if (_currentResponseBlockNode == value) return;
-                _currentResponseBlockNode = value;
-                if (_currentResponseBlockNode)
-                {
-                    OnDialogueResponseBlockEntered?.Invoke(conversation, _currentResponseBlockNode);
-                    OnAnyDialogueResponseBlockEntered?.Invoke(conversation, _currentResponseBlockNode);
-                }
-            }
-        }
-
-        public float TotalSecondsToRespond => _currentResponseBlockNode ? _currentResponseBlockNode.Seconds : Mathf.Infinity;
+        public DialogueResponseBlockNode CurrentDialogueResponseBlockNode => CurrentNode as DialogueResponseBlockNode;
+        public float TotalSecondsToRespond => CurrentDialogueResponseBlockNode ? CurrentDialogueResponseBlockNode.Seconds : Mathf.Infinity;
         public float SecondsRemainingToRespond { get; set; }
 
         private void OnEnable() => ConversationPlayersManager.Register(this);
@@ -176,15 +163,22 @@ namespace IronMountain.DialogueSystem.UI
         public void EnterDialogueResponseBlockNode(DialogueResponseBlockNode dialogueResponseBlockNode)
         {
             StopAllCoroutines();
-            CurrentDialogueResponseBlockNode = dialogueResponseBlockNode;
-            SecondsRemainingToRespond = TotalSecondsToRespond;
             CloseCurrentResponseBlock();
+            SecondsRemainingToRespond = TotalSecondsToRespond;
             SpawnCurrentResponseBlock();
         }
-
-        public void CloseCurrentResponseBlock()
+        
+        public void ExitDialogueResponseBlockNode(DialogueResponseBlockNode dialogueResponseBlockNode)
         {
-            if (_currentResponseBlock) _currentResponseBlock.Destroy();
+            StopAllCoroutines();
+            CloseCurrentResponseBlock();
+            SecondsRemainingToRespond = Mathf.Infinity;
+        }
+
+        private void CloseCurrentResponseBlock()
+        {
+            if (!_currentResponseBlock) return;
+            _currentResponseBlock.Destroy();
             _currentResponseBlock = null;
         }
 
@@ -215,7 +209,6 @@ namespace IronMountain.DialogueSystem.UI
             CurrentNode = null;
             Conversation = null;
             CurrentDialogueLine = null;
-            CurrentDialogueResponseBlockNode = null;
         }
 
 #if UNITY_EDITOR

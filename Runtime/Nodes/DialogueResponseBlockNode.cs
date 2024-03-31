@@ -63,7 +63,7 @@ namespace IronMountain.DialogueSystem.Nodes
         public override void OnNodeExit(ConversationPlayer conversationUI)
         {
             base.OnNodeExit(conversationUI);
-            conversationUI.CloseCurrentResponseBlock();
+            conversationUI.ExitDialogueResponseBlockNode(this);
         }
         
         public override void OnCreateConnection(NodePort @from, NodePort to)

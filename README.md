@@ -1,5 +1,5 @@
 # Dialogue System
-*Version: 2.6.5*
+*Version: 3.0.7*
 ## Description: 
 A system for writing and playing branching dialogue.
 ## Dependencies: 
@@ -7,7 +7,7 @@ A system for writing and playing branching dialogue.
 * com.unity.textmeshpro (3.0.6)
 * com.github.siccity.xnode (1.8.0)
 * com.iron-mountain.save-system (1.0.4)
-* com.iron-mountain.conditions (1.5.0)
+* com.iron-mountain.conditions (1.5.5)
 * com.iron-mountain.resource-utilities (1.1.2)
 * com.iron-mountain.scriptable-actions (1.0.5)
 ---
@@ -21,6 +21,7 @@ A system for writing and playing branching dialogue.
       * public String ***Name***  { get; }
       * public Boolean ***PrioritizeOverDefault***  { get; }
       * public Int32 ***Priority***  { get; }
+      * public String ***DefaultInvokingLine***  { get; set; }
       * public String ***InvokingLine***  { get; }
       * public Sprite ***InvokingIcon***  { get; }
       * public Boolean ***AlertInConversationMenu***  { get; }
@@ -125,8 +126,8 @@ A system for writing and playing branching dialogue.
       * public AudioClip ***AudioClip***  { get; }
 1. public class **DialogueLineNode** : DialogueNode
    * Properties: 
-      * public SpeakerType ***SpeakerType***  { get; }
-      * public Speaker ***CustomSpeaker***  { get; }
+      * public Speaker ***CustomSpeaker***  { get; set; }
+      * public String ***SimpleText***  { get; set; }
       * public String ***Text***  { get; }
       * public LocalizedString ***LocalizedText***  { get; }
       * public AudioClip ***AudioClip***  { get; }
@@ -162,9 +163,12 @@ A system for writing and playing branching dialogue.
 1. public class **DialogueResponseBlockNode** : DialogueNode
    * Properties: 
       * public String ***Name***  { get; }
+      * public Boolean ***IsTimed***  { get; }
+      * public float ***Seconds***  { get; }
    * Methods: 
       * public override DialogueNode ***GetNextNode***(ConversationPlayer conversationUI)
-      * public List`1 ***GetResponseGenerators***()
+      * public DialogueNode ***GetDefaultResponseNode***()
+      * public List`1 ***GetResponses***(ConversationPlayer conversationUI)
       * public override void ***OnNodeEnter***(ConversationPlayer conversationUI)
       * public override void ***OnNodeExit***(ConversationPlayer conversationUI)
       * public override void ***OnCreateConnection***(NodePort from, NodePort to)
@@ -204,7 +208,14 @@ A system for writing and playing branching dialogue.
    * Properties: 
       * public String ***Name***  { get; }
 ### Nodes. Response Generators
-1. public abstract class **ResponseGenerator** : DialogueNode
+1. public class **BasicDialogueResponseNode** : DialogueResponseNode
+   * Properties: 
+      * public String ***Name***  { get; }
+      * public String ***Text***  { get; }
+      * public LocalizedString ***LocalizedText***  { get; }
+   * Methods: 
+      * public override List`1 ***GetDialogueResponses***(ConversationPlayer conversationPlayer)
+1. public abstract class **DialogueResponseNode** : DialogueNode
    * Properties: 
       * public ScriptedResponseStyle ***ScriptedResponseStyle***  { get; }
    * Methods: 
@@ -213,48 +224,30 @@ A system for writing and playing branching dialogue.
       * public override void ***OnNodeEnter***(ConversationPlayer conversationUI)
       * public override void ***OnNodeExit***(ConversationPlayer conversationUI)
       * public override void ***OnCreateConnection***(NodePort from, NodePort to)
-1. public class **ResponseGeneratorActiveDialogue** : ResponseGenerator
-   * Properties: 
-      * public String ***Name***  { get; }
-   * Methods: 
-      * public override List`1 ***GetDialogueResponses***(ConversationPlayer conversationPlayer)
-1. public class **ResponseGeneratorText** : ResponseGenerator
-   * Properties: 
-      * public String ***Name***  { get; }
-      * public String ***Text***  { get; }
-   * Methods: 
-      * public override List`1 ***GetDialogueResponses***(ConversationPlayer conversationPlayer)
-1. public class **ResponseGeneratorTextChat** : ResponseGeneratorText
-   * Properties: 
-      * public String ***Name***  { get; }
-   * Methods: 
-      * public override List`1 ***GetDialogueResponses***(ConversationPlayer conversationPlayer)
-1. public class **ResponseGeneratorTextNeverMind** : ResponseGeneratorText
+1. public class **DialogueResponseNodeActiveDialogue** : DialogueResponseNode
    * Properties: 
       * public String ***Name***  { get; }
    * Methods: 
       * public override List`1 ***GetDialogueResponses***(ConversationPlayer conversationPlayer)
 ### Responses
-1. public class **BasicResponse**
+1. public abstract class **BasicResponse**
    * Properties: 
-      * public ConversationPlayer ***ConversationPlayer***  { get; }
-      * public DialogueNode ***SourceNode***  { get; }
       * public String ***Text***  { get; }
       * public Sprite ***Icon***  { get; }
       * public Int32 ***Row***  { get; }
       * public Int32 ***Column***  { get; }
       * public IResponseStyle ***Style***  { get; }
    * Methods: 
-      * public virtual void ***ExecuteResponse***()
+      * public abstract void ***Execute***()
+1. public class **BranchConversationResponse** : BasicResponse
+   * Methods: 
+      * public override void ***Execute***()
 1. public interface **IResponseStyle**
    * Properties: 
       * public float ***Height***  { get; }
       * public Color ***ButtonColorPrimary***  { get; }
       * public Color ***ButtonColorSecondary***  { get; }
       * public Color ***TextColor***  { get; }
-1. public class **PlayConversationResponse** : BasicResponse
-   * Methods: 
-      * public override void ***ExecuteResponse***()
 1. public class **ResponseStyle**
    * Properties: 
       * public float ***Height***  { get; }
@@ -267,6 +260,9 @@ A system for writing and playing branching dialogue.
       * public Color ***ButtonColorPrimary***  { get; }
       * public Color ***ButtonColorSecondary***  { get; }
       * public Color ***TextColor***  { get; }
+1. public class **SwapConversationResponse** : BasicResponse
+   * Methods: 
+      * public override void ***Execute***()
 ### Selection
 1. public abstract class **ConversationSelector** : MonoBehaviour
    * Actions: 
@@ -289,11 +285,14 @@ A system for writing and playing branching dialogue.
    * Properties: 
       * public String ***ID***  { get; }
       * public String ***SpeakerName***  { get; }
+      * public List<String> ***Aliases***  { get; }
       * public Color ***Color***  { get; }
       * public Conversation ***DefaultConversation***  { get; }
       * public List<Conversation> ***Conversations***  { get; }
       * public SpeakerPortraitCollection ***Portraits***  { get; }
       * public SpeakerPortraitCollection ***FullBodyPortraits***  { get; }
+   * Methods: 
+      * public virtual Boolean ***UsesNameOrAlias***(String name)
 1. public class **PlayConversationOnPointerClick** : MonoBehaviour
    * Methods: 
       * public virtual void ***OnPointerClick***(PointerEventData eventData)
@@ -303,6 +302,7 @@ A system for writing and playing branching dialogue.
    * Properties: 
       * public String ***ID***  { get; }
       * public String ***SpeakerName***  { get; }
+      * public List<String> ***Aliases***  { get; }
       * public Color ***Color***  { get; }
       * public Conversation ***DefaultConversation***  { get; }
       * public List<Conversation> ***Conversations***  { get; }
@@ -327,7 +327,6 @@ A system for writing and playing branching dialogue.
 1. public class **SpeakerPortraitCollection**
    * Methods: 
       * public Sprite ***GetPortrait***(PortraitType type)
-1. public enum **SpeakerType** : Enum
 ### Speakers. U I
 1. public class **SpeakerControllerPortraitImage** : MonoBehaviour
 ### Starters
@@ -345,26 +344,55 @@ A system for writing and playing branching dialogue.
    * Actions: 
       * public event Action ***OnDefaultSpeakerChanged*** 
       * public event Action ***OnConversationChanged*** 
+      * public event Action ***OnDialogueNodeChanged*** 
       * public event Action ***OnDialogueLinePlayed*** 
       * public event Action ***OnClosed*** 
    * Properties: 
       * public Int32 ***FrameOfLastProgression***  { get; }
       * public float ***TimeOfLastProgression***  { get; }
       * public ISpeaker ***DefaultSpeaker***  { get; }
-      * public Conversation ***CurrentConversation***  { get; }
+      * public Conversation ***Conversation***  { get; }
       * public DialogueNode ***CurrentNode***  { get; set; }
       * public DialogueLine ***CurrentDialogueLine***  { get; set; }
+      * public DialogueResponseBlockNode ***CurrentDialogueResponseBlockNode***  { get; }
+      * public float ***TotalSecondsToRespond***  { get; }
+      * public float ***SecondsRemainingToRespond***  { get; set; }
    * Methods: 
       * public ConversationPlayer ***Initialize***(ISpeaker speaker, Conversation conversation)
       * public void ***Close***()
-      * public void ***PlayDialogueLine***(DialogueLine dialogueLine)
-      * public void ***GenerateResponseBlock***(DialogueResponseBlockNode dialogueResponseBlockNode)
-      * public void ***DestroyResponseBlock***()
-      * public void ***PlayNextDialogueNode***()
+      * public void ***HandleDialogueLine***(DialogueLine dialogueLine)
+      * public void ***EnterDialogueResponseBlockNode***(DialogueResponseBlockNode dialogueResponseBlockNode)
+      * public void ***ExitDialogueResponseBlockNode***(DialogueResponseBlockNode dialogueResponseBlockNode)
+      * public void ***PlayNextNode***()
       * public void ***CompleteConversation***()
 1. public static class **ConversationPlayersManager**
 1. public class **DialogueLineImage** : MonoBehaviour
 1. public class **DialogueLineResizer** : MonoBehaviour
+1. public class **SpeakerBackgroundColor** : MonoBehaviour
+1. public class **SpeakerNameText** : MonoBehaviour
+1. public class **SpeakerPortraitImage** : MonoBehaviour
+### U I. Responses
+1. public class **DialogueResponseBlock** : MonoBehaviour
+   * Methods: 
+      * public void ***Initialize***(DialogueResponseBlockNode dialogueResponseBlock, ConversationPlayer conversationUI)
+      * public void ***Submit***(BasicResponse response)
+      * public void ***Destroy***()
+1. public class **DialogueResponseButton** : MonoBehaviour
+   * Actions: 
+      * public event Action ***OnResponseChanged*** 
+   * Properties: 
+      * public BasicResponse ***Response***  { get; }
+   * Methods: 
+      * public virtual void ***Initialize***(DialogueResponseBlock responseBlock, BasicResponse response)
+1. public class **DialogueResponseButtonOutline** : MonoBehaviour
+1. public class **DialogueResponseButtonText** : MonoBehaviour
+### U I. Speech Bubble Tail
+1. public class **SpeechBubbleAnchor** : MonoBehaviour
+   * Properties: 
+      * public SpeakerController ***SpeakerController***  { get; }
+1. public static class **SpeechBubbleAnchorsManager**
+1. public class **SpeechBubbleTail** : Graphic
+### U I. Text Animation
 1. public abstract class **DialogueLineTyper** : MonoBehaviour
    * Properties: 
       * public Boolean ***IsAnimating***  { get; }
@@ -376,28 +404,3 @@ A system for writing and playing branching dialogue.
 1. public class **DialogueLineTyperText** : DialogueLineTyper
    * Methods: 
       * public override void ***ForceFinishAnimating***()
-1. public class **DialogueResponseBlock** : MonoBehaviour
-   * Methods: 
-      * public void ***Initialize***(DialogueResponseBlockNode dialogueResponseBlock, ConversationPlayer conversationUI)
-      * public void ***Destroy***()
-1. public class **DialogueResponseButton** : MonoBehaviour
-   * Actions: 
-      * public event Action ***OnBasicResponseChanged*** 
-   * Properties: 
-      * public BasicResponse ***BasicResponse***  { get; }
-   * Methods: 
-      * public virtual void ***Initialize***(BasicResponse basicResponse, ConversationPlayer conversationUI)
-      * public void ***OnClick***()
-1. public class **DialogueResponseButtonOutline** : MonoBehaviour
-1. public class **SpeakerBackgroundColor** : MonoBehaviour
-1. public class **SpeakerNameText** : MonoBehaviour
-1. public class **SpeakerPortraitImage** : MonoBehaviour
-1. public class **UI_DialogueResponseWithIcon** : DialogueResponseButton
-   * Methods: 
-      * public override void ***Initialize***(BasicResponse basicResponse, ConversationPlayer conversationUI)
-### U I. Speech Bubble Tail
-1. public class **SpeechBubbleAnchor** : MonoBehaviour
-   * Properties: 
-      * public SpeakerController ***SpeakerController***  { get; }
-1. public static class **SpeechBubbleAnchorsManager**
-1. public class **SpeechBubbleTail** : Graphic

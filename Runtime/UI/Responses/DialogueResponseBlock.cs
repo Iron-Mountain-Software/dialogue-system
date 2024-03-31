@@ -26,6 +26,7 @@ namespace IronMountain.DialogueSystem.UI.Responses
 
         public void Initialize(DialogueResponseBlockNode dialogueResponseBlock, ConversationPlayer conversationUI)
         {
+            if (!dialogueResponsePrefab) return;
             List<BasicResponse> responses = dialogueResponseBlock.GetResponses(conversationUI);
             responses.Sort((responseX, responseY) => responseY.Row == responseX.Row ? responseX.Column - responseY.Column : responseX.Row - responseY.Row);
             int currentRowIndex = int.MinValue;

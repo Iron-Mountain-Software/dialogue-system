@@ -14,7 +14,6 @@ namespace IronMountain.DialogueSystem.Editor.Windows
         private string _name = "New Conversation";
         private string _defaultInvokingLine = string.Empty;
         
-        private Conversation _conversation;
         private ConversationEditor _conversationEditor;
         
         public static void Open()
@@ -65,19 +64,20 @@ namespace IronMountain.DialogueSystem.Editor.Windows
         private void CreateConversation()
         {
             Type conversationType = TypeIndex.ConversationTypes[_conversationTypeIndex];
-            _conversation = CreateInstance(conversationType) as Conversation;
+            Conversation conversation = CreateInstance(conversationType) as Conversation;
+            if (!conversation) return;
             CreateFolders();
             string path = Path.Combine(_folder, _name + ".asset");
             
-            AssetDatabase.CreateAsset(_conversation, path);
-            _conversation.DefaultInvokingLine = _defaultInvokingLine;
-            EditorUtility.SetDirty(_conversation);
-            AssetDatabase.SaveAssetIfDirty(_conversation);
+            AssetDatabase.CreateAsset(conversation, path);
+            conversation.DefaultInvokingLine = _defaultInvokingLine;
+            EditorUtility.SetDirty(conversation);
+            AssetDatabase.SaveAssetIfDirty(conversation);
             AssetDatabase.Refresh();
 
             Close();
             
-            ConversationEditor.Open(_conversation).Focus();
+            ConversationEditor.Open(conversation).Focus();
         }
 
         private void CreateFolders()
