@@ -34,8 +34,8 @@ namespace IronMountain.DialogueSystem.Nodes.Conditions
 		public override void RefreshErrors()
 		{
 			base.RefreshErrors();
-			if (GetInputPort("pass").ConnectionCount != 0) Errors.Add("Bad input.");
-			if (GetOutputPort("fail").ConnectionCount != 1) Errors.Add("Bad output.");
+			if (GetOutputPort("pass").ConnectionCount != 0) Errors.Add("Bad pass output.");
+			if (GetOutputPort("fail").ConnectionCount != 1) Errors.Add("Bad fail output.");
 		}
 		
 #endif
