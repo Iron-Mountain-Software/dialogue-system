@@ -4,8 +4,9 @@ using UnityEngine;
 
 namespace IronMountain.DialogueSystem
 {
-    public class DialogueTouchInputManager : MonoBehaviour
+    public class DialogueInputManager : MonoBehaviour
     {
+        [SerializeField] private KeyCode keyCode = KeyCode.Mouse0;
         [SerializeField] private ConversationPlayer conversationUI;
         [SerializeField] private DialogueLineTyper dialogueLineTyper;
 
@@ -21,7 +22,7 @@ namespace IronMountain.DialogueSystem
             if (conversationUI
                 && conversationUI.Conversation
                 && conversationUI.FrameOfLastProgression != Time.frameCount
-                && Input.GetMouseButtonUp(0))
+                && Input.GetKeyUp(keyCode))
             {
                 if (dialogueLineTyper && dialogueLineTyper.IsAnimating)
                 {

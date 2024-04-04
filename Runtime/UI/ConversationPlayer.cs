@@ -26,10 +26,8 @@ namespace IronMountain.DialogueSystem.UI
         [SerializeField] private bool playOnStart = true;
         [SerializeField] private bool autoAdvance = false;
         [SerializeField] private float autoAdvanceSeconds = 3f;
-        [Space]
         [SerializeField] private bool selfDestruct = true;
         [SerializeField] private float destructionDelay = .5f;
-        [Space]
         [SerializeField] private Transform responseBlockParent;
         [SerializeField] private DialogueResponseBlock responseBlockPrefab;
         
