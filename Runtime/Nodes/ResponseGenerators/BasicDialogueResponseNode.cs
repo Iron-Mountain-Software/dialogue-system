@@ -71,9 +71,12 @@ namespace IronMountain.DialogueSystem.Nodes.ResponseGenerators
 
 #if UNITY_EDITOR
 
-        protected override bool ExtensionHasErrors()
+        private bool MissingText => string.IsNullOrWhiteSpace(stringText) && (text.IsEmpty || string.IsNullOrEmpty(text.TableReference));
+
+        public override void RefreshWarnings()
         {
-            return text.IsEmpty || string.IsNullOrEmpty(text.TableReference) || base.ExtensionHasErrors();
+            base.RefreshWarnings();
+            if (MissingText) Warnings.Add("No text.");
         }
         
 #endif

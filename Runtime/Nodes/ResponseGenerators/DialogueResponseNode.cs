@@ -36,26 +36,22 @@ namespace IronMountain.DialogueSystem.Nodes.ResponseGenerators
 
         public override void OnCreateConnection(NodePort @from, NodePort to)
         {
+            base.OnCreateConnection(from, to);
             NodePort myInputPort = GetInputPort("input");
-            if (to == myInputPort && !(@from.node is DialogueResponseBlockNode || @from.node is Condition))
+            if (to == myInputPort && @from.node is not (DialogueResponseBlockNode or Condition))
             {
                 from.Disconnect(to);
                 Debug.LogError("ResponseGenerator can only have inputs from Node_DialogueResponseBlock.");
             }
         }
-        
-                
+
 #if UNITY_EDITOR
 
-        protected override bool ExtensionHasWarnings()
+        public override void RefreshErrors()
         {
-            return false;
-        }
-
-        protected override bool ExtensionHasErrors()
-        {
-            return GetInputPort("input").ConnectionCount == 0
-                   || GetOutputPort("output").ConnectionCount != 1;
+            base.RefreshErrors();
+            if (GetInputPort("input").ConnectionCount == 0) Errors.Add("Bad input.");
+            if (GetOutputPort("output").ConnectionCount != 1) Errors.Add("Bad output.");
         }
 		
 #endif

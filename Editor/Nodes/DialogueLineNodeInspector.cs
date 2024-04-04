@@ -4,7 +4,6 @@ using IronMountain.DialogueSystem.Editor.Windows;
 using IronMountain.DialogueSystem.Nodes;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 using XNode;
 using XNodeEditor;
 
@@ -109,6 +108,7 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
                 if (!strArray.Contains(iterator.name))
                     NodeEditorGUILayout.PropertyField(iterator, true, Array.Empty<GUILayoutOption>());
             }
+            
             foreach (NodePort dynamicPort in target.DynamicPorts)
             {
                 if (!NodeEditorGUILayout.IsDynamicPortListPort(dynamicPort))

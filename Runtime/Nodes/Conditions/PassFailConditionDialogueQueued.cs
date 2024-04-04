@@ -23,19 +23,5 @@ namespace IronMountain.DialogueSystem.Nodes.Conditions
             }
             return false;
         }
-        
-#if UNITY_EDITOR
-
-        protected override bool ExtensionHasWarnings()
-        {
-            return false;
-        }
-
-        protected override bool ExtensionHasErrors()
-        {
-            return false;
-        }
-		
-#endif
     }
 }

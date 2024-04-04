@@ -22,17 +22,13 @@ namespace IronMountain.DialogueSystem.Nodes
         }
 
 #if UNITY_EDITOR
-
-        protected override bool ExtensionHasWarnings()
+        
+        public override void RefreshErrors()
         {
-            return false;
+            base.RefreshErrors();
+            if (GetInputPort("input").ConnectionCount == 0) Errors.Add("Bad input.");
         }
 
-        protected override bool ExtensionHasErrors()
-        {
-            return GetInputPort("input").ConnectionCount == 0;
-        }
-		
 #endif
         
     }

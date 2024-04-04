@@ -36,24 +36,16 @@ namespace IronMountain.DialogueSystem.Nodes
         
 #if UNITY_EDITOR
 
-        protected override bool ExtensionHasWarnings()
+        public override void RefreshWarnings()
         {
+            base.RefreshWarnings();
             foreach (DialogueLineMainContent content in alternateContent)
             {
-                if (!content.AudioClip) return true;
+                if (!content.AudioClip) Warnings.Add("No audio.");
+                if (content.TextData.IsEmpty || string.IsNullOrEmpty(content.TextData.TableReference)) Warnings.Add("No text.");
             }
-            return base.ExtensionHasWarnings();
         }
 
-        protected override bool ExtensionHasErrors()
-        {
-            foreach (DialogueLineMainContent content in alternateContent)
-            {
-                if (content.TextData.IsEmpty || string.IsNullOrEmpty(content.TextData.TableReference)) return true;
-            }
-            return base.ExtensionHasErrors();
-        }
-		
 #endif
         
     }

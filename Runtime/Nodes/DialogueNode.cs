@@ -1,4 +1,5 @@
-﻿using IronMountain.DialogueSystem.UI;
+﻿using System.Collections.Generic;
+using IronMountain.DialogueSystem.UI;
 using UnityEngine;
 using XNode;
 
@@ -29,9 +30,21 @@ namespace IronMountain.DialogueSystem.Nodes
         
 #if UNITY_EDITOR
 
+        public override void OnCreateConnection(NodePort @from, NodePort to) => OnValidate();
+        public override void OnRemoveConnection(NodePort port) => OnValidate();
+
+        public readonly List<string> Warnings = new ();
+        public readonly List<string> Errors = new ();
+
+        public bool HasWarnings() => Warnings is {Count: > 0};
+        public bool HasErrors() => Errors is {Count: > 0};
+        
         protected virtual void OnValidate()
         {
             RefreshName();
+            RefreshWarnings();
+            RefreshErrors();
+            if (graph is Conversation conversation) conversation.OnValidate();
         }
         
         [ContextMenu("Refresh Name")]
@@ -39,20 +52,20 @@ namespace IronMountain.DialogueSystem.Nodes
         {
             name = Name;
         }
-        
-        public bool HasWarnings()
+
+        [ContextMenu("Refresh Warnings")]
+        public virtual void RefreshWarnings()
         {
-            return ExtensionHasWarnings();
+            Warnings.Clear();
         }
         
-        public bool HasErrors()
+        [ContextMenu("Refresh Errors")]
+        public virtual void RefreshErrors()
         {
-            return !graph || ExtensionHasErrors();
+            Errors.Clear();
+            if (!graph) Errors.Add("Null Graph");
         }
 
-        protected abstract bool ExtensionHasWarnings();
-        protected abstract bool ExtensionHasErrors();
-        
 #endif
     }
 }

@@ -79,7 +79,7 @@ namespace IronMountain.DialogueSystem.Editor
         protected virtual void DrawGeneralSection()
         {
             GUILayout.Space(10);
-            EditorGUILayout.BeginVertical(_conversation.GeneralSectionHasErrors ? _invalidContainer : _validContainer, GUILayout.Height(60));
+            EditorGUILayout.BeginVertical(_validContainer, GUILayout.Height(60));
             GUILayout.Label("General", _header, GUILayout.ExpandWidth(true));
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("ID", GUILayout.MaxWidth(100));
@@ -140,7 +140,7 @@ namespace IronMountain.DialogueSystem.Editor
         protected virtual void DrawConditionSection(Conversation conversation)
         {
             GUILayout.Space(10);
-            EditorGUILayout.BeginVertical(_conversation.ConditionHasErrors ? _invalidContainer : _validContainer, GUILayout.MinHeight(75));
+            EditorGUILayout.BeginVertical(_validContainer, GUILayout.MinHeight(75));
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.BeginVertical();
             EditorGUILayout.LabelField("Condition", _header);

@@ -27,16 +27,12 @@ namespace IronMountain.DialogueSystem.Nodes
 
 #if UNITY_EDITOR
 
-        protected override bool ExtensionHasWarnings()
+        public override void RefreshErrors()
         {
-            return false;
+            base.RefreshErrors();
+            if (GetOutputPort("output").ConnectionCount != 1) Errors.Add("Bad output.");
         }
 
-        protected override bool ExtensionHasErrors()
-        {
-            return GetOutputPort("output").ConnectionCount != 1;
-        }
-		
 #endif
         
     }

@@ -31,10 +31,12 @@ namespace IronMountain.DialogueSystem.Nodes.Conditions
 
 #if UNITY_EDITOR
 
-		protected override bool ExtensionHasErrors()
-        {
-	        return false;
-        }
+		public override void RefreshErrors()
+		{
+			base.RefreshErrors();
+			if (GetInputPort("pass").ConnectionCount != 0) Errors.Add("Bad input.");
+			if (GetOutputPort("fail").ConnectionCount != 1) Errors.Add("Bad output.");
+		}
 		
 #endif
     }

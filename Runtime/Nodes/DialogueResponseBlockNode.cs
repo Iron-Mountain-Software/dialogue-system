@@ -68,6 +68,7 @@ namespace IronMountain.DialogueSystem.Nodes
         
         public override void OnCreateConnection(NodePort @from, NodePort to)
         {
+            base.OnCreateConnection(from, to);
             NodePort myInputPort = GetInputPort("input");
             NodePort myOutputPort = GetOutputPort("responses");
             if (from == myOutputPort && !(to.node is DialogueResponseNode || to.node is Condition))
@@ -79,15 +80,11 @@ namespace IronMountain.DialogueSystem.Nodes
         
 #if UNITY_EDITOR
 
-        protected override bool ExtensionHasWarnings()
+        public override void RefreshErrors()
         {
-            return false;
-        }
-
-        protected override bool ExtensionHasErrors()
-        {
-            return GetInputPort("input").ConnectionCount == 0
-                   || GetOutputPort("responses").ConnectionCount < 1;
+            base.RefreshErrors();
+            if (GetInputPort("input").ConnectionCount == 0) Errors.Add("Bad input.");
+            if (GetOutputPort("responses").ConnectionCount < 1) Errors.Add("Bad output.");
         }
 		
 #endif

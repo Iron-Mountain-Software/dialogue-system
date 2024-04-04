@@ -24,23 +24,13 @@ namespace IronMountain.DialogueSystem.Nodes.Actions
             conversationUI.CurrentNode = GetNextNode(conversationUI);
         }
 
-        public void LogErrors()
-        {
-            if (GetInputPort("input").ConnectionCount == 0) Debug.LogError("Dialogue Action Node Error: Invalid Input: " + Name, this);
-            if (GetOutputPort("output").ConnectionCount != 1) Debug.LogError("Dialogue Action Node Error: Invalid Output: " + Name, this);
-        }
-        
 #if UNITY_EDITOR
-		
-        protected override bool ExtensionHasWarnings()
+
+        public override void RefreshErrors()
         {
-            return false;
-        }
-        
-        protected override bool ExtensionHasErrors()
-        {
-            return GetInputPort("input").ConnectionCount == 0
-                   || GetOutputPort("output").ConnectionCount != 1;
+            base.RefreshErrors();
+            if (GetInputPort("input").ConnectionCount == 0) Errors.Add("Bad input.");
+            if (GetOutputPort("output").ConnectionCount != 1) Errors.Add("Bad output.");
         }
 		
 #endif

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using IronMountain.Conditions;
 using IronMountain.DialogueSystem.Nodes;
@@ -188,6 +189,21 @@ namespace IronMountain.DialogueSystem
 
 #if UNITY_EDITOR
 
+        public void OnValidate()
+        {
+            RefreshWarnings();
+            RefreshErrors();
+        }
+
+        public readonly List<string> Warnings = new ();
+        public readonly List<string> Errors = new ();
+
+        public bool HasWarnings() => Warnings is {Count: > 0};
+        public bool HasErrors() => Errors is {Count: > 0};
+        
+        public bool PreviewHasErrors => previewType != ConversationPreviewType.None &&
+                                        (previewText.IsEmpty || string.IsNullOrEmpty(previewText.TableReference));
+
         public virtual void Reset()
         {
             GenerateNewID();
@@ -199,24 +215,34 @@ namespace IronMountain.DialogueSystem
             ID = GUID.Generate().ToString();
         }
 
-        [ContextMenu("Test For Warnings")]
-        public bool HasWarnings()
+        [ContextMenu("Refresh Warnings")]
+        public virtual void RefreshWarnings()
         {
+            Warnings.Clear();
             foreach (var node in nodes)
-                if (node is DialogueNode dialogueNode && dialogueNode.HasWarnings())
-                    return true;
-            return false;
+            {
+                if (node is not DialogueNode dialogueNode) continue;
+                dialogueNode.RefreshWarnings();
+                Warnings.AddRange(dialogueNode.Warnings);
+            }
         }
-        
-        [ContextMenu("Test For Errors")]
-        public bool HasErrors()
+
+        [ContextMenu("Refresh Errors")]
+        public virtual void RefreshErrors()
         {
-            return GeneralSectionHasErrors
-                   || PreviewHasErrors
-                   || ConditionHasErrors
-                   || GraphHasErrors();
+            Errors.Clear();
+            if (string.IsNullOrWhiteSpace(id)) Errors.Add("No ID.");
+            if (!condition) Errors.Add("Conversation is missing a condition.");
+            if (condition && condition.HasErrors()) Errors.Add("Conversation condition has errors.");
+            if (PreviewHasErrors) Errors.Add("Preview has errors.");
+            foreach (var node in nodes)
+            {
+                if (node is not DialogueNode dialogueNode) continue;
+                dialogueNode.RefreshErrors();
+                Errors.AddRange(dialogueNode.Errors);
+            }
         }
-        
+
         [MenuItem("Iron Mountain/Align Selected Nodes %#-")]
         public static void AlignSelectedNodes()
         {
@@ -236,29 +262,6 @@ namespace IronMountain.DialogueSystem
                 node.position.y = averageY;
             }
             UnityEditor.Selection.activeObject = null;
-        }
-
-        public bool GeneralSectionHasErrors => string.IsNullOrWhiteSpace(id);
-        
-        public bool PreviewHasErrors => previewType != ConversationPreviewType.None &&
-                                        (previewText.IsEmpty || string.IsNullOrEmpty(previewText.TableReference));
-
-        public bool ConditionHasErrors => !condition || condition.HasErrors();
-
-        public bool GraphHasErrors()
-        {
-            foreach (var node in nodes)
-                if (node is DialogueNode dialogueNode && dialogueNode.HasErrors())
-                    return true;
-            return false;
-        }
-        
-        [ContextMenu("Log Graph Errors")]
-        public void LogGraphErrors()
-        {
-            foreach (var node in nodes)
-                if (node is DialogueNode dialogueNode && dialogueNode.HasErrors())
-                    Debug.Log(dialogueNode.Name, dialogueNode);
         }
 
 #endif

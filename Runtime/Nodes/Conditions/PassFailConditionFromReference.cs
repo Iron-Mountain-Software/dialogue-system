@@ -17,14 +17,10 @@ namespace IronMountain.DialogueSystem.Nodes.Conditions
         
 #if UNITY_EDITOR
 
-        protected override bool ExtensionHasWarnings()
+        public override void RefreshErrors()
         {
-            return false;
-        }
-
-        protected override bool ExtensionHasErrors()
-        {
-            return !condition;
+            base.RefreshErrors();
+            if (!condition) Errors.Add("No condition.");
         }
 		
 #endif

@@ -105,17 +105,20 @@ namespace IronMountain.DialogueSystem.Nodes
 		private bool MissingAudioClip => !audioClip && localizedAudio.IsEmpty;
 		private bool MissingText => string.IsNullOrWhiteSpace(simpleText) && (text.IsEmpty || string.IsNullOrEmpty(text.TableReference));
 
-		protected override bool ExtensionHasWarnings()
+		public override void RefreshWarnings()
 		{
-			return MissingAudioClip || MissingText;
-		}
-
-		protected override bool ExtensionHasErrors()
-		{
-			return GetInputPort("input").ConnectionCount == 0
-			       || GetOutputPort("output").ConnectionCount != 1;
+			base.RefreshWarnings();
+			if (MissingAudioClip) Warnings.Add("No audio.");
+			if (MissingText) Warnings.Add("No text.");
 		}
 		
+		public override void RefreshErrors()
+		{
+			base.RefreshErrors();
+			if (GetInputPort("input").ConnectionCount == 0) Errors.Add("Bad input.");
+			if (GetOutputPort("output").ConnectionCount != 1) Errors.Add("Bad output.");
+		}
+
 #endif
 		
 	}
