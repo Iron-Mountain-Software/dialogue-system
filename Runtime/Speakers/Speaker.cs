@@ -27,7 +27,7 @@ namespace IronMountain.DialogueSystem.Speakers
         public SpeakerPortraitCollection Portraits => portraits;
         public SpeakerPortraitCollection FullBodyPortraits => fullBodyPortraits;
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             foreach (Conversation conversation in conversations)
             {
@@ -35,7 +35,7 @@ namespace IronMountain.DialogueSystem.Speakers
             }
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             foreach (Conversation conversation in conversations)
             {
@@ -43,7 +43,7 @@ namespace IronMountain.DialogueSystem.Speakers
             }
         }
 
-        private void InvokeOnActiveConversationsChanged()
+        protected void InvokeOnActiveConversationsChanged()
         {
             OnActiveConversationsChanged?.Invoke();
         }
