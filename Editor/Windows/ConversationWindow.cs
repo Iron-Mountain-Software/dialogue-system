@@ -130,7 +130,7 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             {
                 _showDetails = !_showDetails;
             }
-            GUILayout.Label(" " + _conversation.name, _h1);
+            GUILayout.Label(" " + (_conversation ? _conversation.Name : string.Empty), _h1);
             GUILayout.Label("CREATE:", _h1, GUILayout.Width(90));
             if (GUILayout.Button("Start", GUILayout.Width(40)))
             {

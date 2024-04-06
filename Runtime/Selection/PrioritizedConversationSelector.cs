@@ -5,9 +5,9 @@ namespace IronMountain.DialogueSystem.Selection
         public override void RefreshNextConversation()
         {
             Conversation conversation = null;
-            if (Speaker != null)
+            if (Speaker != null && AllConversations != null)
             {
-                foreach (Conversation testConversation in Speaker.Conversations)
+                foreach (Conversation testConversation in AllConversations)
                 {
                     if (!testConversation) continue;
                     if (!testConversation.PrioritizeOverDefault) continue;
