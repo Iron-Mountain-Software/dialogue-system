@@ -79,7 +79,7 @@ namespace IronMountain.DialogueSystem.Selection
             ValidateSpeaker();
         }
 
-        public void ValidateSpeaker()
+        private void ValidateSpeaker()
         {
             if (speaker is GameObject speakerObject)
             {
@@ -92,7 +92,6 @@ namespace IronMountain.DialogueSystem.Selection
                 EditorUtility.SetDirty(this);
             }
             if (!speaker) Debug.LogWarning("Warning: ConversationSelector is missing a Speaker!", this);
-            AssetDatabase.SaveAssetIfDirty(this);
         }
 
 #endif
