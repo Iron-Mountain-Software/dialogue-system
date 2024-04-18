@@ -119,6 +119,7 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
             {
                 EditorGUILayout.Space(8);
                 EditorGUILayout.BeginHorizontal(GUILayout.Height(25));
+                if (GUILayout.Button("Add Lines", GUILayout.ExpandHeight(true))) DialogueLinesCreatorWindow.Open(_dialogueLineNode.GetPort("output"));
                 if (GUILayout.Button("Add Responses", GUILayout.ExpandHeight(true))) AddNode<DialogueResponseBlockNode>();
                 if (GUILayout.Button("Add Ending", GUILayout.ExpandHeight(true))) AddNode<DialogueEndingNode>();
                 EditorGUILayout.EndHorizontal();

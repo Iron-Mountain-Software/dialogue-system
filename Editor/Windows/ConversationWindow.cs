@@ -49,7 +49,7 @@ namespace IronMountain.DialogueSystem.Editor.Windows
                 typeof(ConversationIndex));
             window.minSize = MinSize;
             window.wantsMouseMove = true;
-            window.Initialize();
+            window.InitializeStyles();
             return window;
         }
         
@@ -78,24 +78,27 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             }
         }
 
-        private void Initialize()
+        private void InitializeStyles()
         {
-            _h1 = new () 
+            _h1 ??= new GUIStyle
             {
                 alignment = TextAnchor.MiddleLeft,
                 fontSize = 20,
                 fontStyle = FontStyle.Bold,
-                normal = { textColor = Color.white }
+                normal = {textColor = Color.white}
             };
             
-            _box = new ()
+            _box ??= new GUIStyle
             {
                 padding = new RectOffset(10,10,10,10)
             };
-            
-            _sideBarTexture = new Texture2D(1, 1);
-            _sideBarTexture.SetPixel(0,0, SideBarColor);
-            _sideBarTexture.Apply();
+
+            if (!_sideBarTexture)
+            {
+                _sideBarTexture = new Texture2D(1, 1);
+                _sideBarTexture.SetPixel(0,0, SideBarColor);
+                _sideBarTexture.Apply();
+            }
         }
 
         private void CalculateLayout()
@@ -123,6 +126,7 @@ namespace IronMountain.DialogueSystem.Editor.Windows
         private void OnLateGUI()
         {
             CalculateLayout();
+            InitializeStyles();
             GUI.DrawTexture(_headerSection, _sideBarTexture);
             GUILayout.BeginArea(_headerSection, _box);
             GUILayout.BeginHorizontal();
@@ -142,13 +146,13 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             }
             if (GUILayout.Button("Lines", GUILayout.Width(45)))
             {
-                DialogueLinesCreatorWindow.Open(this, null);
+                DialogueLinesCreatorWindow.Open(null);
             }
             if (GUILayout.Button("Responses", GUILayout.Width(75)))
             {
                 graphEditor.CreateNode(typeof(DialogueResponseBlockNode), GridCenterPosition);
             }
-            if (GUILayout.Button("Actions", GUILayout.Width(60)))
+            if (GUILayout.Button("Action", GUILayout.Width(56)))
             {
                 RenderCreateMenu(TypeIndex.DialogueActionNodeTypes);
             }
@@ -156,13 +160,13 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             {
                 RenderCreateMenu(TypeIndex.DialogueConditionNodeTypes);
             }
-            if (GUILayout.Button("Other", GUILayout.Width(45)))
+            if (GUILayout.Button("Randomizer", GUILayout.Width(83)))
             {
-                RenderCreateMenu(new List<Type>()
-                {
-                    typeof(DialoguePassNode),
-                    typeof(DialogueRandomSelectorNode),
-                });
+                graphEditor.CreateNode(typeof(DialogueRandomizerNode), GridCenterPosition);
+            }
+            if (GUILayout.Button("Pass", GUILayout.Width(42)))
+            {
+                graphEditor.CreateNode(typeof(DialoguePassNode), GridCenterPosition);
             }
             GUILayout.EndHorizontal();
             GUILayout.EndArea();

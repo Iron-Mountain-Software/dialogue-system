@@ -85,7 +85,7 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
                 && GUILayout.Button("Add Lines", GUILayout.Height(25)))
             {
                 EditorGUILayout.Space(8);
-                DialogueLinesCreatorWindow.Open(ConversationEditor.Current, _dialogueResponseNode.GetPort("output"));
+                DialogueLinesCreatorWindow.Open(_dialogueResponseNode.GetPort("output"));
             }
 
             serializedObject.ApplyModifiedProperties();

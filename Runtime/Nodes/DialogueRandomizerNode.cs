@@ -7,12 +7,12 @@ namespace IronMountain.DialogueSystem.Nodes
 {
     [NodeWidth(120)]
     [NodeTint("#656565")]
-    public class DialogueRandomSelectorNode : DialogueNode
+    public class DialogueRandomizerNode : DialogueNode
     {
         [Input] public Connection input;
         [Output] public Connection output;
 
-        public override string Name => "Random";
+        public override string Name => "Randomizer";
 
         public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
         {

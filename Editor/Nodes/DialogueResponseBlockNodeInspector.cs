@@ -55,8 +55,7 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
             if (serializedObject.FindProperty("isTimed").boolValue 
                 && GUILayout.Button("Add Default Route", GUILayout.ExpandHeight(true)))
             {
-                DialogueLinesCreatorWindow.Open(ConversationEditor.Current,
-                    _dialogueResponseBlockNode.GetPort("defaultResponse"));
+                DialogueLinesCreatorWindow.Open(_dialogueResponseBlockNode.GetPort("defaultResponse"));
             }
 
             EditorGUILayout.EndHorizontal();
