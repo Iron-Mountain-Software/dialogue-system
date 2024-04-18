@@ -18,7 +18,6 @@ using UnityEditor.Localization;
 
 namespace IronMountain.DialogueSystem
 {
-    [CreateAssetMenu(menuName = "Scriptable Objects/Dialogue/Conversation")]
     public class Conversation : NodeGraph
     {
         public static event Action<Conversation> OnAnyIsActiveChanged;

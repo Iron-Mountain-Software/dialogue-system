@@ -46,7 +46,7 @@ namespace IronMountain.DialogueSystem.Editor.Windows
         {
             ConversationEditor window = GetWindow<ConversationEditor>(
                 "Conversation", true, 
-                typeof(ConversationIndex));
+                typeof(ConversationsIndex));
             window.minSize = MinSize;
             window.wantsMouseMove = true;
             window.InitializeStyles();

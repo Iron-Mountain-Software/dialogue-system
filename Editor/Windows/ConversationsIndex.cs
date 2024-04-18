@@ -7,7 +7,7 @@ using XNode;
 
 namespace IronMountain.DialogueSystem.Editor.Windows
 {
-    public class ConversationIndex : EditorWindow
+    public class ConversationsIndex : EditorWindow
     {
         private static readonly Vector2 MinSize = new (400, 400);
         private static readonly Vector2 MaxSize = new (600, 1200);
@@ -19,12 +19,11 @@ namespace IronMountain.DialogueSystem.Editor.Windows
         
         private readonly List<Conversation> _conversations = new();
 
-        public static ConversationIndex Open()
+        public static ConversationsIndex Open()
         {
-            ConversationIndex window = GetWindow<ConversationIndex>(
+            ConversationsIndex window = GetWindow<ConversationsIndex>(
                 "Conversations", true, 
-                typeof(NewConversationWindow), 
-                typeof(ConversationIndex));
+                typeof(SpeakersIndex));
             window.minSize = MinSize;
             window.maxSize = MaxSize;
             return window;
@@ -36,7 +35,10 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             ConversationsManager.OnConversationsChanged += OnConversationsChanged;
         }
 
-        private void OnFocus() => RefreshIndex();
+        private void OnFocus()
+        {
+            RefreshIndex();
+        }
 
         private void OnDisable()
         {
@@ -78,7 +80,8 @@ namespace IronMountain.DialogueSystem.Editor.Windows
         {
             EditorGUILayout.BeginHorizontal(GUILayout.Height(40));
             if (GUILayout.Button("Create", GUILayout.ExpandHeight(true))) NewConversationWindow.Open();
-            if (GUILayout.Button("Export", GUILayout.ExpandHeight(true))) ExportDialogueLines();
+            if (GUILayout.Button("Speakers", GUILayout.ExpandHeight(true))) SpeakersIndex.Open();
+            if (GUILayout.Button("Export", GUILayout.ExpandHeight(true))) ExportDialogueLines(); 
             EditorGUILayout.EndHorizontal();
         }
 

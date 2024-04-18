@@ -29,7 +29,6 @@ namespace IronMountain.DialogueSystem.Editor
         private readonly GUIStyle _greenBox;
 
         private readonly GUIContent _autoPlayEnabledContent = new ("▶", "Autoplay enabled");
-        private readonly GUIContent _autoPlayDisabledContent = new (string.Empty, "Autoplay disabled");
         private readonly GUIContent _speechBubbleContent = new ("SP", "Speech Bubble Preview");
         private readonly GUIContent _thoughtBubbleContent = new ("TH", "Thought Bubble Preview");
         private readonly GUIContent _loopingEnabledContent = new ("↺", "Looping enabled");
@@ -39,7 +38,7 @@ namespace IronMountain.DialogueSystem.Editor
         public ConversationListEditor()
         {
             Texture2D grayTexture = new Texture2D(1, 1);
-            grayTexture.SetPixel(0,0, new Color(0f, 0f, 0f, 0.4f));
+            grayTexture.SetPixel(0,0, new Color(0f, 0f, 0f, 0.2f));
             grayTexture.Apply();
             _grayBox = new GUIStyle {
                 margin = new RectOffset(2, 2, 1, 1),
@@ -95,7 +94,7 @@ namespace IronMountain.DialogueSystem.Editor
             if (conversation.HasErrors())
             {
                 EditorGUILayout.BeginHorizontal(_redBox, GUILayout.MaxHeight(35), GUILayout.ExpandHeight(false));
-                GUI.backgroundColor = new Color(1,1,1, .5f);
+                GUI.backgroundColor = new Color(1,1,1, .2f);
                 if (GUILayout.Button(EditorGUIUtility.IconContent("Error"), GUILayout.Width(25), GUILayout.ExpandHeight(true)))
                 {
                     _drawers[conversation] = !_drawers[conversation];
@@ -104,7 +103,7 @@ namespace IronMountain.DialogueSystem.Editor
             else if (conversation.HasWarnings())
             {
                 EditorGUILayout.BeginHorizontal(_yellowBox, GUILayout.MaxHeight(35), GUILayout.ExpandHeight(false));
-                GUI.backgroundColor = new Color(1,1,1, .5f);
+                GUI.backgroundColor = new Color(1,1,1, .2f);
                 if (GUILayout.Button(EditorGUIUtility.IconContent("Warning"), GUILayout.Width(25), GUILayout.ExpandHeight(true)))
                 {
                     _drawers[conversation] = !_drawers[conversation];
@@ -117,13 +116,22 @@ namespace IronMountain.DialogueSystem.Editor
                 _drawers[conversation] = false;
             }
 
-            EditorGUI.BeginDisabledGroup(conversation == SelectedConversation);
-            if (GUILayout.Button(conversation.name, GUILayout.ExpandHeight(true)))
+            if (conversation == SelectedConversation)
             {
-                ConversationEditor.Open(conversation);
-                SelectedConversation = conversation;
+                GUI.backgroundColor = new Color(1, 1, 1, .6f);
+                if (GUILayout.Button(conversation.name, GUILayout.ExpandHeight(true)))
+                {
+                    EditorGUIUtility.PingObject(conversation);
+                }
             }
-            EditorGUI.EndDisabledGroup();
+            else
+            {
+                if (GUILayout.Button(conversation.name, GUILayout.ExpandHeight(true)))
+                {
+                    ConversationEditor.Open(conversation);
+                    SelectedConversation = conversation;
+                }
+            }
 
             GUI.backgroundColor = Color.white;
 

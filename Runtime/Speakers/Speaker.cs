@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace IronMountain.DialogueSystem.Speakers
 {
-    [CreateAssetMenu(menuName = "Scriptable Objects/Dialogue/Speaker")]
     public class Speaker : ScriptableObject, ISpeaker
     {
         public event Action OnActiveConversationsChanged;

@@ -8,7 +8,7 @@ namespace IronMountain.DialogueSystem.Editor
         [MenuItem("Iron Mountain/Dialogue System", priority = 2)]
         public static void OpenIndex()
         {
-            ConversationIndex.Open();
+            ConversationsIndex.Open();
         }
     }
 }

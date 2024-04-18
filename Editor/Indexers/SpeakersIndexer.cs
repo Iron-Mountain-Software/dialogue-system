@@ -7,14 +7,14 @@ namespace IronMountain.DialogueSystem.Editor.Indexers
 {
     public static class SpeakersIndexer
     {
-        public static List<Speaker> Speakers = new ();
+        public static readonly List<Speaker> Speakers = new ();
 
         static SpeakersIndexer()
         {
-            LoadAssets();
+            Refresh();
         }
 
-        private static void LoadAssets()
+        public static void Refresh()
         {
             Speakers.Clear();
             AssetDatabase.Refresh();

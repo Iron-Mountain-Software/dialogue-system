@@ -30,7 +30,7 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             
             EditorGUILayout.BeginHorizontal();
             _folder = EditorGUILayout.TextField("Folder: ", _folder);
-            if (GUILayout.Button("Current", GUILayout.Width(60))) _folder = GetCurrentFolder();
+            if (GUILayout.Button("Current", GUILayout.Width(60))) _folder = DirectoryUtilities.GetCurrentFolder();
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
@@ -46,15 +46,6 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             if (GUILayout.Button("Create Conversation", GUILayout.Height(35))) CreateConversation();
         }
 
-        private string GetCurrentFolder()
-        {
-            Type projectWindowUtilType = typeof(ProjectWindowUtil);
-            MethodInfo getActiveFolderPath = projectWindowUtilType.GetMethod("GetActiveFolderPath", BindingFlags.Static | BindingFlags.NonPublic);
-            return getActiveFolderPath is not null 
-                ? getActiveFolderPath.Invoke(null, new object[0]).ToString()
-                : string.Empty;
-        }
-        
         private string GetCurrentName()
         {
             string[] subfolders = _folder.Split(Path.DirectorySeparatorChar);
@@ -66,7 +57,7 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             Type conversationType = TypeIndex.ConversationTypes[_conversationTypeIndex];
             Conversation conversation = CreateInstance(conversationType) as Conversation;
             if (!conversation) return;
-            CreateFolders();
+            DirectoryUtilities.CreateFolders(_folder);
             string path = Path.Combine(_folder, _name + ".asset");
             
             AssetDatabase.CreateAsset(conversation, path);
@@ -78,20 +69,6 @@ namespace IronMountain.DialogueSystem.Editor.Windows
             Close();
             
             ConversationEditor.Open(conversation).Focus();
-        }
-
-        private void CreateFolders()
-        {
-            string[] subfolders = _folder.Split(Path.DirectorySeparatorChar);
-            if (subfolders.Length == 0) return;
-            string parent = subfolders[0];
-            for (int index = 1; index < subfolders.Length; index++)
-            {
-                var subfolder = subfolders[index];
-                string child = Path.Join(parent, subfolder);
-                if (!AssetDatabase.IsValidFolder(child)) AssetDatabase.CreateFolder(parent, subfolder);
-                parent = child;
-            }
         }
     }
 }
