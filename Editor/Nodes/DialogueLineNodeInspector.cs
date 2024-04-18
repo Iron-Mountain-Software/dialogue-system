@@ -12,14 +12,9 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
     [CustomNodeEditor(typeof(DialogueLineNode))]
     public class DialogueLineNodeInspector : NodeEditor
     {
-        private bool _localize = false;
+        public static bool Localize = false;
+        
         private DialogueLineNode _dialogueLineNode;
-
-        public override void OnCreate()
-        {
-            base.OnCreate();
-            _localize = !((DialogueLineNode) target).LocalizedText.IsEmpty;
-        }
 
         public virtual void DrawAdditionalProperties() { }
 
@@ -38,23 +33,23 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
             EditorGUILayout.Space(10);
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUI.BeginDisabledGroup(!_localize);
-            if (GUILayout.Button("Simple")) _localize = false;
+            EditorGUI.BeginDisabledGroup(!Localize);
+            if (GUILayout.Button("Simple")) Localize = false;
             EditorGUI.EndDisabledGroup();
-            EditorGUI.BeginDisabledGroup(_localize);
-            if (GUILayout.Button("Localized")) _localize = true;
+            EditorGUI.BeginDisabledGroup(Localize);
+            if (GUILayout.Button("Localized")) Localize = true;
             EditorGUI.EndDisabledGroup();
             EditorGUILayout.EndHorizontal();
 
-            if (_localize)
+            if (Localize)
             {
                 NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("text"), new GUIContent("Text"));
                 NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("localizedAudio"), new GUIContent("Narration"));
             }
             else
             {
-                NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("simpleText"));
-                
+                NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("simpleText"), GUIContent.none);
+
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label("Narration", GUILayout.Width(55));
                 NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("audioClip"), GUIContent.none);

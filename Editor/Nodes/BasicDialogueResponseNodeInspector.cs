@@ -13,14 +13,7 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
     [CustomNodeEditor(typeof(BasicDialogueResponseNode))]
     public class BasicDialogueResponseNodeInspector : NodeEditor
     {
-        private bool _localize;
         private BasicDialogueResponseNode _dialogueResponseNode;
-
-        public override void OnCreate()
-        {
-            base.OnCreate();
-            _localize = !((BasicDialogueResponseNode) target).LocalizedText.IsEmpty;
-        }
 
         public virtual void DrawAdditionalProperties() { }
 
@@ -37,21 +30,21 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
             EditorGUILayout.Space(10);
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUI.BeginDisabledGroup(!_localize);
-            if (GUILayout.Button("Simple")) _localize = false;
+            EditorGUI.BeginDisabledGroup(!DialogueLineNodeInspector.Localize);
+            if (GUILayout.Button("Simple")) DialogueLineNodeInspector.Localize = false;
             EditorGUI.EndDisabledGroup();
-            EditorGUI.BeginDisabledGroup(_localize);
-            if (GUILayout.Button("Localized")) _localize = true;
+            EditorGUI.BeginDisabledGroup(DialogueLineNodeInspector.Localize);
+            if (GUILayout.Button("Localized")) DialogueLineNodeInspector.Localize = true;
             EditorGUI.EndDisabledGroup();
             EditorGUILayout.EndHorizontal();
 
-            if (_localize)
+            if (DialogueLineNodeInspector.Localize)
             {
                 NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("text"), new GUIContent("Text"));
             }
             else
             {
-                NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("stringText"));
+                NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("stringText"), GUIContent.none);
             }
 
             EditorGUILayout.Space(10);

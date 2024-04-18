@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using IronMountain.DialogueSystem.Editor.Windows;
 using IronMountain.DialogueSystem.Nodes;
+using IronMountain.DialogueSystem.Nodes.ResponseGenerators;
 using UnityEditor;
 using UnityEngine;
 using XNode;
@@ -47,20 +49,23 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
 
             EditorGUILayout.BeginHorizontal(GUILayout.Height(25));
 
-            if (GUILayout.Button("Add Response", GUILayout.ExpandHeight(true)))
+            if (GUILayout.Button("Add Basic Response", GUILayout.Height(25)))
+            {
+                AddNode(typeof(BasicDialogueResponseNode));
+            }
+
+            if (GUILayout.Button("Other", GUILayout.Height(25)))
             {
                 RenderCreateResponseMenu();
             }
+            
+            EditorGUILayout.EndHorizontal();
 
-            if (serializedObject.FindProperty("isTimed").boolValue 
-                && GUILayout.Button("Add Default Route", GUILayout.ExpandHeight(true)))
+            if (serializedObject.FindProperty("isTimed").boolValue && GUILayout.Button("Add Default Route", GUILayout.Height(25)))
             {
                 DialogueLinesCreatorWindow.Open(_dialogueResponseBlockNode.GetPort("defaultResponse"));
             }
-
-            EditorGUILayout.EndHorizontal();
-
-
+            
             serializedObject.ApplyModifiedProperties();
         }
         
@@ -70,22 +75,38 @@ namespace IronMountain.DialogueSystem.Editor.Nodes
             GenericMenu menu = new GenericMenu();
             foreach (Type derivedType in TypeIndex.DialogueResponseNodeTypes)
             {
+                if (derivedType == typeof(BasicDialogueResponseNode)) continue;
                 menu.AddItem(new GUIContent(
                         "Add " + derivedType.Name),
-                    false,
-                    () =>
-                    {
-                        if (!ConversationEditor.Current || ConversationEditor.Current.graphEditor == null) return;
-                        Node node = ConversationEditor.Current.graphEditor.CreateNode(derivedType, _dialogueResponseBlockNode.position);
-                        _dialogueResponseBlockNode.GetPort("responses").Connect(node.GetPort("input"));
-                        if (_dialogueResponseBlockNode.GetType().GetCustomAttributes(typeof(Node.NodeWidthAttribute), true ).FirstOrDefault() 
-                                is Node.NodeWidthAttribute widthAttribute)
-                        {
-                            node.position = _dialogueResponseBlockNode.position + Vector2.right * (widthAttribute.width + 40);
-                        }
-                    });
+                    false, 
+                    () => AddNode(derivedType));
             }
             menu.ShowAsContext();
+        }
+
+
+        private void AddNode(Type type)
+        {
+            if (!ConversationEditor.Current || ConversationEditor.Current.graphEditor == null) return;
+            Node node = ConversationEditor.Current.graphEditor.CreateNode(type, _dialogueResponseBlockNode.position);
+            _dialogueResponseBlockNode.GetPort("responses").Connect(node.GetPort("input"));
+            List<NodePort> responses = _dialogueResponseBlockNode.GetPort("responses").GetConnections();
+            if (responses.Count <= 1)
+            {
+                int parentWidth = _dialogueResponseBlockNode.GetType()
+                        .GetCustomAttributes(typeof(Node.NodeWidthAttribute), true).FirstOrDefault()
+                    is Node.NodeWidthAttribute widthAttribute
+                    ? widthAttribute.width
+                    : 0;
+                node.position = _dialogueResponseBlockNode.position
+                                + Vector2.right * (parentWidth + 40);
+            }
+            else
+            {
+                NodePort nodePort = responses[^2];
+                if (nodePort == null || !nodePort.node) return;
+                node.position = nodePort.node.position + Vector2.down * -270;
+            }
         }
     }
 }

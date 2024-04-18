@@ -15,14 +15,14 @@ namespace IronMountain.DialogueSystem.Nodes
 		[Output] public Connection output;
 		
 		[SerializeField] private Speaker customSpeaker;
-		[SerializeField] [TextArea] private string simpleText;
+		[SerializeField] [TextArea(5,5)] private string simpleText;
 		[SerializeField] private AudioClip audioClip;
 		[SerializeField] private LocalizedString text;
 		[SerializeField] private LocalizedAsset<AudioClip> localizedAudio;
 		[SerializeField] protected SpeakerPortraitCollection.PortraitType portrait;
 		[SerializeField] protected AnimationType animation;
 		[SerializeField] protected ResourceSprite sprite;
-		
+
 		public Speaker CustomSpeaker
 		{
 			get => customSpeaker;
