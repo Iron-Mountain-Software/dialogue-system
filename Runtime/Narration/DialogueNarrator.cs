@@ -1,6 +1,5 @@
 using System;
 using IronMountain.DialogueSystem.Speakers;
-using IronMountain.DialogueSystem.UI;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -9,10 +8,9 @@ namespace IronMountain.DialogueSystem.Narration
     [ExecuteAlways]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(AudioSource))]
-    public class DialogueNarration : MonoBehaviour
+    public class DialogueNarrator : MonoBehaviour
     {
         public event Action OnIsPlayingChanged;
-        public event Action OnIsMutedChanged;
     
         public enum Type
         {
@@ -25,10 +23,10 @@ namespace IronMountain.DialogueSystem.Narration
         [SerializeField] private AudioSource audioSource;
         
         private bool _isPlaying;
-        private bool _isMuted;
     
         public ISpeaker Speaker => speaker as ISpeaker;
         public AudioSource AudioSource => audioSource;
+        public ConversationPlayer CurrentConversationPlayer { get; private set; }
 
         public bool IsPlaying
         {
@@ -40,17 +38,6 @@ namespace IronMountain.DialogueSystem.Narration
                 OnIsPlayingChanged?.Invoke();
             }
         }
-        
-        public bool IsMuted
-        {
-            get => _isMuted;
-            set
-            {
-                if (_isMuted == value) return;
-                _isMuted = value;
-                OnIsMutedChanged?.Invoke();
-            }
-        }
 
         private void Awake()
         {
@@ -60,13 +47,13 @@ namespace IronMountain.DialogueSystem.Narration
         private void OnEnable()
         {
             RefreshRequirements();
-            DialogueNarrationManager.DialogueNarrations.Add(this);
+            DialogueNarrationManager.DialogueNarrators.Add(this);
             ConversationPlayer.OnAnyDialogueLinePlayed += OnAnyDialogueLinePlayed;
         }
 
         private void OnDisable()
         {
-            DialogueNarrationManager.DialogueNarrations.Remove(this);
+            DialogueNarrationManager.DialogueNarrators.Remove(this);
             ConversationPlayer.OnAnyDialogueLinePlayed -= OnAnyDialogueLinePlayed;
         }
 
@@ -93,44 +80,61 @@ namespace IronMountain.DialogueSystem.Narration
             audioSource.playOnAwake = false;
         }
 
-        private void OnAnyDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine)
+        private void OnAnyDialogueLinePlayed(ConversationPlayer conversationPlayer, Conversation conversation, DialogueLine dialogueLine)
         {
             if (dialogueLine == null) return;
             switch (type)
             {
                 case Type.Global:
-                    Play(dialogueLine.AudioClip);
+                    Play(conversationPlayer, dialogueLine.AudioClip);
                     break;
                 case Type.Speaker:
                     if (Speaker == null || dialogueLine.Speaker == null) return;
                     if (!string.Equals(Speaker.ID, dialogueLine.Speaker.ID)) return;
-                    Play(dialogueLine.AudioClip);
+                    Play(conversationPlayer, dialogueLine.AudioClip);
                     break;
             }
         }
 
-        private void Play(AudioClip audioClip)
+        private void Play(ConversationPlayer conversationPlayer, AudioClip audioClip)
         {
             if (!audioClip) return;
             if (!audioSource) InitializeAudioSource();
             if (!audioSource) return;
             if (audioSource.isPlaying) audioSource.Stop();
             audioSource.clip = audioClip;
-            audioSource.Play();
+            if (CurrentConversationPlayer)
+            {
+                CurrentConversationPlayer.OnEnabledChanged -= RefreshPausedState;
+                CurrentConversationPlayer.OnIsMutedChanged -= RefreshPausedState;
+            }
+            CurrentConversationPlayer = conversationPlayer;
+            if (CurrentConversationPlayer)
+            {
+                CurrentConversationPlayer.OnEnabledChanged += RefreshPausedState;
+                CurrentConversationPlayer.OnIsMutedChanged += RefreshPausedState;
+            }
+            if (CurrentConversationPlayer && CurrentConversationPlayer.enabled) audioSource.Play();
+            RefreshMutedState();
+        }
+
+        private void RefreshPausedState()
+        {
+            if (!audioSource) return;
+            if (CurrentConversationPlayer && CurrentConversationPlayer.enabled)
+                audioSource.UnPause();
+            else audioSource.Pause();
+        }
+        
+        private void RefreshMutedState()
+        {
+            if (!audioSource) return;
+            audioSource.mute = CurrentConversationPlayer && CurrentConversationPlayer.IsMuted;
         }
 
         private void Update()
         {
-            if (audioSource)
-            {
-                IsPlaying = audioSource.isPlaying;
-                IsMuted = audioSource.mute;
-            }
-            else
-            {
-                IsPlaying = false;
-                IsMuted = false;
-            }
+            IsPlaying = audioSource && audioSource.isPlaying;
         }
 
 #if UNITY_EDITOR

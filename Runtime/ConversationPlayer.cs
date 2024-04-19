@@ -1,29 +1,30 @@
 using System;
 using System.Collections;
 using IronMountain.DialogueSystem.Nodes;
-using IronMountain.DialogueSystem.Nodes.ResponseGenerators;
 using IronMountain.DialogueSystem.Speakers;
 using IronMountain.DialogueSystem.UI.Responses;
 using UnityEngine;
 
-namespace IronMountain.DialogueSystem.UI
+namespace IronMountain.DialogueSystem
 {
     public class ConversationPlayer : MonoBehaviour
     {
         public static event Action<Conversation> OnAnyConversationStarted;
         public static event Action<Conversation> OnAnyConversationEnded;
         public static event Action<Conversation, DialogueNode> OnAnyDialogueNodeChanged;
-        public static event Action<Conversation, DialogueLine> OnAnyDialogueLinePlayed;
+        public static event Action<ConversationPlayer, Conversation, DialogueLine> OnAnyDialogueLinePlayed;
         
+        public event Action OnEnabledChanged;
         public event Action OnDefaultSpeakerChanged;
         public event Action OnConversationChanged;
         public event Action<Conversation, DialogueNode> OnDialogueNodeChanged;
         public event Action<Conversation, DialogueLine> OnDialogueLinePlayed;
-
+        public event Action OnIsMutedChanged;
         public event Action OnClosed;
         
         [SerializeField] private Conversation conversation;
         [SerializeField] private bool playOnStart = true;
+        [SerializeField] private bool isMuted;
         [SerializeField] private bool autoAdvance = false;
         [SerializeField] private float autoAdvanceSeconds = 3f;
         [SerializeField] private bool selfDestruct = true;
@@ -90,8 +91,19 @@ namespace IronMountain.DialogueSystem.UI
                 if (_currentDialogueLine != null)
                 {
                     OnDialogueLinePlayed?.Invoke(conversation, _currentDialogueLine);
-                    OnAnyDialogueLinePlayed?.Invoke(conversation, _currentDialogueLine);
+                    OnAnyDialogueLinePlayed?.Invoke(this, conversation, _currentDialogueLine);
                 }
+            }
+        }
+        
+        public bool IsMuted
+        {
+            get => isMuted;
+            set
+            {
+                if (isMuted == value) return;
+                isMuted = value;
+                OnIsMutedChanged?.Invoke();
             }
         }
         
@@ -99,9 +111,19 @@ namespace IronMountain.DialogueSystem.UI
         public float TotalSecondsToRespond => CurrentDialogueResponseBlockNode ? CurrentDialogueResponseBlockNode.Seconds : Mathf.Infinity;
         public float SecondsRemainingToRespond { get; set; }
 
-        private void OnEnable() => ConversationPlayersManager.Register(this);
-        private void OnDisable() => ConversationPlayersManager.Unregister(this);
-        
+        protected virtual void Awake() => ConversationPlayersManager.Register(this);
+        protected virtual void OnDestroy() => ConversationPlayersManager.Unregister(this);
+
+        protected virtual void OnEnable()
+        {
+            OnEnabledChanged?.Invoke();
+        }
+
+        protected virtual void OnDisable()
+        {
+            OnEnabledChanged?.Invoke();
+        }
+
         public ConversationPlayer Initialize(ISpeaker speaker, Conversation conversation)
         {
             _defaultSpeaker = null;
@@ -128,7 +150,7 @@ namespace IronMountain.DialogueSystem.UI
             Conversation.OnConversationStarted();
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             if (CurrentDialogueResponseBlockNode && CurrentDialogueResponseBlockNode.IsTimed)
             {
@@ -156,6 +178,12 @@ namespace IronMountain.DialogueSystem.UI
                     : autoAdvanceSeconds;
                 StartCoroutine(WaitToContinue(seconds, PlayNextNode));
             }
+        }
+        
+        private IEnumerator WaitToContinue(float seconds, Action onComplete)
+        {
+            yield return new WaitForSeconds(seconds);
+            onComplete?.Invoke();
         }
         
         public void EnterDialogueResponseBlockNode(DialogueResponseBlockNode dialogueResponseBlockNode)
@@ -188,15 +216,9 @@ namespace IronMountain.DialogueSystem.UI
             _currentResponseBlock.Initialize(CurrentDialogueResponseBlockNode, this);
         }
 
-        private IEnumerator WaitToContinue(float seconds, Action onComplete)
-        {
-            yield return new WaitForSeconds(seconds);
-            onComplete?.Invoke();
-        }
-
         public void PlayNextNode()
         {
-            if (!CurrentNode) return;
+            if (!enabled || !CurrentNode) return;
             DialogueNode nextNode = CurrentNode.GetNextNode(this);
             if (nextNode) CurrentNode = nextNode;
         }
@@ -215,6 +237,7 @@ namespace IronMountain.DialogueSystem.UI
         {
             if (!responseBlockParent) responseBlockParent = transform;
             if (destructionDelay < 0) destructionDelay = 0;
+            OnIsMutedChanged?.Invoke();
         }
         
 #endif

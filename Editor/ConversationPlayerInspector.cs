@@ -9,8 +9,12 @@ namespace IronMountain.DialogueSystem.Editor
     {
         public override void OnInspectorGUI()
         {
+            EditorGUI.BeginDisabledGroup(true);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("m_Script"));
+            EditorGUI.EndDisabledGroup();
             EditorGUILayout.PropertyField(serializedObject.FindProperty("conversation"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("playOnStart"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("isMuted"));
             EditorGUILayout.Space(5);
             
             EditorGUILayout.BeginHorizontal();

@@ -3,27 +3,27 @@ using UnityEngine;
 namespace IronMountain.DialogueSystem.Narration
 {
     [ExecuteAlways]
-    [RequireComponent(typeof(DialogueNarration))]
+    [RequireComponent(typeof(DialogueNarrator))]
     public abstract class DialogueNarrationRequirement : MonoBehaviour
     {
         [Header("Cache")]
-        protected DialogueNarration DialogueNarration;
+        protected DialogueNarrator DialogueNarrator;
         
         public abstract bool IsSatisfied();
 
         protected virtual void Awake()
         {
-            DialogueNarration = GetComponent<DialogueNarration>();
+            DialogueNarrator = GetComponent<DialogueNarrator>();
         }
         
         protected virtual void OnEnable()
         {
-            DialogueNarration.RefreshRequirements();
+            DialogueNarrator.RefreshRequirements();
         }
 
         protected virtual void OnDisable()
         {
-            DialogueNarration.RefreshRequirements();
+            DialogueNarrator.RefreshRequirements();
         }
     }
 }

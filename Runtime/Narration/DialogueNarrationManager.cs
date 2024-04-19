@@ -4,6 +4,6 @@ namespace IronMountain.DialogueSystem.Narration
 {
     public static class DialogueNarrationManager
     {
-        public static readonly List<DialogueNarration> DialogueNarrations = new ();
+        public static readonly List<DialogueNarrator> DialogueNarrators = new ();
     }
 }

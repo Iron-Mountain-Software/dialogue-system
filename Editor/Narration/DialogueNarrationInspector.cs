@@ -3,7 +3,7 @@ using UnityEditor;
 
 namespace IronMountain.DialogueSystem.Editor.Narration
 {
-    [CustomEditor(typeof(DialogueNarration))]
+    [CustomEditor(typeof(DialogueNarrator))]
     public class DialogueNarrationInspector : UnityEditor.Editor
     {
         public override void OnInspectorGUI()

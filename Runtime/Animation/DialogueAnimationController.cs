@@ -33,7 +33,7 @@ namespace IronMountain.DialogueSystem.Animation
         private void OnEnable() => ConversationPlayer.OnAnyDialogueLinePlayed += OnDialogueLinePlayed;
         private void OnDisable() => ConversationPlayer.OnAnyDialogueLinePlayed -= OnDialogueLinePlayed;
 
-        private void OnDialogueLinePlayed(Conversation conversation, DialogueLine dialogueLine) 
+        private void OnDialogueLinePlayed(ConversationPlayer conversationPlayer, Conversation conversation, DialogueLine dialogueLine) 
         {
             if (!animator || !_speakerController || _speakerController.Speaker != dialogueLine.Speaker) return;
             AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);

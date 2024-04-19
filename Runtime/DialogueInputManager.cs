@@ -1,4 +1,3 @@
-using IronMountain.DialogueSystem.UI;
 using IronMountain.DialogueSystem.UI.TextAnimation;
 using UnityEngine;
 
@@ -20,6 +19,7 @@ namespace IronMountain.DialogueSystem
         private void Update()
         {
             if (conversationUI
+                && conversationUI.enabled
                 && conversationUI.Conversation
                 && conversationUI.FrameOfLastProgression != Time.frameCount
                 && Input.GetKeyUp(keyCode))
