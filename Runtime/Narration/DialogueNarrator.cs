@@ -49,12 +49,15 @@ namespace IronMountain.DialogueSystem.Narration
             RefreshRequirements();
             DialogueNarrationManager.DialogueNarrators.Add(this);
             ConversationPlayer.OnAnyDialogueLinePlayed += OnAnyDialogueLinePlayed;
+            StopListening();
+            StartListening();
         }
 
         private void OnDisable()
         {
             DialogueNarrationManager.DialogueNarrators.Remove(this);
             ConversationPlayer.OnAnyDialogueLinePlayed -= OnAnyDialogueLinePlayed;
+            StopListening();
         }
 
         public void RefreshRequirements()
@@ -103,17 +106,9 @@ namespace IronMountain.DialogueSystem.Narration
             if (!audioSource) return;
             if (audioSource.isPlaying) audioSource.Stop();
             audioSource.clip = audioClip;
-            if (CurrentConversationPlayer)
-            {
-                CurrentConversationPlayer.OnEnabledChanged -= RefreshPausedState;
-                CurrentConversationPlayer.OnIsMutedChanged -= RefreshMutedState;
-            }
+            StopListening();
             CurrentConversationPlayer = conversationPlayer;
-            if (CurrentConversationPlayer)
-            {
-                CurrentConversationPlayer.OnEnabledChanged += RefreshPausedState;
-                CurrentConversationPlayer.OnIsMutedChanged += RefreshMutedState;
-            }
+            StartListening();
             if (CurrentConversationPlayer && CurrentConversationPlayer.enabled) audioSource.Play();
             RefreshMutedState();
         }
@@ -135,6 +130,20 @@ namespace IronMountain.DialogueSystem.Narration
         private void Update()
         {
             IsPlaying = audioSource && audioSource.isPlaying;
+        }
+
+        private void StopListening()
+        {
+            if (!CurrentConversationPlayer) return;
+            CurrentConversationPlayer.OnEnabledChanged -= RefreshPausedState;
+            CurrentConversationPlayer.OnIsMutedChanged -= RefreshMutedState;
+        }
+
+        private void StartListening()
+        {
+            if (!CurrentConversationPlayer) return;
+            CurrentConversationPlayer.OnEnabledChanged += RefreshPausedState;
+            CurrentConversationPlayer.OnIsMutedChanged += RefreshMutedState;
         }
 
 #if UNITY_EDITOR
