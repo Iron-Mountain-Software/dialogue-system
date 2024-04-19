@@ -39,7 +39,6 @@ namespace IronMountain.DialogueSystem.Selection
 
         protected virtual void OnEnable()
         {
-            if (Speaker != null) Speaker.OnActiveConversationsChanged += RefreshNextConversation;
             ConversationPlayersManager.OnConversationPlayersChanged += RefreshNextConversation;
             RefreshAllConversations();
             RefreshNextConversation();
@@ -47,29 +46,37 @@ namespace IronMountain.DialogueSystem.Selection
 
         protected virtual void OnDisable()
         {
-            if (Speaker != null) Speaker.OnActiveConversationsChanged -= RefreshNextConversation;
             ConversationPlayersManager.OnConversationPlayersChanged -= RefreshNextConversation;
         }
 
         private void RefreshAllConversations()
         {
+            foreach (Conversation conversation in AllConversations)
+            {
+                if (conversation) conversation.OnIsActiveChanged -= RefreshNextConversation;
+            }
             AllConversations.Clear();
             if (Speaker is {Conversations: { }})
             {
                 foreach (Conversation conversation in Speaker.Conversations)
                 {
-                    if (!conversation || AllConversations.Contains(conversation)) continue;
-                    AllConversations.Add(conversation);
+                    AddConversation(conversation);
                 }
             }
             if (additionalConversations != null)
             {
                 foreach (Conversation conversation in additionalConversations)
                 {
-                    if (!conversation || AllConversations.Contains(conversation)) continue;
-                    AllConversations.Add(conversation);
+                    AddConversation(conversation);
                 }
             }
+        }
+
+        private void AddConversation(Conversation conversation)
+        {
+            if (!conversation || AllConversations.Contains(conversation)) return;
+            conversation.OnIsActiveChanged += RefreshNextConversation;
+            AllConversations.Add(conversation);
         }
 
 #if UNITY_EDITOR
@@ -77,6 +84,7 @@ namespace IronMountain.DialogueSystem.Selection
         private void OnValidate()
         {
             ValidateSpeaker();
+            RefreshAllConversations();
         }
 
         private void ValidateSpeaker()

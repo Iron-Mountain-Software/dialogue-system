@@ -9,10 +9,8 @@ namespace IronMountain.DialogueSystem.Selection
             {
                 foreach (Conversation testConversation in AllConversations)
                 {
-                    if (!testConversation) continue;
-                    if (!testConversation.PrioritizeOverDefault) continue;
-                    if (!testConversation.Looping && testConversation.Playthroughs > 0) continue;
-                    if (!testConversation.Condition || !testConversation.Condition.Evaluate()) continue;
+                    if (!testConversation || !testConversation.IsActive
+                        || !testConversation.PrioritizeOverDefault) continue;
                     if (conversation && testConversation.Priority >= conversation.Priority) continue;
                     conversation = testConversation;
                 }

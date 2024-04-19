@@ -123,7 +123,7 @@ namespace IronMountain.DialogueSystem
         public bool IsActive
         {
             get => _isActive;
-            set
+            private set
             {
                 if (_isActive == value) return;
                 _isActive = value;
