@@ -106,13 +106,13 @@ namespace IronMountain.DialogueSystem.Narration
             if (CurrentConversationPlayer)
             {
                 CurrentConversationPlayer.OnEnabledChanged -= RefreshPausedState;
-                CurrentConversationPlayer.OnIsMutedChanged -= RefreshPausedState;
+                CurrentConversationPlayer.OnIsMutedChanged -= RefreshMutedState;
             }
             CurrentConversationPlayer = conversationPlayer;
             if (CurrentConversationPlayer)
             {
                 CurrentConversationPlayer.OnEnabledChanged += RefreshPausedState;
-                CurrentConversationPlayer.OnIsMutedChanged += RefreshPausedState;
+                CurrentConversationPlayer.OnIsMutedChanged += RefreshMutedState;
             }
             if (CurrentConversationPlayer && CurrentConversationPlayer.enabled) audioSource.Play();
             RefreshMutedState();
