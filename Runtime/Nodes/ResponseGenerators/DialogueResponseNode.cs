@@ -22,17 +22,19 @@ namespace IronMountain.DialogueSystem.Nodes.ResponseGenerators
         
         public abstract List<BasicResponse> GetDialogueResponses(ConversationPlayer conversationPlayer);
 
-        public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
+        public override DialogueNode GetNextNode(ConversationPlayer conversationPlayer)
         {
             return GetOutputPort("output")?.Connection?.node as DialogueNode;
         }
         
-        public override void OnNodeEnter(ConversationPlayer conversationUI)
+        public override void OnNodeEnter(ConversationPlayer conversationPlayer)
         {
-            conversationUI.CurrentNode = GetNextNode(conversationUI);
+            conversationPlayer.CurrentNode = GetNextNode(conversationPlayer);
         }
+        
+        public override void OnNodeUpdate(ConversationPlayer conversationPlayer) { }
     
-        public override void OnNodeExit(ConversationPlayer conversationUI) { }
+        public override void OnNodeExit(ConversationPlayer conversationPlayer) { }
 
         public override void OnCreateConnection(NodePort @from, NodePort to)
         {

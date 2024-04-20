@@ -12,9 +12,9 @@ namespace IronMountain.DialogueSystem.UI.Responses
         [SerializeField] protected float spacing;
         [SerializeField] protected GameObject rowPrefab;
 
-        public override void Initialize(DialogueResponseBlockNode dialogueResponseBlock, ConversationPlayer conversationUI)
+        public override DialogueResponseBlock Initialize(DialogueResponseBlockNode dialogueResponseBlock, ConversationPlayer conversationUI)
         {
-            if (!responseButtonPrefab || !parent) return;
+            if (!responseButtonPrefab || !parent) return this;
             List<BasicResponse> responses = dialogueResponseBlock.GetResponses(conversationUI);
             responses.Sort((responseX, responseY) => responseY.Row == responseX.Row
                 ? responseX.Column - responseY.Column
@@ -42,6 +42,7 @@ namespace IronMountain.DialogueSystem.UI.Responses
 
                 Instantiate(responseButtonPrefab, currentRow).Initialize(this, response);
             }
+            return this;
         }
     }
 }

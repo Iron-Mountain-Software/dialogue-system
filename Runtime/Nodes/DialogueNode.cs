@@ -10,11 +10,11 @@ namespace IronMountain.DialogueSystem.Nodes
         [SerializeField] [HideInInspector] private string id;
         
         public abstract string Name { get; }
-        public abstract DialogueNode GetNextNode(ConversationPlayer conversationUI);
+        public abstract DialogueNode GetNextNode(ConversationPlayer conversationPlayer);
 
-        public virtual void OnNodeEnter(ConversationPlayer conversationUI) { }
-
-        public virtual void OnNodeExit(ConversationPlayer conversationUI) { }
+        public abstract void OnNodeEnter(ConversationPlayer conversationPlayer);
+        public abstract void OnNodeUpdate(ConversationPlayer conversationPlayer);
+        public abstract void OnNodeExit(ConversationPlayer conversationPlayer);
 
         public DialogueNode GetNextHaltingNode(ConversationPlayer conversationUI)
         {

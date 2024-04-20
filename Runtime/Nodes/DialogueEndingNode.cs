@@ -9,17 +9,20 @@ namespace IronMountain.DialogueSystem.Nodes
         [Input] public Connection input;
         public override string Name => graph ? "[out] " + graph.name : "[out]";
 
-        public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
+        public override DialogueNode GetNextNode(ConversationPlayer conversationPlayer)
         {
             return null;
         }
 
-        public override void OnNodeEnter(ConversationPlayer conversationUI)
+        public override void OnNodeEnter(ConversationPlayer conversationPlayer)
         {
-            base.OnNodeEnter(conversationUI);
-            conversationUI.CompleteConversation();
-            conversationUI.Close();
+            conversationPlayer.CompleteConversation();
+            conversationPlayer.Close();
         }
+
+        public override void OnNodeUpdate(ConversationPlayer conversationPlayer) { }
+
+        public override void OnNodeExit(ConversationPlayer conversationPlayer) { }
 
 #if UNITY_EDITOR
         

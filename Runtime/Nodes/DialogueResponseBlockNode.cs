@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using IronMountain.DialogueSystem.Nodes.Conditions;
 using IronMountain.DialogueSystem.Nodes.ResponseGenerators;
 using IronMountain.DialogueSystem.Responses;
-using IronMountain.DialogueSystem.UI;
 using UnityEngine;
 using XNode;
 
@@ -28,7 +27,7 @@ namespace IronMountain.DialogueSystem.Nodes
         public bool IsTimed => isTimed;
         public float Seconds => isTimed ? seconds : Mathf.Infinity;
 
-        public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
+        public override DialogueNode GetNextNode(ConversationPlayer conversationPlayer)
         {
             return null;
         }
@@ -54,16 +53,27 @@ namespace IronMountain.DialogueSystem.Nodes
             return responsePaths;
         }
         
-        public override void OnNodeEnter(ConversationPlayer conversationUI)
+        public override void OnNodeEnter(ConversationPlayer conversationPlayer)
         {
-            base.OnNodeEnter(conversationUI);
-            conversationUI.EnterDialogueResponseBlockNode(this);
+            conversationPlayer.SpawnResponseBlock(this);
+            conversationPlayer.TotalSecondsToRespond = seconds;
+            conversationPlayer.SecondsRemainingToRespond = seconds;
         }
 
-        public override void OnNodeExit(ConversationPlayer conversationUI)
+        public override void OnNodeUpdate(ConversationPlayer conversationPlayer)
         {
-            base.OnNodeExit(conversationUI);
-            conversationUI.ExitDialogueResponseBlockNode(this);
+            if (!conversationPlayer || !isTimed) return;
+            conversationPlayer.SecondsRemainingToRespond -= Time.deltaTime;
+            if (conversationPlayer.SecondsRemainingToRespond > 0) return;
+            DialogueNode defaultResponseNode = GetDefaultResponseNode();
+            if (defaultResponseNode) conversationPlayer.CurrentNode = defaultResponseNode;
+        }
+
+        public override void OnNodeExit(ConversationPlayer conversationPlayer)
+        {
+            conversationPlayer.CloseResponseBlock(this);
+            conversationPlayer.TotalSecondsToRespond = Mathf.Infinity;
+            conversationPlayer.SecondsRemainingToRespond = Mathf.Infinity;
         }
         
         public override void OnCreateConnection(NodePort @from, NodePort to)
@@ -71,7 +81,7 @@ namespace IronMountain.DialogueSystem.Nodes
             base.OnCreateConnection(from, to);
             NodePort myInputPort = GetInputPort("input");
             NodePort myOutputPort = GetOutputPort("responses");
-            if (from == myOutputPort && !(to.node is DialogueResponseNode || to.node is Condition))
+            if (from == myOutputPort && to.node is not (DialogueResponseNode or Condition))
             {
                 from.Disconnect(to);
                 Debug.LogError("Node_DialogueResponseBlock can only output to ResponseGenerator.");

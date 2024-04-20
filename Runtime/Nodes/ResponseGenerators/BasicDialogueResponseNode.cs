@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using IronMountain.DialogueSystem.Responses;
-using IronMountain.DialogueSystem.UI;
 using IronMountain.ResourceUtilities;
 using UnityEngine;
 using UnityEngine.Localization;

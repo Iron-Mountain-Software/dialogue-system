@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using IronMountain.DialogueSystem.Nodes;
 using IronMountain.DialogueSystem.Speakers;
 using IronMountain.DialogueSystem.UI.Responses;
@@ -36,10 +37,15 @@ namespace IronMountain.DialogueSystem
         private ISpeaker _defaultSpeaker;
         private DialogueNode _currentNode;
         private DialogueLine _currentDialogueLine;
-        private DialogueResponseBlock _currentResponseBlock;
+        private readonly Dictionary<DialogueResponseBlockNode, DialogueResponseBlock> _responseBlocks = new ();
 
+        public bool AutoAdvance => autoAdvance;
+        public float AutoAdvanceSeconds => autoAdvanceSeconds;
+        public float TotalSecondsToRespond { get; set; } = Mathf.Infinity;
+        public float SecondsRemainingToRespond { get; set; } = Mathf.Infinity;
         public int FrameOfLastProgression { get; private set; }
         public float TimeOfLastProgression { get; private set; }
+        public float Timer { get; set; }
 
         public ISpeaker DefaultSpeaker
         {
@@ -106,10 +112,6 @@ namespace IronMountain.DialogueSystem
                 OnIsMutedChanged?.Invoke();
             }
         }
-        
-        public DialogueResponseBlockNode CurrentDialogueResponseBlockNode => CurrentNode as DialogueResponseBlockNode;
-        public float TotalSecondsToRespond => CurrentDialogueResponseBlockNode ? CurrentDialogueResponseBlockNode.Seconds : Mathf.Infinity;
-        public float SecondsRemainingToRespond { get; set; }
 
         protected virtual void Awake() => ConversationPlayersManager.Register(this);
         protected virtual void OnDestroy() => ConversationPlayersManager.Unregister(this);
@@ -152,13 +154,7 @@ namespace IronMountain.DialogueSystem
 
         protected virtual void Update()
         {
-            if (CurrentDialogueResponseBlockNode && CurrentDialogueResponseBlockNode.IsTimed)
-            {
-                SecondsRemainingToRespond -= Time.deltaTime;
-                if (SecondsRemainingToRespond > 0) return;
-                DialogueNode nextNode = CurrentDialogueResponseBlockNode.GetDefaultResponseNode();
-                if (nextNode) CurrentNode = nextNode;
-            }
+            if (CurrentNode) CurrentNode.OnNodeUpdate(this);
         }
 
         public void Close()
@@ -167,53 +163,27 @@ namespace IronMountain.DialogueSystem
             if (selfDestruct) Destroy(gameObject, destructionDelay);
         }
 
-        public void HandleDialogueLine(DialogueLine dialogueLine)
+        public void SpawnResponseBlock(DialogueResponseBlockNode dialogueResponseBlockNode)
         {
-            StopAllCoroutines();
-            CurrentDialogueLine = dialogueLine;
-            if (autoAdvance)
-            {
-                float seconds = dialogueLine != null && dialogueLine.AudioClip 
-                    ? dialogueLine.AudioClip.length 
-                    : autoAdvanceSeconds;
-                StartCoroutine(WaitToContinue(seconds, PlayNextNode));
-            }
-        }
-        
-        private IEnumerator WaitToContinue(float seconds, Action onComplete)
-        {
-            yield return new WaitForSeconds(seconds);
-            onComplete?.Invoke();
-        }
-        
-        public void EnterDialogueResponseBlockNode(DialogueResponseBlockNode dialogueResponseBlockNode)
-        {
-            StopAllCoroutines();
-            CloseCurrentResponseBlock();
-            SecondsRemainingToRespond = TotalSecondsToRespond;
-            SpawnCurrentResponseBlock();
-        }
-        
-        public void ExitDialogueResponseBlockNode(DialogueResponseBlockNode dialogueResponseBlockNode)
-        {
-            StopAllCoroutines();
-            CloseCurrentResponseBlock();
-            SecondsRemainingToRespond = Mathf.Infinity;
-        }
-
-        private void CloseCurrentResponseBlock()
-        {
-            if (!_currentResponseBlock) return;
-            _currentResponseBlock.Destroy();
-            _currentResponseBlock = null;
-        }
-
-        private void SpawnCurrentResponseBlock()
-        {
-            if (!CurrentDialogueResponseBlockNode || !responseBlockPrefab) return;
+            if (_responseBlocks.ContainsKey(dialogueResponseBlockNode) 
+                && _responseBlocks[dialogueResponseBlockNode]
+                || !responseBlockPrefab) return;
             Transform parent = responseBlockParent ? responseBlockParent : transform;
-            _currentResponseBlock = Instantiate(responseBlockPrefab, parent);
-            _currentResponseBlock.Initialize(CurrentDialogueResponseBlockNode, this);
+            if (_responseBlocks.ContainsKey(dialogueResponseBlockNode))
+            {
+                _responseBlocks[dialogueResponseBlockNode] = Instantiate(responseBlockPrefab, parent)
+                    .Initialize(dialogueResponseBlockNode, this);
+            }
+            else _responseBlocks.Add(dialogueResponseBlockNode, Instantiate(responseBlockPrefab, parent)
+                    .Initialize(dialogueResponseBlockNode, this));
+        }
+        
+        public void CloseResponseBlock(DialogueResponseBlockNode dialogueResponseBlockNode)
+        {
+            if (!_responseBlocks.ContainsKey(dialogueResponseBlockNode)) return;
+            _responseBlocks[dialogueResponseBlockNode].Destroy();
+            _responseBlocks[dialogueResponseBlockNode] = null;
+            _responseBlocks.Remove(dialogueResponseBlockNode);
         }
 
         public void PlayNextNode()

@@ -1,5 +1,4 @@
 ﻿using System;
-using IronMountain.DialogueSystem.UI;
 
 namespace IronMountain.DialogueSystem.Nodes
 {
@@ -13,17 +12,20 @@ namespace IronMountain.DialogueSystem.Nodes
 
         public override string Name => graph ? "[in] " + graph.name : "[in]";
 
-        public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
+        public override DialogueNode GetNextNode(ConversationPlayer conversationPlayer)
         {
             return GetOutputPort("output")?.Connection?.node as DialogueNode;
         }
 
-        public override void OnNodeEnter(ConversationPlayer conversationUI)
+        public override void OnNodeEnter(ConversationPlayer conversationPlayer)
         {
-            base.OnNodeEnter(conversationUI);
             OnDialogueBeginningEntered?.Invoke(this);
-            conversationUI.CurrentNode = GetNextNode(conversationUI);
+            conversationPlayer.CurrentNode = GetNextNode(conversationPlayer);
         }
+
+        public override void OnNodeUpdate(ConversationPlayer conversationPlayer) { }
+
+        public override void OnNodeExit(ConversationPlayer conversationPlayer) { }
 
 #if UNITY_EDITOR
 

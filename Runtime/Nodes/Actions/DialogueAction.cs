@@ -1,7 +1,4 @@
-﻿using IronMountain.DialogueSystem.UI;
-using UnityEngine;
-
-namespace IronMountain.DialogueSystem.Nodes.Actions
+﻿namespace IronMountain.DialogueSystem.Nodes.Actions
 {
     [NodeWidth(150)]
     [NodeTint("#FF9229")]
@@ -12,17 +9,20 @@ namespace IronMountain.DialogueSystem.Nodes.Actions
 
         protected abstract void HandleAction(ConversationPlayer conversationUI);
 
-        public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
+        public override DialogueNode GetNextNode(ConversationPlayer conversationPlayer)
         {
             return GetOutputPort("output")?.Connection?.node as DialogueNode;
         }
         
-        public override void OnNodeEnter(ConversationPlayer conversationUI)
+        public override void OnNodeEnter(ConversationPlayer conversationPlayer)
         {
-            base.OnNodeEnter(conversationUI);
-            HandleAction(conversationUI);
-            conversationUI.CurrentNode = GetNextNode(conversationUI);
+            HandleAction(conversationPlayer);
+            conversationPlayer.CurrentNode = GetNextNode(conversationPlayer);
         }
+        
+        public override void OnNodeUpdate(ConversationPlayer conversationPlayer) { }
+        
+        public override void OnNodeExit(ConversationPlayer conversationPlayer) { }
 
 #if UNITY_EDITOR
 

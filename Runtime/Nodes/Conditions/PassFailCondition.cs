@@ -1,6 +1,3 @@
-using IronMountain.DialogueSystem.UI;
-using UnityEngine;
-
 namespace IronMountain.DialogueSystem.Nodes.Conditions
 {
 	public abstract class PassFailCondition : Condition
@@ -8,26 +5,25 @@ namespace IronMountain.DialogueSystem.Nodes.Conditions
 		[Output] public Connection pass;
 		[Output] public Connection fail;
 
-		[Header("Cache")]
-		protected ConversationPlayer ConversationUI;
-
-		protected abstract bool TestCondition(ConversationPlayer conversationUI);
+		protected abstract bool TestCondition(ConversationPlayer conversationPlayer);
 
 		public override string Name => "Pass fail";
 
-        public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
+        public override DialogueNode GetNextNode(ConversationPlayer conversationPlayer)
         {
-	        return TestCondition(conversationUI) ?
+	        return TestCondition(conversationPlayer) ?
 		        GetOutputPort("pass")?.Connection?.node as DialogueNode :
 		        GetOutputPort("fail")?.Connection?.node as DialogueNode;
         }
 
-        public override void OnNodeEnter(ConversationPlayer conversationUI)
+        public override void OnNodeEnter(ConversationPlayer conversationPlayer)
         {
-	        conversationUI.CurrentNode = GetNextNode(conversationUI);
+	        conversationPlayer.CurrentNode = GetNextNode(conversationPlayer);
         }
 
-        public override void OnNodeExit(ConversationPlayer conversationUI) { }
+        public override void OnNodeUpdate(ConversationPlayer conversationPlayer) { }
+        
+        public override void OnNodeExit(ConversationPlayer conversationPlayer) { }
 
 #if UNITY_EDITOR
 

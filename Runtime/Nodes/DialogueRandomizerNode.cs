@@ -14,7 +14,7 @@ namespace IronMountain.DialogueSystem.Nodes
 
         public override string Name => "Randomizer";
 
-        public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
+        public override DialogueNode GetNextNode(ConversationPlayer conversationPlayer)
         {
             NodePort outputPort = GetOutputPort("output");
             List<NodePort> connectionPorts = outputPort?.GetConnections();
@@ -23,12 +23,15 @@ namespace IronMountain.DialogueSystem.Nodes
             return connectionPorts[randomIndex].node as DialogueNode;
         }
 
-        public override void OnNodeEnter(ConversationPlayer conversationUI)
+        public override void OnNodeEnter(ConversationPlayer conversationPlayer)
         {
-            base.OnNodeEnter(conversationUI);
-            conversationUI.CurrentNode = GetNextNode(conversationUI);
+            conversationPlayer.CurrentNode = GetNextNode(conversationPlayer);
         }
-        
+
+        public override void OnNodeUpdate(ConversationPlayer conversationPlayer) { }
+
+        public override void OnNodeExit(ConversationPlayer conversationPlayer) { }
+
 #if UNITY_EDITOR
 
         public override void RefreshErrors()

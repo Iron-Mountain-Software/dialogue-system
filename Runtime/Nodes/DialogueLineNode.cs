@@ -1,6 +1,5 @@
 using IronMountain.DialogueSystem.Animation;
 using IronMountain.DialogueSystem.Speakers;
-using IronMountain.DialogueSystem.UI;
 using IronMountain.ResourceUtilities;
 using UnityEngine;
 using UnityEngine.Localization;
@@ -86,20 +85,37 @@ namespace IronMountain.DialogueSystem.Nodes
 			}
 		}
 
-		public override DialogueNode GetNextNode(ConversationPlayer conversationUI)
+		public override DialogueNode GetNextNode(ConversationPlayer conversationPlayer)
 		{
 			return GetOutputPort("output")?.Connection?.node as DialogueNode;
 		}
 
-		public override void OnNodeEnter(ConversationPlayer conversationUI)
+		public override void OnNodeEnter(ConversationPlayer conversationPlayer)
 		{
-			base.OnNodeEnter(conversationUI);
-			DialogueLine dialogueLine = GetDialogueLine(conversationUI);
-			conversationUI.HandleDialogueLine(dialogueLine);
-			DialogueNode nextHaltingNode = GetNextHaltingNode(conversationUI);
-			if (nextHaltingNode is DialogueResponseBlockNode) conversationUI.CurrentNode = GetNextNode(conversationUI);
+			conversationPlayer.CurrentDialogueLine = GetDialogueLine(conversationPlayer);;
+			DialogueNode nextHaltingNode = GetNextHaltingNode(conversationPlayer);
+			if (nextHaltingNode is DialogueResponseBlockNode) conversationPlayer.CurrentNode = GetNextNode(conversationPlayer);
+			conversationPlayer.Timer = 0f;
 		}
-		
+
+		public override void OnNodeUpdate(ConversationPlayer conversationPlayer)
+		{
+			if (!conversationPlayer || !conversationPlayer.AutoAdvance) return;
+			conversationPlayer.Timer += Time.deltaTime;
+			float seconds = conversationPlayer.CurrentDialogueLine != null 
+			                && conversationPlayer.CurrentDialogueLine.AudioClip 
+				? conversationPlayer.CurrentDialogueLine.AudioClip.length 
+				: conversationPlayer.AutoAdvanceSeconds;
+			if (conversationPlayer.Timer < seconds) return;
+			DialogueNode nextNode = GetNextNode(conversationPlayer);
+			if (nextNode) conversationPlayer.CurrentNode = nextNode;
+		}
+
+		public override void OnNodeExit(ConversationPlayer conversationPlayer)
+		{
+			conversationPlayer.Timer = 0f;
+		}
+
 #if UNITY_EDITOR
 
 		private bool MissingAudioClip => !audioClip && localizedAudio.IsEmpty;

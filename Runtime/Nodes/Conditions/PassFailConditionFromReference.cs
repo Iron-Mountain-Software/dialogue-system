@@ -10,7 +10,7 @@ namespace IronMountain.DialogueSystem.Nodes.Conditions
         
         public override string Name => condition ? condition.ToString() : "NULL CONDITION";
 
-        protected override bool TestCondition(ConversationPlayer conversationUI)
+        protected override bool TestCondition(ConversationPlayer conversationPlayer)
         {
             return condition && condition.Evaluate();
         }

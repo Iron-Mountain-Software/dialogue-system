@@ -21,9 +21,9 @@ namespace IronMountain.DialogueSystem.UI.Responses
             if (!parent) parent = transform;
         }
         
-        public virtual void Initialize(DialogueResponseBlockNode dialogueResponseBlock, ConversationPlayer conversationUI)
+        public virtual DialogueResponseBlock Initialize(DialogueResponseBlockNode dialogueResponseBlock, ConversationPlayer conversationUI)
         {
-            if (!responseButtonPrefab || !parent) return;
+            if (!responseButtonPrefab || !parent) return this;
             List<BasicResponse> responses = dialogueResponseBlock.GetResponses(conversationUI);
             responses.Sort((responseX, responseY) => responseY.Row == responseX.Row
                 ? responseX.Column - responseY.Column
@@ -33,6 +33,7 @@ namespace IronMountain.DialogueSystem.UI.Responses
                 if (response == null) continue;
                 Instantiate(responseButtonPrefab, parent).Initialize(this, response);
             }
+            return this;
         }
         
         public void Submit(BasicResponse response)
